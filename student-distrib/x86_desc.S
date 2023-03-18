@@ -9,6 +9,7 @@
 .globl ldt_size, tss_size
 .globl gdt_desc, ldt_desc, tss_desc
 .globl tss, tss_desc_ptr, ldt, ldt_desc_ptr
+.globl gdt_desc_ptr
 .globl gdt_ptr
 .globl idt_desc_ptr, idt
 
@@ -27,6 +28,13 @@ ldt_desc:
     .long ldt
 
     .align 4
+
+gdt_desc_ptr:
+    # gdt size 
+    # gdt address
+    .word gdt_bottom - gdt - 1 
+    .long gdt
+
 tss:
 _tss:
     .rept 104
@@ -73,6 +81,7 @@ gdt_ptr:
 
     # Set up an entry for user DS
     .quad 0x00CFF2000000FFFF
+
 
     # Set up an entry for TSS
 tss_desc_ptr:
