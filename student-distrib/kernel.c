@@ -136,6 +136,9 @@ void entry(unsigned long magic, unsigned long addr) {
         ltr(KERNEL_TSS);
     }
 
+
+    
+
     /* Init the PIC */
     i8259_init();
 
