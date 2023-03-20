@@ -162,11 +162,16 @@ typedef union idt_desc_t {
         uint16_t offset_31_16;
     } __attribute__ ((packed));
 } idt_desc_t;
-
 /* The IDT itself (declared in x86_desc.S */
 extern idt_desc_t idt[NUM_VEC];
 /* The descriptor used to load the IDTR */
 extern x86_desc_t idt_desc_ptr;
+
+// void handler(void){
+//     printf
+// }
+
+// SET_IDT_ENTRY(idt[0], handler)
 
 /* Sets runtime parameters for an IDT entry */
 #define SET_IDT_ENTRY(str, handler)                              \
