@@ -1,2 +1,1 @@
-/*
-*/
+/* pushal call popal then iret before each function call recommend making functions in here and calling them in the table in idt.c*/
