@@ -21,7 +21,7 @@ void i8259_init(void) {
     outb(ICW2_MASTER, (MASTER_8259_PORT + 1)); 
     outb(ICW2_SLAVE, (SLAVE_8259_PORT + 1));
     outb(ICW3_MASTER, (MASTER_8259_PORT + 1));
-    outb(ICW3_SLAVE, (SLAVE_8259_PORT + 1));
+    outb(ICW3_SLAVE, (SLAVE_8259_PORT + 1)); //Slave attached to IR line 2 
     outb(ICW4, (MASTER_8259_PORT + 1));
     outb(ICW4, (SLAVE_8259_PORT + 1));
     // Mask all interrupts
@@ -63,12 +63,10 @@ void disable_irq(uint32_t irq_num) {
 void send_eoi(uint32_t irq_num) {
     if (irq_num > 15 || irq_num < 0) //maximum possible irq number is 15 if not then invalid
         return;
-    // check whether it is master IRQ_num, i.e. 0-7
-    if (irq_num < 8) {
+    if (irq_num < 8) {// check whether it is master IRQ_num, i.e. 0-7
         outb(EOI | irq_num, MASTER_8259_PORT);
         return;
-    }
-    // it is slave IRQ_num, i.e. 8-15
-    outb(EOI | SLAVE_PORT, MASTER_8259_PORT);
+    }// it is slave IRQ_num, i.e. 8-15
+    outb(EOI | 2, MASTER_8259_PORT);
     outb(EOI | (irq_num - 8), SLAVE_8259_PORT);
 }
