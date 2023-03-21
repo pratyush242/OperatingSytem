@@ -7,24 +7,23 @@
     .globl name                     
     name:                           ;\
         pushal                      ;\
-        pushfl                      ;\
-        pushl $name                 ;\
+        pushl $id                   ;\
         call blue_screen            ;\
         addl $4, %esp               ;\
-        popal                       ;\   
-        popfl                       ;\            
+        popal                       ;\
+        addl $4, %esp               ;\
         iret
 
 #define EXCEPTION_WRAPPER(name, id)     \
     .globl name                     
     name:                           ;\
+        pushl $0                    ;\
         pushal                      ;\
-        pushfl                      ;\
-        pushl $name                 ;\
+        pushl $id                   ;\
         call blue_screen            ;\
         addl $4, %esp               ;\
-        popal                       ;\   
-        popfl                       ;\            
+        popal                       ;\
+        addl $4, %esp               ;\
         iret
 
 
@@ -59,7 +58,7 @@ EXCEPTION_WRAPPER_ERROR (INVALID_TSS, 0x0A);
 EXCEPTION_WRAPPER_ERROR (SEGMENT_NOT_PRESENT, 0x0B);
 EXCEPTION_WRAPPER_ERROR (STACK_SEGMENT_FAULT, 0x0C);
 EXCEPTION_WRAPPER_ERROR (GENERAL_PROTECTION, 0x0D);
-EXCEPTION_WRAPPER_ERROR (PAGE_FAULTt, 0x0E);
+EXCEPTION_WRAPPER_ERROR (PAGE_FAULT, 0x0E);
 EXCEPTION_WRAPPER (MATH_FAULT, 0x10);
 EXCEPTION_WRAPPER_ERROR (ALIGNMENT_CHECK, 0x11);
 EXCEPTION_WRAPPER (MACHINE_CHECK, 0x12);
@@ -67,8 +66,8 @@ EXCEPTION_WRAPPER (SIMD_FLOATING_POINT_CHECK, 0x13);
 
 
 
-INTERRUPT_WRAPPER(, 0x21);
-INTERRUPT_WRAPPER(, 0x28);
+INTERRUPT_WRAP(rtc_wrap, rtc_interrupt);
+INTERRUPT_WRAP(keyboard_wrap, keyboard_interrupt);
 
 
 
