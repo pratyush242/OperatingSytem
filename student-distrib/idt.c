@@ -1,6 +1,7 @@
 #include "idt.h"
 #include "lib.h"
 #include "x86_desc.h"
+#include "x86_desc.S"
 #include "wrapper.S"
 
 
