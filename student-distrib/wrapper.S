@@ -66,8 +66,8 @@ EXCEPTION_WRAPPER (SIMD_FLOATING_POINT_CHECK, 0x13);
 
 
 
-INTERRUPT_WRAP(rtc_wrap, rtc_interrupt);
-INTERRUPT_WRAP(keyboard_wrap, keyboard_interrupt);
+INTERRUPT_WRAP(rtc_wrap, rtc_handler);
+INTERRUPT_WRAP(keyboard_wrap, handler_keyboard);
 
 
 
