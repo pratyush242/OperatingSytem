@@ -59,27 +59,29 @@ void division_by_zero_test(){
 	return result;
 }
 
-void null_test(){
-	TEST_HEADER;
-    int result;
-	int* a = NULL;
+// void null_test(){
+// 	TEST_HEADER;
+//     int result;
+// 	int* a = NULL;
 	
-	result = *(a);
-	return FAIL;
+// 	result = *(a);
+// 	return FAIL;
 
-}
+// }
 
-void rtc_test(){
-	TEST_HEADER;
-    __asm__("int $x21");
-	return FAIL;
-}
+// void rtc_test(){
+// 	TEST_HEADER;
+// 	printf("rtc");
+//     // __asm__("int 0x21");
+// 	return FAIL;
+// }
 
-void system__call_test(){
-	TEST_HEADER;
-    __asm__("int $x80");
-	return FAIL;
-}
+// void system__call_test(){
+// 	TEST_HEADER;
+//     // __asm__("int 0x80");
+// 	printf("syscall");
+// 	return FAIL;
+// }
 
 
 /* Checkpoint 2 tests */
@@ -91,7 +93,7 @@ void system__call_test(){
 /* Test suite entry point */
 void launch_tests(){
 	TEST_OUTPUT("idt_test", idt_test());
-	// TEST_OUTPUT("division_by_zero_test", division_by_zero_test());
+	TEST_OUTPUT("division_by_zero_test", division_by_zero_test());
 	// TEST_OUTPUT("null_test", null_test());
 	// TEST_OUTPUT("rtc_test", rtc_test());
 	// TEST_OUTPUT("system__call_test", system__call_test());

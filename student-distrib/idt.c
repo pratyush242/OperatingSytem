@@ -4,6 +4,91 @@
 #include "wrapper.h"
 
 
+void divide_error(){
+    printf("divide error");
+   
+}
+void Reserved(){
+    printf("Reserved");
+    
+}
+void NMI_INTERRUPT(){
+    printf("NMI_INTERRUPT");
+   
+}
+void BREAKPOINT(){
+    printf("BREAKPOINT");
+   
+}
+void OVERFLOW(){
+    printf("OVERFLOW");
+   
+}
+
+void BOUND(){
+    printf("BOUND");
+   
+}
+void INVALID_OPCODE(){
+    printf("INVALID_OPCODE");
+   
+}
+void DEV_NOT_AVAILABLE(){
+    printf("DEV_NOT_AVAILABLE");
+   
+}
+void DOUBLE_FAULT(){
+    printf("DOUBLE_FAULT");
+   
+}
+void SEGMENT_OVERRUN(){
+    printf("SEGMENT_OVERRUN");
+   
+}
+void INVALID_TSS(){
+    printf("INAVLID_TSS");
+   
+}
+void SEGMENT_NOT_PRESENT(){
+    printf("SEGMENT_NOT_PRESENT");
+   
+}
+void STACK_SEGMENT_FAULT(){
+    printf("STACK_sEGMENT_FAULT");
+   
+}
+void GENERAL_PROTECTION(){
+    printf("GENERAL_PROTECTION");
+}
+
+void PAGE_FAULT(){
+    printf("PAGE_FAULT");
+}
+void MATH_FAULT(){
+    printf("MATH_FAULT");
+}
+void ALIGNMENT_CHECK(){
+    printf("ALIGNMENT_CHECK");
+}
+void MACHINE_CHECK(){
+    printf("MACHINE_CHECK");
+}
+void SIMD_FLOATING_POINT_CHECK(){
+    printf("SIMD_FLOATING_POINT_CHECK");
+
+}
+void keyboard_wrap(){
+    printf("keyboard");
+
+}
+void rtc_wrap(){
+    printf("rtc");
+
+}
+
+
+
+
 void idt_init(){
 
     int i ;
@@ -29,7 +114,7 @@ void idt_init(){
 
     SET_IDT_ENTRY(idt[0], divide_error);
     SET_IDT_ENTRY(idt[1], Reserved);
-    SET_IDT_ENTRY(idt[2], NMI_INTERRUPT );
+    SET_IDT_ENTRY(idt[2], NMI_INTERRUPT);
     SET_IDT_ENTRY(idt[3], BREAKPOINT);
     SET_IDT_ENTRY(idt[4], OVERFLOW);
     SET_IDT_ENTRY(idt[5], BOUND);
@@ -38,13 +123,13 @@ void idt_init(){
     SET_IDT_ENTRY(idt[8], DOUBLE_FAULT);
     SET_IDT_ENTRY(idt[9], SEGMENT_OVERRUN);
     SET_IDT_ENTRY(idt[10], INVALID_TSS);
-    SET_IDT_ENTRY(idt[11], SEGMENT_NOT_PRESENT );
+    SET_IDT_ENTRY(idt[11], SEGMENT_NOT_PRESENT);
     SET_IDT_ENTRY(idt[12], STACK_SEGMENT_FAULT);
-    SET_IDT_ENTRY(idt[13], GENERAL_PROTECTION );
-    SET_IDT_ENTRY(idt[14], PAGE_FAULT );
-    SET_IDT_ENTRY(idt[16], MATH_FAULT );
+    SET_IDT_ENTRY(idt[13], GENERAL_PROTECTION);
+    SET_IDT_ENTRY(idt[14], PAGE_FAULT);
+    SET_IDT_ENTRY(idt[16], MATH_FAULT);
     SET_IDT_ENTRY(idt[17], ALIGNMENT_CHECK);
-    SET_IDT_ENTRY(idt[18], MACHINE_CHECK );
+    SET_IDT_ENTRY(idt[18], MACHINE_CHECK);
     SET_IDT_ENTRY(idt[19], SIMD_FLOATING_POINT_CHECK);
 
     
@@ -59,7 +144,7 @@ void idt_init(){
 
     idt[0x80].dpl = 3;
 
-    SET_IDT_ENTRY(idt[0x80], system_call);
+    //SET_IDT_ENTRY(idt[0x80], system_call);
 
     lidt(idt_desc_ptr); 
 
@@ -86,11 +171,8 @@ char* array_of_names[] = {
     "MATH_FAULT",
     "ALIGNMENT_CHECK",
     "MACHINE_CHECK",
-    "SIMD_FLOATING_POINT_CHECK",
-
-
-
-}
+    "SIMD_FLOATING_POINT_CHECK"
+};
 
 
 void blue_screen(uint32_t id){

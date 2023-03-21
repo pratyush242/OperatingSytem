@@ -1,4 +1,18 @@
 1. 
 -> wrong sizing on GDT
 2.# errors 
--> .S files were included 
+->"header file errors"
+.S files were included .
+
+3. #errors
+->  "_" character not recognized
+We were getting this error because the function in wrapper.S were defined in an incorrect format.
+
+4, #errors
+->  "unrecognized charcater"
+We were getting this error becaus the interrupt handlers being passed in set idt were not defined in header file of wrapper.
+
+5, #errors
+
+->   "void value not ignored as it ought to be"
+
