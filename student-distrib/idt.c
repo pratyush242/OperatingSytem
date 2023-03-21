@@ -65,10 +65,10 @@ void idt_init(){
     SET_IDT_ENTRY(idt[18], MACHINE_CHECK );
     SET_IDT_ENTRY(idt[19], SIMD_FLOATING_POINT_CHECK);
 
-    idt[0x21].present = 1;
+    
     idt[0x21].reserved3 = 1;
 
-    idt[0x28].present = 1;
+    
     idt[0x28].reserved3 = 1;
 
     SET_IDT_ENTRY(idt[0x21], rtc_wrap);
