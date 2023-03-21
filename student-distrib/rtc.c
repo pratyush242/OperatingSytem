@@ -2,7 +2,7 @@
 #include "lib.h"
 
 
-uint32_t rtc_counter = 0;
+
 
 void rtc_init(){
     
