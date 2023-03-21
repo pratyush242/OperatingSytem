@@ -74,6 +74,11 @@ void idt_init(){
     SET_IDT_ENTRY(idt[0x21], rtc_wrap);
     SET_IDT_ENTRY(idt[0x28], keyboard_wrap);
 
+
+    idt[0x80].dpl = 3;
+
+    SET_IDT_ENTRY(idt[0x80], rtc_wrap);
+
     lidt(idt_desc_ptr);
 
 
@@ -99,7 +104,8 @@ char* array_of_names[] = {
     "MATH_FAULT",
     "ALIGNMENT_CHECK",
     "MACHINE_CHECK",
-    "SIMD_FLOATING_POINT_CHECK"
+    "SIMD_FLOATING_POINT_CHECK",
+
 
 
 
@@ -117,8 +123,11 @@ char* array_of_names[] = {
 
 
 void blue_screen(uint32_t id){
+    if(id == 0x80){
+        printf("system call error");
+    }
     char* name = array_of_names[id];
-    printf("%s at adress", name);
+    printf("%s", name);
 
     
 }

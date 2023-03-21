@@ -35,7 +35,7 @@
     name:                           ;\
         pushal                      ;\
         pushfl                      ;\
-        call func                     ;\
+        call func                   ;\
         popal                       ;\   
         popfl                       ;\            
         iret
