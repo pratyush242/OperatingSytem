@@ -6,9 +6,7 @@
 
 
 /* pushal call popal then iret before each function call recommend making functions in here and calling them in the table in idt.c*/
-#define EXCEPTION_WRAPPER_ERROR(name, id)     \
-    .globl name                     
-    name:                           ;\
+#define EXCEPTION_WRAPPER_ERROR(name, id)     \                    
         pushal                      ;\
         pushl $id                   ;\
         call blue_screen            ;\
@@ -17,9 +15,7 @@
         addl $4, %esp               ;\
         iret
 
-#define EXCEPTION_WRAPPER(name, id)     \
-    .globl name                     
-    name:                           ;\
+#define EXCEPTION_WRAPPER(name, id)     \                    
         pushl $0                    ;\
         pushal                      ;\
         pushl $id                   ;\
@@ -30,9 +26,7 @@
         iret
 
 
-#define INTERRUPT_WRAPPER(name, func)     \
-    .globl name                     
-    name:                           ;\
+#define INTERRUPT_WRAPPER(name, func)     \                    
         pushal                      ;\
         pushfl                      ;\
         call func                   ;\
@@ -45,7 +39,8 @@
 
 
 
-
+.globl name                     
+name:
 /*call the functions*/
 EXCEPTION_WRAPPER (divide_error, 0x00);
 EXCEPTION_WRAPPER (Reserved, 0x01);
@@ -66,9 +61,6 @@ EXCEPTION_WRAPPER (MATH_FAULT, 0x10);
 EXCEPTION_WRAPPER_ERROR (ALIGNMENT_CHECK, 0x11);
 EXCEPTION_WRAPPER (MACHINE_CHECK, 0x12);
 EXCEPTION_WRAPPER (SIMD_FLOATING_POINT_CHECK, 0x13);
-
-
-
 INTERRUPT_WRAP(rtc_wrap, rtc_handler);
 INTERRUPT_WRAP(keyboard_wrap, handler_keyboard);
 

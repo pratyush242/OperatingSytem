@@ -1,29 +1,19 @@
 #include "idt.h"
 #include "lib.h"
 #include "x86_desc.h"
-#include "x86_desc.S"
-#include "wrapper.S"
-
-
-
-
+#include "wrapper.h"
 
 
 void idt_init(){
 
     int i ;
 
-
-
     for(i = 0;i<NUM_VEC;i++){
-
-
-        if(i<= 19 && i!=15){
+        if(i<= 19 && i!=15){ 
             idt[i].present = 1;
         }
         else{
             idt[i].present = 0;
-
         }
         idt[i].seg_selector = KERNEL_CS;
         idt[i].dpl = 0; // change to 3 for system call handler
@@ -33,15 +23,6 @@ void idt_init(){
         idt[i].reserved3 = 0; // change to 1 for interrupt
         idt[i].reserved4 = 0;
         idt[i].size = 1;
-
-
-        
-
-
-
-
-
-
     }
 //have to add a wrapper not sure how to 
 //made a new file interrupt_wrapper
@@ -106,17 +87,6 @@ char* array_of_names[] = {
     "ALIGNMENT_CHECK",
     "MACHINE_CHECK",
     "SIMD_FLOATING_POINT_CHECK",
-
-
-
-
-
-
-
-
-
-
-
 
 
 
