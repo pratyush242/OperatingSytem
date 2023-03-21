@@ -1,7 +1,7 @@
 #include "idt.h"
 #include "lib.h"
 #include "x86_desc.h"
-#include "interrupt_wrapper.S"
+#include "wrapper.S"
 
 
 void divide_error(){
@@ -123,29 +123,36 @@ void idt_init(){
 //have to add a wrapper not sure how to 
 //made a new file interrupt_wrapper
 
-    SET_IDT_ENTRY(idt[0], divide_error());
-    SET_IDT_ENTRY(idt[1], Reserved());
-    SET_IDT_ENTRY(idt[2], NMI_INTERRUPT() );
-    SET_IDT_ENTRY(idt[3], BREAKPOINT());
-    SET_IDT_ENTRY(idt[4], OVERFLOW());
-    SET_IDT_ENTRY(idt[5], BOUND());
-    SET_IDT_ENTRY(idt[6], INVALID_OPCODE());
-    SET_IDT_ENTRY(idt[7], DEV_NOT_AVAILABLE());
-    SET_IDT_ENTRY(idt[8], DOUBLE_FAULT());
-    SET_IDT_ENTRY(idt[9], SEGMENT_OVERRUN());
-    SET_IDT_ENTRY(idt[10], INVALID_TSS());
-    SET_IDT_ENTRY(idt[11], SEGMENT_NOT_PRESENT() );
-    SET_IDT_ENTRY(idt[12], STACK_SEGMENT_FAULT());
-    SET_IDT_ENTRY(idt[13], GENERAL_PROTECTION() );
-    SET_IDT_ENTRY(idt[14], PAGE_FAULT() );
-    SET_IDT_ENTRY(idt[16], MATH_FAULT() );
-    SET_IDT_ENTRY(idt[17], ALIGNMENT_CHECK());
-    SET_IDT_ENTRY(idt[18], MACHINE_CHECK() );
-    SET_IDT_ENTRY(idt[19], SIMD_FLOATING_POINT_CHECK());
+    SET_IDT_ENTRY(idt[0], divide_error);
+    SET_IDT_ENTRY(idt[1], Reserved);
+    SET_IDT_ENTRY(idt[2], NMI_INTERRUPT );
+    SET_IDT_ENTRY(idt[3], BREAKPOINT);
+    SET_IDT_ENTRY(idt[4], OVERFLOW);
+    SET_IDT_ENTRY(idt[5], BOUND);
+    SET_IDT_ENTRY(idt[6], INVALID_OPCODE);
+    SET_IDT_ENTRY(idt[7], DEV_NOT_AVAILABLE);
+    SET_IDT_ENTRY(idt[8], DOUBLE_FAULT);
+    SET_IDT_ENTRY(idt[9], SEGMENT_OVERRUN);
+    SET_IDT_ENTRY(idt[10], INVALID_TSS);
+    SET_IDT_ENTRY(idt[11], SEGMENT_NOT_PRESENT );
+    SET_IDT_ENTRY(idt[12], STACK_SEGMENT_FAULT);
+    SET_IDT_ENTRY(idt[13], GENERAL_PROTECTION );
+    SET_IDT_ENTRY(idt[14], PAGE_FAULT );
+    SET_IDT_ENTRY(idt[16], MATH_FAULT );
+    SET_IDT_ENTRY(idt[17], ALIGNMENT_CHECK);
+    SET_IDT_ENTRY(idt[18], MACHINE_CHECK );
+    SET_IDT_ENTRY(idt[19], SIMD_FLOATING_POINT_CHECK);
     lidt(idt_desc_ptr);
 
 
 
+}
+
+
+void blue_screen(name){
+    printf("%s at adress", name);
+
+    
 }
 
 
