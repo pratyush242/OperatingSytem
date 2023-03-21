@@ -1,5 +1,8 @@
 #define ASM 1
 
+#include "wrapper.h"
+
+
 
 
 /* pushal call popal then iret before each function call recommend making functions in here and calling them in the table in idt.c*/
@@ -27,12 +30,12 @@
         iret
 
 
-#define INTERRUPT_WRAPPER(name, id)     \
+#define INTERRUPT_WRAPPER(name, func)     \
     .globl name                     
     name:                           ;\
         pushal                      ;\
         pushfl                      ;\
-        call id                     ;\
+        call func                     ;\
         popal                       ;\   
         popfl                       ;\            
         iret

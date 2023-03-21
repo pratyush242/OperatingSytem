@@ -4,84 +4,6 @@
 #include "wrapper.S"
 
 
-void divide_error(){
-    printf("divide error");
-   
-}
-void Reserved(){
-    printf("Reserved");
-    
-}
-void NMI_INTERRUPT(){
-    printf("NMI_INTERRUPT");
-   
-}
-void BREAKPOINT(){
-    printf("BREAKPOINT");
-   
-}
-void OVERFLOW(){
-    printf("OVERFLOW");
-   
-}
-
-
-
-
-
-
-void BOUND(){
-    printf("BOUND");
-   
-}
-void INVALID_OPCODE(){
-    printf("INVALID_OPCODE");
-   
-}
-void DEV_NOT_AVAILABLE(){
-    printf("DEV_NOT_AVAILABLE");
-   
-}
-void DOUBLE_FAULT(){
-    printf("DOUBLE_FAULT");
-   
-}
-void SEGMENT_OVERRUN(){
-    printf("SEGMENT_OVERRUN");
-   
-}
-void INVALID_TSS(){
-    printf("INAVLID_TSS");
-   
-}
-void SEGMENT_NOT_PRESENT(){
-    printf("SEGMENT_NOT_PRESENT");
-   
-}
-void STACK_SEGMENT_FAULT(){
-    printf("STACK_sEGMENT_FAULT");
-   
-}
-void GENERAL_PROTECTION(){
-    printf("GENERAL_PROTECTION");
-}
-
-void PAGE_FAULT(){
-    printf("PAGE_FAULT");
-}
-void MATH_FAULT(){
-    printf("MATH_FAULT");
-}
-void ALIGNMENT_CHECK(){
-    printf("ALIGNMENT_CHECK");
-}
-void MACHINE_CHECK(){
-    printf("MACHINE_CHECK");
-}
-void SIMD_FLOATING_POINT_CHECK(){
-    printf("SIMD_FLOATING_POINT_CHECK");
-
-}
 
 
 
@@ -142,14 +64,60 @@ void idt_init(){
     SET_IDT_ENTRY(idt[17], ALIGNMENT_CHECK);
     SET_IDT_ENTRY(idt[18], MACHINE_CHECK );
     SET_IDT_ENTRY(idt[19], SIMD_FLOATING_POINT_CHECK);
+
+    idt[0x21].present = 1;
+    idt[0x21].reserved3 = 1;
+
+    idt[0x28].present = 1;
+    idt[0x28].reserved3 = 1;
+
+    SET_IDT_ENTRY(idt[0x21], rtc_wrap);
+    SET_IDT_ENTRY(idt[0x28], keyboard_wrap);
+
     lidt(idt_desc_ptr);
 
 
 
 }
 
+char* array_of_names[] = {
+    "divide_error",
+    "Reserved",
+    "NMI_INTERRUPT",
+    "BREAKPOINT",
+    "OVERFLOW",
+    "BOUND",
+    "INVALID_OPCODE",
+    "DEV_NOT_AVAILABLE",
+    "DOUBLE_FAULT",
+    "SEGMENT_OVERRUN",
+    "INVALID_TSS",
+    "SEGMENT_NOT_PRESENT",
+    "STACK_SEGMENT_FAULT",
+    "GENERAL_PROTECTION",
+    "PAGE_FAULT",
+    "MATH_FAULT",
+    "ALIGNMENT_CHECK",
+    "MACHINE_CHECK",
+    "SIMD_FLOATING_POINT_CHECK"
 
-void blue_screen(name){
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+void blue_screen(uint32_t id){
+    char* name = array_of_names[id];
     printf("%s at adress", name);
 
     
