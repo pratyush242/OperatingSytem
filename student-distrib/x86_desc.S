@@ -30,8 +30,7 @@ ldt_desc:
     .align 4
 
 gdt_desc_ptr:
-    # gdt size 
-    # gdt address
+    
     .word gdt_bottom - gdt - 1 
     .long gdt
 

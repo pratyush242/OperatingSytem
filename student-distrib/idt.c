@@ -78,9 +78,9 @@ void idt_init(){
 
     idt[0x80].dpl = 3;
 
-    SET_IDT_ENTRY(idt[0x80], rtc_wrap);
+    SET_IDT_ENTRY(idt[0x80], system_call);
 
-    lidt(idt_desc_ptr);
+    lidt(idt_desc_ptr); 
 
 
 
