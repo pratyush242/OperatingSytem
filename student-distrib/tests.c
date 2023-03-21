@@ -47,6 +47,18 @@ int idt_test(){
 
 // add more tests here
 
+
+
+int division_test(){
+	TEST_HEADER;
+
+	int testVar;
+	int one = 1;
+	int zero = 0;
+	 = one/zero;
+}
+
+
 /* Checkpoint 2 tests */
 /* Checkpoint 3 tests */
 /* Checkpoint 4 tests */
