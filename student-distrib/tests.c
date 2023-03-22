@@ -48,25 +48,14 @@ int idt_test(){
 
 // add more tests here
 
-
-
-void division_by_zero_test(){
+int exceptions_test(){
 	TEST_HEADER;
-
-	int result;
-	int a = 22;
-	int b = 0;
-	result = a/b;
-	
+	/* Use exception #15 for assertions, otherwise
+	   reserved by Intel */
+	int i = 1 / 0;
+	// asm volatile("int $00");
+	return FAIL;
 }
-
-// int exceptions_test(){
-// 	/* Use exception #15 for assertions, otherwise
-// 	   reserved by Intel */
-// 	division_by_zero_test();
-// 	asm volatile("int $00");
-// 	return PASS;
-// }
 
 
 
@@ -104,11 +93,11 @@ void division_by_zero_test(){
 /* Test suite entry point */
 
 void launch_tests(){
-	printf("WEHITTHIS");
-	division_by_zero_test();
+	//printf("WEHITTHIS");
+	//division_by_zero_test();
 	//idt_init();
-	//TEST_OUTPUT("idt_test", idt_test());
-	//TEST_OUTPUT("division_by_zero_test", exceptions_test());
+	TEST_OUTPUT("idt_test", idt_test());
+	TEST_OUTPUT("division_by_zero_test", exceptions_test());
 	// TEST_OUTPUT("null_test", null_test());
 	//TEST_OUTPUT("_test", rtc_test());
 	// TEST_OUTPUT("system__call_test", system__call_test());
