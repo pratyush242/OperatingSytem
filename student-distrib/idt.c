@@ -4,87 +4,87 @@
 #include "wrapper.h"
 
 
-void divide_error(){
-    printf("divide error");
+// void divide_error(){
+//     printf("divide error");
    
-}
-void Reserved(){
-    printf("Reserved");
+// }
+// void Reserved(){
+//     printf("Reserved");
     
-}
-void NMI_INTERRUPT(){
-    printf("NMI_INTERRUPT");
+// }
+// void NMI_INTERRUPT(){
+//     printf("NMI_INTERRUPT");
    
-}
-void BREAKPOINT(){
-    printf("BREAKPOINT");
+// }
+// void BREAKPOINT(){
+//     printf("BREAKPOINT");
    
-}
-void OVERFLOW(){
-    printf("OVERFLOW");
+// }
+// void OVERFLOW(){
+//     printf("OVERFLOW");
    
-}
+// }
 
-void BOUND(){
-    printf("BOUND");
+// void BOUND(){
+//     printf("BOUND");
    
-}
-void INVALID_OPCODE(){
-    printf("INVALID_OPCODE");
+// }
+// void INVALID_OPCODE(){
+//     printf("INVALID_OPCODE");
    
-}
-void DEV_NOT_AVAILABLE(){
-    printf("DEV_NOT_AVAILABLE");
+// }
+// void DEV_NOT_AVAILABLE(){
+//     printf("DEV_NOT_AVAILABLE");
    
-}
-void DOUBLE_FAULT(){
-    printf("DOUBLE_FAULT");
+// }
+// void DOUBLE_FAULT(){
+//     printf("DOUBLE_FAULT");
    
-}
-void SEGMENT_OVERRUN(){
-    printf("SEGMENT_OVERRUN");
+// }
+// void SEGMENT_OVERRUN(){
+//     printf("SEGMENT_OVERRUN");
    
-}
-void INVALID_TSS(){
-    printf("INAVLID_TSS");
+// }
+// void INVALID_TSS(){
+//     printf("INAVLID_TSS");
    
-}
-void SEGMENT_NOT_PRESENT(){
-    printf("SEGMENT_NOT_PRESENT");
+// }
+// void SEGMENT_NOT_PRESENT(){
+//     printf("SEGMENT_NOT_PRESENT");
    
-}
-void STACK_SEGMENT_FAULT(){
-    printf("STACK_sEGMENT_FAULT");
+// }
+// void STACK_SEGMENT_FAULT(){
+//     printf("STACK_sEGMENT_FAULT");
    
-}
-void GENERAL_PROTECTION(){
-    printf("GENERAL_PROTECTION");
-}
+// }
+// void GENERAL_PROTECTION(){
+//     printf("GENERAL_PROTECTION");
+// }
 
-void PAGE_FAULT(){
-    printf("PAGE_FAULT");
-}
-void MATH_FAULT(){
-    printf("MATH_FAULT");
-}
-void ALIGNMENT_CHECK(){
-    printf("ALIGNMENT_CHECK");
-}
-void MACHINE_CHECK(){
-    printf("MACHINE_CHECK");
-}
-void SIMD_FLOATING_POINT_CHECK(){
-    printf("SIMD_FLOATING_POINT_CHECK");
+// void PAGE_FAULT(){
+//     printf("PAGE_FAULT");
+// }
+// void MATH_FAULT(){
+//     printf("MATH_FAULT");
+// }
+// void ALIGNMENT_CHECK(){
+//     printf("ALIGNMENT_CHECK");
+// }
+// void MACHINE_CHECK(){
+//     printf("MACHINE_CHECK");
+// }
+// void SIMD_FLOATING_POINT_CHECK(){
+//     printf("SIMD_FLOATING_POINT_CHECK");
 
-}
-void keyboard_wrap(){
-    printf("keyboard");
+// }
+// void keyboard_wrap(){
+//     printf("keyboard");
 
-}
-void rtc_wrap(){
-    printf("rtc");
+// }
+// void rtc_wrap(){
+//     printf("rtc");
 
-}
+// }
 
 
 

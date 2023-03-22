@@ -9,44 +9,32 @@
 
                  
 #define pushall \
-pushall:
-        pushl %eax ;\ 
+        pushl %eax ;\
         pushl %ebp ;\
         pushl %ebx ;\
         pushl %ecx ;\
         pushl %edx ;\
         pushl %edi ;\
-        pushl %esi ;\  
+        pushl %esi ;
         
 #define popall \
-popall:
         popl %esi ;\
         popl %edi ;\
         popl %edx ;\
         popl %ecx ;\
         popl %ebx ;\
         popl %ebp ;\
-        popl %eax ;\
-        
-
-
+        popl %eax ;
+   
 #define INTERRUPT_WRAPPER(name,id) \
-.globl name                     
-name:
-
-INTERRUPT_WRAPPER:                   
-        pushall                   ;\
-        pushfl                      ;\
-        call name                   ;\
-        popall                     ;\   
-        popfl                       ;\            
-        iret         
-
-
-
-
-
-
+        .globl name     ;\               
+        name:           ;\    
+                pushall ;\
+                pushfl  ;\
+                call name       ;\
+                popall  ;\
+                popfl   ;\      
+                iret         
 
 
 /*call the functions*/
