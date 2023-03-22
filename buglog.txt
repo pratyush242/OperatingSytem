@@ -15,4 +15,5 @@ We were getting this error becaus the interrupt handlers being passed in set idt
 5, #errors
 
 ->   "void value not ignored as it ought to be"
+We were getting this error because our function declarations were incorrect.
 

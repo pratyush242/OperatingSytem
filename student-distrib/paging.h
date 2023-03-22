@@ -13,5 +13,7 @@ void initializeDirectory();
 extern void enablePaging();
 
 extern void loadDirectory(PageDirectoryEntry* pg_dir);
+
 #endif
 #endif
+

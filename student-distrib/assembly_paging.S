@@ -3,7 +3,7 @@
 .globl enablePaging
 
 
-
+/* paging enable subroutine*/
 enablePaging:
     pushl %ebp
     movl %esp, %ebp
@@ -18,6 +18,7 @@ enablePaging:
 
     leave
     ret
+/* Load directory subroutine*/
 
 .globl loadDirectory
 loadDirectory:

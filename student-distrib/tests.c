@@ -107,9 +107,9 @@ void launch_tests(){
 	//printf("WEHITTHIS");
 	//division_by_zero_test();
 	//idt_init();
-	//TEST_OUTPUT("idt_test", idt_test());
-	TEST_OUTPUT("video_memory_test", video_memory_test());
-	//TEST_OUTPUT("division_by_zero_test", exceptions_test());
+	TEST_OUTPUT("idt_test", idt_test());
+	//TEST_OUTPUT("video_memory_test", video_memory_test());
+	TEST_OUTPUT("division_by_zero_test", exceptions_test());
 	// TEST_OUTPUT("null_test", null_test());
 	//TEST_OUTPUT("_test", rtc_test());
 	// TEST_OUTPUT("system__call_test", system__call_test());

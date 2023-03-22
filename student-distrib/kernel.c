@@ -141,16 +141,21 @@ void entry(unsigned long magic, unsigned long addr) {
     
     idt_init();
     /* Init the PIC */
-    //i8259_init();
-    // init_keyboard();
-    // rtc_init();
+    i8259_init();
+    //init keyboard
+    printf("pic");
+    init_keyboard();
+    //rtc init
+    rtc_init();
 
     
-    /* Initialize devices, memory, filesystem, enable device interrupts on the
-     * PIC, any other initialization stuff... */
+    // /* Initialize devices, memory, filesystem, enable device interrupts on the
+    //  * PIC, any other initialization stuff... */
+    //paging init
     initializeTable();
 
     initializeDirectory();
+
 
     /* Enable interrupts */
     /* Do not enable the following until after you have set up your
