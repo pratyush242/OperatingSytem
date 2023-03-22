@@ -9,7 +9,7 @@
 #include "debug.h"
 #include "tests.h"
 #include "idt.h"
-
+#include "paging.h"
 #define RUN_TESTS 1
 
 /* Macros. */
@@ -145,9 +145,12 @@ void entry(unsigned long magic, unsigned long addr) {
     // init_keyboard();
     // rtc_init();
 
-
+    
     /* Initialize devices, memory, filesystem, enable device interrupts on the
      * PIC, any other initialization stuff... */
+    initializeTable();
+
+    initializeDirectory();
 
     /* Enable interrupts */
     /* Do not enable the following until after you have set up your

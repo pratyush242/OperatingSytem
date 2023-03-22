@@ -125,6 +125,83 @@ extern uint32_t tss_size;
 extern seg_desc_t tss_desc_ptr;
 extern tss_t tss;
 
+typedef union PageTableEntry {
+    uint32_t val; 
+
+    struct {
+        uint32_t Present              :1; 
+        uint32_t ReadWrite        :1; 
+        uint32_t UserSupervisor    :1;   
+        uint32_t WriteThrough      :1;
+        uint32_t CacheDisabled      :1;  
+        uint32_t Accessed           :1; 
+        uint32_t Dirty             :1; 
+        uint32_t PageTableAttr :1; 
+        uint32_t GlobalPage        :1; 
+        uint32_t ProgUse          :3; 
+        uint32_t PageBaseAddr   :20; 
+    } __attribute__ ((packed));
+ 
+} PageTableEntry; 
+
+
+typedef union DirFourKBEntry {
+    uint32_t val; 
+
+   
+    struct {
+        uint32_t Present           :1; 
+        uint32_t ReadWrite       :1;
+        uint32_t UserSupervisor    :1; 
+        uint32_t WriteThrough    :1; 
+        uint32_t CacheDisabled     :1; 
+        uint32_t Accessed           :1; 
+        uint32_t Reserved           :1; 
+        uint32_t PageSize         :1; 
+        uint32_t GlobalPage       :1;
+        uint32_t ProgUse          :3;
+        uint32_t PageBaseAddr    :20; 
+    } __attribute__ ((packed)); 
+
+
+}DirFourKBEntry; 
+
+
+typedef union DirFourMBEntry {
+    uint32_t val; 
+
+   
+    struct {
+        uint32_t Present            :1; 
+        uint32_t ReadWrite          :1; 
+        uint32_t UserSupervisor     :1; 
+        uint32_t WriteThrough     :1;
+        uint32_t CacheDisabled       :1; 
+        uint32_t Accessed           :1; 
+        uint32_t Dirty            :1; 
+        uint32_t PageSize          :1;
+        uint32_t GlobalPage        :1; 
+        uint32_t ProgUse         :3; 
+        uint32_t PageTableAttr   :1; 
+        uint32_t Reserved              :9; 
+        uint32_t PageBaseAddr    :10; 
+    } __attribute__((packed)); 
+
+}DirFourMBEntry; 
+
+
+
+
+
+typedef union PageDirectoryEntry {
+    DirFourKBEntry FourKB; 
+    DirFourMBEntry FourMB; 
+} PageDirectoryEntry; 
+
+
+static PageDirectoryEntry PageDir[1024] __attribute__((aligned (4096))); 
+static PageTableEntry PageTable[1024] __attribute__((aligned (4096))); 
+
 /* Sets runtime-settable parameters in the GDT entry for the LDT */
 #define SET_LDT_PARAMS(str, addr, lim)                          \
 do {                                                            \
