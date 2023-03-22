@@ -199,8 +199,7 @@ typedef union PageDirectoryEntry {
 } PageDirectoryEntry; 
 
 
-static PageDirectoryEntry PageDir[1024] __attribute__((aligned (4096))); 
-static PageTableEntry PageTable[1024] __attribute__((aligned (4096))); 
+
 
 /* Sets runtime-settable parameters in the GDT entry for the LDT */
 #define SET_LDT_PARAMS(str, addr, lim)                          \
