@@ -113,6 +113,43 @@ int rtc_test(){
 	return FAIL;
 }
 
+
+
+int kernel_lower__fail_test(){
+    TEST_HEADER;
+    char* temp_pointer = (char*)0x3FFFFF;
+    char final = *temp_pointer;
+    return FAIL;
+}
+
+
+int kernel_upper__fail_test(){
+    TEST_HEADER;
+    char* temp_pointer = (char*)0x800000;
+    char final = *temp_pointer;
+    return FAIL;
+}
+
+
+int video_lower__fail_test(){
+
+    TEST_HEADER;
+    char* temp_pointer = (char*)0xB7FFF;
+    char final = *temp_pointer;
+    return FAIL;
+
+}
+
+
+int video_upper__fail_test(){
+
+    TEST_HEADER;
+    char* temp_pointer = (char*)0xB9000;
+    char final = *temp_pointer;
+    return FAIL;
+
+}
+
 // void system__call_test(){
 // 	TEST_HEADER;
 //     // __asm__("int 0x80");
@@ -135,9 +172,9 @@ void launch_tests(){
 	//idt_init();
 	TEST_OUTPUT("idt_test", idt_test());
 	//TEST_OUTPUT("video_memory_test", video_memory_test());
+	TEST_OUTPUT("kernel_lower__fail_test", kernel_lower__fail_test());
 	//TEST_OUTPUT("division_by_zero_test", exceptions_test());
 	//TEST_OUTPUT("null_test", null_test());
-	TEST_OUTPUT("_test", rtc_test());
-	// TEST_OUTPUT("system__call_test", system__call_test());
+	//TEST_OUTPUT("_test", rtc_test());
 	// launch your tests here
 }
