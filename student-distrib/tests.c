@@ -1,6 +1,7 @@
 #include "tests.h"
 #include "x86_desc.h"
 #include "lib.h"
+#include "idt.h"
 
 #define PASS 1
 #define FAIL 0
@@ -49,15 +50,25 @@ int idt_test(){
 
 
 
-// void division_by_zero_test(){
-// 	TEST_HEADER;
+void division_by_zero_test(){
+	TEST_HEADER;
 
-// 	int result;
-// 	int a = 22;
-// 	int b = 0;
-// 	result = b/a;
-// 	return result;
+	int result;
+	int a = 22;
+	int b = 0;
+	result = a/b;
+	
+}
+
+// int exceptions_test(){
+// 	/* Use exception #15 for assertions, otherwise
+// 	   reserved by Intel */
+// 	division_by_zero_test();
+// 	asm volatile("int $00");
+// 	return PASS;
 // }
+
+
 
 // void null_test(){
 // 	TEST_HEADER;
@@ -91,11 +102,15 @@ int idt_test(){
 
 
 /* Test suite entry point */
+
 void launch_tests(){
-	TEST_OUTPUT("idt_test", idt_test());
-	// TEST_OUTPUT("division_by_zero_test", division_by_zero_test());
+	printf("WEHITTHIS");
+	division_by_zero_test();
+	//idt_init();
+	//TEST_OUTPUT("idt_test", idt_test());
+	//TEST_OUTPUT("division_by_zero_test", exceptions_test());
 	// TEST_OUTPUT("null_test", null_test());
-	// TEST_OUTPUT("rtc_test", rtc_test());
+	//TEST_OUTPUT("_test", rtc_test());
 	// TEST_OUTPUT("system__call_test", system__call_test());
 	// launch your tests here
 }

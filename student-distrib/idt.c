@@ -4,87 +4,108 @@
 #include "wrapper.h"
 
 
-// void divide_error(){
-//     printf("divide error");
+void divide_error(){
+    printf("divide error");
+    while(1);
    
-// }
-// void Reserved(){
-//     printf("Reserved");
+}
+void Reserved(){
+    printf("Reserved");
+    while(1);
     
-// }
-// void NMI_INTERRUPT(){
-//     printf("NMI_INTERRUPT");
+}
+void NMI_INTERRUPT(){
+    printf("NMI_INTERRUPT");
+    while(1);
    
-// }
-// void BREAKPOINT(){
-//     printf("BREAKPOINT");
+}
+void BREAKPOINT(){
+    printf("BREAKPOINT");
+    while(1);
    
-// }
-// void OVERFLOW(){
-//     printf("OVERFLOW");
+}
+void OVERFLOW(){
+    printf("OVERFLOW");
+    while(1);
    
-// }
+}
 
-// void BOUND(){
-//     printf("BOUND");
+void BOUND(){
+    printf("BOUND");
+    while(1);
    
-// }
-// void INVALID_OPCODE(){
-//     printf("INVALID_OPCODE");
+}
+void INVALID_OPCODE(){
+    printf("INVALID_OPCODE");
+    while(1);
    
-// }
-// void DEV_NOT_AVAILABLE(){
-//     printf("DEV_NOT_AVAILABLE");
+}
+void DEV_NOT_AVAILABLE(){
+    printf("DEV_NOT_AVAILABLE");
+    while(1);
    
-// }
-// void DOUBLE_FAULT(){
-//     printf("DOUBLE_FAULT");
+}
+void DOUBLE_FAULT(){
+    printf("DOUBLE_FAULT");
+    while(1);
    
-// }
-// void SEGMENT_OVERRUN(){
-//     printf("SEGMENT_OVERRUN");
+}
+void SEGMENT_OVERRUN(){
+    printf("SEGMENT_OVERRUN");
+    while(1);
    
-// }
-// void INVALID_TSS(){
-//     printf("INAVLID_TSS");
+}
+void INVALID_TSS(){
+    printf("INAVLID_TSS");
+    while(1);
    
-// }
-// void SEGMENT_NOT_PRESENT(){
-//     printf("SEGMENT_NOT_PRESENT");
+}
+void SEGMENT_NOT_PRESENT(){
+    printf("SEGMENT_NOT_PRESENT");
+    while(1);
    
-// }
-// void STACK_SEGMENT_FAULT(){
-//     printf("STACK_sEGMENT_FAULT");
+}
+void STACK_SEGMENT_FAULT(){
+    printf("STACK_sEGMENT_FAULT");
+    while(1);
    
-// }
-// void GENERAL_PROTECTION(){
-//     printf("GENERAL_PROTECTION");
-// }
+}
+void GENERAL_PROTECTION(){
+    printf("GENERAL_PROTECTION");
+    while(1);
+}
 
-// void PAGE_FAULT(){
-//     printf("PAGE_FAULT");
-// }
-// void MATH_FAULT(){
-//     printf("MATH_FAULT");
-// }
-// void ALIGNMENT_CHECK(){
-//     printf("ALIGNMENT_CHECK");
-// }
-// void MACHINE_CHECK(){
-//     printf("MACHINE_CHECK");
-// }
-// void SIMD_FLOATING_POINT_CHECK(){
-//     printf("SIMD_FLOATING_POINT_CHECK");
+void PAGE_FAULT(){
+    printf("PAGE_FAULT");
+    while(1);
+}
+void MATH_FAULT(){
+    printf("MATH_FAULT");
+    while(1);
+}
+void ALIGNMENT_CHECK(){
+    printf("ALIGNMENT_CHECK");
+    while(1);
+}
+void MACHINE_CHECK(){
+    printf("MACHINE_CHECK");
+    while(1);
+}
+void SIMD_FLOATING_POINT_CHECK(){
+    printf("SIMD_FLOATING_POINT_CHECK");
+    while(1);
 
-// }
-// void keyboard_wrap(){
-//     printf("keyboard");
+}
+void keyboard_wrap(){
+    printf("keyboard");
+    while(1);
 
-// }
-// void rtc_wrap(){
-//     printf("rtc");
+}
+void rtc_wrap(){
+    printf("rtc");
+    while(1);
 
-// }
+}
 
 
 
@@ -94,25 +115,26 @@ void idt_init(){
     int i ;
 
     for(i = 0;i<NUM_VEC;i++){
-        if(i<= 19 && i!=15){ 
-            idt[i].present = 1;
-        }
-        else{
-            idt[i].present = 0;
-        }
+        // if(i<= 19 && i!=15){ 
+        //     idt[i].present = 1;
+        // }
+        // else{
+        //     idt[i].present = 0;
+        // }
+        idt[i].present = 1;
         idt[i].seg_selector = KERNEL_CS;
         idt[i].dpl = 0; // change to 3 for system call handler
         idt[i].reserved0 = 0;
         idt[i].reserved1 = 1;
         idt[i].reserved2 = 1;
-        idt[i].reserved3 = 0; // change to 1 for interrupt
+        idt[i].reserved3 = 1; // change to 1 for interrupt
         idt[i].reserved4 = 0;
         idt[i].size = 1;
     }
 //have to add a wrapper not sure how to 
 //made a new file interrupt_wrapper
 
-    SET_IDT_ENTRY(idt[0], divide_error);
+    SET_IDT_ENTRY(idt[0x00], divide_error);
     SET_IDT_ENTRY(idt[1], Reserved);
     SET_IDT_ENTRY(idt[2], NMI_INTERRUPT);
     SET_IDT_ENTRY(idt[3], BREAKPOINT);
@@ -175,14 +197,14 @@ char* array_of_names[] = {
 };
 
 
-void blue_screen(uint32_t id){
-    if(id == 0x80){
-        printf("system call error");
-    }
-    char* name = array_of_names[id];
-    printf("%s", name);
+// void blue_screen(uint32_t id){
+//     if(id == 0x80){
+//         printf("system call error");
+//     }
+//     char* name = array_of_names[id];
+//     printf("%s", name);
 
     
-}
+//}
 
 
