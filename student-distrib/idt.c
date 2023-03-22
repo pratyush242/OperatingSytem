@@ -184,16 +184,21 @@ void idt_init(){
     desc.reserved3 = 0x0;
     desc.reserved4 = 0x0;
     desc.seg_selector = KERNEL_CS;
-
-    idt[0].present = 0x1;
-    idt[0].dpl = 0x0;
-    idt[0].reserved0 = 0x0;
-    idt[0].size = 0x1;
-    idt[0].reserved1 = 0x1;
-    idt[0].reserved2 = 0x1;
-    idt[0].reserved3 = 0x0;
-    idt[0].reserved4 = 0x0;
-    idt[0].seg_selector = KERNEL_CS;
+    int i = 0;
+    for(i = 0;i<20;i++){
+    if(i!=15)
+{
+    idt[i].present = 0x1;
+    idt[i].dpl = 0x0;
+    idt[i].reserved0 = 0x0;
+    idt[i].size = 0x1;
+    idt[i].reserved1 = 0x1;
+    idt[i].reserved2 = 0x1;
+    idt[i].reserved3 = 0x0;
+    idt[i].reserved4 = 0x0;
+    idt[i].seg_selector = KERNEL_CS;
+}
+    }
 
     // Sets IDT entries in the interrupt descriptor table 
     SET_IDT_ENTRY(idt[0x00], divide_error);
