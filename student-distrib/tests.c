@@ -172,8 +172,8 @@ void launch_tests(){
 	//idt_init();
 	TEST_OUTPUT("idt_test", idt_test());
 	//TEST_OUTPUT("video_memory_test", video_memory_test());
-	TEST_OUTPUT("kernel_lower__fail_test", kernel_lower__fail_test());
-	//TEST_OUTPUT("division_by_zero_test", exceptions_test());
+	//TEST_OUTPUT("kernel_lower__fail_test", kernel_lower__fail_test());
+	TEST_OUTPUT("division_by_zero_test", exceptions_test());
 	//TEST_OUTPUT("null_test", null_test());
 	//TEST_OUTPUT("_test", rtc_test());
 	// launch your tests here
