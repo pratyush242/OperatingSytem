@@ -7,8 +7,8 @@
 
 
 /* Interrupt masks to determine which interrupts are enabled and disabled */
-uint8_t master_mask; /* IRQs 0-7  */
-uint8_t slave_mask;  /* IRQs 8-15 */
+uint8_t master_mask = 0xFF; /* IRQs 0-7  */
+uint8_t slave_mask = 0xFF;  /* IRQs 8-15 */
 
 /* Initialize the 8259 PIC */
 void i8259_init(void) {
@@ -32,32 +32,39 @@ void i8259_init(void) {
 
 /* Enable (unmask) the specified IRQ */
 void enable_irq(uint32_t irq_num) {
-    if(irq_num > 15 || irq_num < 0){//maximum possible irq number is 15 if not then invalid
+    if (irq_num > 8 || irq_num <0) // if out of range return
+        return;
+    if (irq_num < 8) // is master IRQ_num = 0-7
+    {
+        // it is master IRQ. Set the corresponding bit to 0 
+        master_mask = inb(MASTER_8259_PORT + 1); 
+        master_mask &= ~(1 << irq_num); 
+        outb(master_mask, MASTER_8259_PORT + 1); 
         return;
     }
-    if(irq_num < 8) { // irq less than 8, master
-        master_mask = master_mask & ~(1 << irq_num);
-        outb(master_mask, (MASTER_8259_PORT + 1));
-    } else { // irq more than 8, slave
-        irq_num -= 8;
-        slave_mask = slave_mask & ~(1 << irq_num);
-        outb(slave_mask, (SLAVE_8259_PORT + 1));
-    }
+    // Set the corresponding bit to 0 
+    slave_mask = inb(SLAVE_8259_PORT+1); 
+    slave_mask &= ~(1 << (irq_num - (8)));
+    outb(slave_mask, SLAVE_8259_PORT+1); 
+    return;
 }
 
 /* Disable (mask) the specified IRQ */
 void disable_irq(uint32_t irq_num) {
-    if(irq_num > 15 || irq_num < 0){//maximum possible irq number is 15 if not then invalid
+    if (irq_num > 8 || irq_num <0) // if out of range return
+        return;
+    if (irq_num < 8) // is master IRQ_num = 0-7
+    {
+       //Set the corresponding bit to 1 
+        master_mask = inb(MASTER_8259_PORT + 1); 
+        master_mask |= 1 << irq_num; 
+        outb(master_mask, MASTER_8259_PORT + 1); 
         return;
     }
-    if(irq_num < 8) { // irq less than 8, master
-        master_mask = master_mask | (1 << irq_num);
-        outb(master_mask, (MASTER_8259_PORT + 1));
-    } else { // irq more than 8, slave
-        irq_num -= 8;
-        slave_mask = slave_mask | (1 << irq_num);
-        outb(slave_mask, (SLAVE_8259_PORT + 1));
-    }
+    slave_mask = inb(SLAVE_8259_PORT+1); 
+    slave_mask |= 1 << (irq_num - 8); 
+    outb(slave_mask, SLAVE_8259_PORT+1); 
+    return;
 }
 
 /* Send end-of-interrupt signal for the specified IRQ */
@@ -68,6 +75,6 @@ void send_eoi(uint32_t irq_num) {
         outb(EOI | irq_num, MASTER_8259_PORT);
         return;
     }// it is slave IRQ_num, i.e. 8-15
-    outb(EOI | 2, MASTER_8259_PORT);
     outb(EOI | (irq_num - 8), SLAVE_8259_PORT);
+    outb(EOI | 2, MASTER_8259_PORT);
 }
