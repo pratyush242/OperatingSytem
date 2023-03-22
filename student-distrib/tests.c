@@ -49,15 +49,14 @@ int idt_test(){
 
 
 
-void division_by_zero_test(){
-	TEST_HEADER;
+// void division_by_zero_test(){
+// 	TEST_HEADER;
 
-	int result;
-	int a = 22;
-	int b = 0;
-	result = b/a;
-	return result;
-}
+// 	int result;
+// 	int a = 22;
+// 	int b = 0;
+// 	result = b/a;
+// }
 
 // void null_test(){
 // 	TEST_HEADER;
@@ -69,17 +68,16 @@ void division_by_zero_test(){
 
 // }
 
-// void rtc_test(){
-// 	TEST_HEADER;
-// 	printf("rtc");
-//     // __asm__("int 0x21");
-// 	return FAIL;
+// void exception_test(){
+	
+//     asm("int $0x01");
+
+	
 // }
 
 // void system__call_test(){
 // 	TEST_HEADER;
-//     // __asm__("int 0x80");
-// 	printf("syscall");
+//  asm("int 0x80");
 // 	return FAIL;
 // }
 
@@ -93,9 +91,11 @@ void division_by_zero_test(){
 /* Test suite entry point */
 void launch_tests(){
 	TEST_OUTPUT("idt_test", idt_test());
-	TEST_OUTPUT("division_by_zero_test", division_by_zero_test());
+	// TEST_OUTPUT("division_by_zero_test", division_by_zero_test());
 	// TEST_OUTPUT("null_test", null_test());
 	// TEST_OUTPUT("rtc_test", rtc_test());
 	// TEST_OUTPUT("system__call_test", system__call_test());
 	// launch your tests here
+	// rtc_test();
+
 }

@@ -9,7 +9,7 @@
 #include "debug.h"
 #include "tests.h"
 
-#define RUN_TESTS
+#define RUN_TESTS 1
 
 /* Macros. */
 /* Check if the bit BIT in FLAGS is set. */
@@ -140,7 +140,10 @@ void entry(unsigned long magic, unsigned long addr) {
     
     idt_init();
     /* Init the PIC */
-    i8259_init();
+    // i8259_init();
+    // init_keyboard();
+    // rtc_init();
+
 
     /* Initialize devices, memory, filesystem, enable device interrupts on the
      * PIC, any other initialization stuff... */
