@@ -56,6 +56,7 @@ int idt_test(){
 // 	int a = 22;
 // 	int b = 0;
 // 	result = b/a;
+// 	return result;
 // }
 
 // void null_test(){
@@ -68,16 +69,17 @@ int idt_test(){
 
 // }
 
-// void exception_test(){
-	
-//     asm("int $0x01");
-
-	
+// void rtc_test(){
+// 	TEST_HEADER;
+// 	printf("rtc");
+//     // __asm__("int 0x21");
+// 	return FAIL;
 // }
 
 // void system__call_test(){
 // 	TEST_HEADER;
-//  asm("int 0x80");
+//     // __asm__("int 0x80");
+// 	printf("syscall");
 // 	return FAIL;
 // }
 
@@ -96,6 +98,4 @@ void launch_tests(){
 	// TEST_OUTPUT("rtc_test", rtc_test());
 	// TEST_OUTPUT("system__call_test", system__call_test());
 	// launch your tests here
-	// rtc_test();
-
 }
