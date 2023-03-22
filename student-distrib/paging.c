@@ -2,6 +2,10 @@
 
 #include "paging.h"
 
+
+
+//function to initialize tables
+
 void initializeTable() {
 
     int i; 
@@ -24,7 +28,7 @@ void initializeTable() {
 
 }
 
-
+//function to initialize directories
 
 void initializeDirectory(){
     int i;

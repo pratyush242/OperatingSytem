@@ -143,7 +143,6 @@ void entry(unsigned long magic, unsigned long addr) {
     /* Init the PIC */
     i8259_init();
     //init keyboard
-    printf("pic");
     init_keyboard();
     //rtc init
     rtc_init();

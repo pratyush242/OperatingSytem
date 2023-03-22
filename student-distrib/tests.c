@@ -47,6 +47,14 @@ int idt_test(){
 }
 
 // add more tests here
+/* exceptions Test
+ * 
+ * checks for division by 0 test case
+ * Inputs: None
+ * Outputs: exception/FAIL
+ * Side Effects: None
+
+ */
 
 int exceptions_test(){
 	TEST_HEADER;
@@ -56,6 +64,16 @@ int exceptions_test(){
 	// asm volatile("int $00");
 	return FAIL;
 }
+
+
+/* Video_Memory_Test
+ * 
+ * checks for video memory paging case
+ * Inputs: None
+ * Outputs: pass
+ * Side Effects: None
+
+ */
 
 
 int video_memory_test(){
@@ -70,6 +88,15 @@ int video_memory_test(){
 	return PASS;
 
 }
+
+/* Null_Test
+ * 
+ * checks for null value case
+ * Inputs: None
+ * Outputs: PAGE_FAULT/fail
+ * Side Effects: None
+
+ */
 int null_test(){
 	TEST_HEADER;
     int result;
@@ -107,9 +134,9 @@ void launch_tests(){
 	//printf("WEHITTHIS");
 	//division_by_zero_test();
 	//idt_init();
-	//TEST_OUTPUT("idt_test", idt_test());
-	TEST_OUTPUT("video_memory_test", video_memory_test());
-	//TEST_OUTPUT("division_by_zero_test", exceptions_test());
+	TEST_OUTPUT("idt_test", idt_test());
+	//TEST_OUTPUT("video_memory_test", video_memory_test());
+	TEST_OUTPUT("division_by_zero_test", exceptions_test());
 	TEST_OUTPUT("null_test", null_test());
 	//TEST_OUTPUT("_test", rtc_test());
 	// TEST_OUTPUT("system__call_test", system__call_test());

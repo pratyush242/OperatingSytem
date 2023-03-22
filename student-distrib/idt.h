@@ -3,11 +3,6 @@
 
 
 extern void idt_init();
-//extern void blue_screen(uint32_t id);
-
-
-
-
 extern void divide_error();
 extern void Reserved(); 
 extern void NMI_INTERRUPT();

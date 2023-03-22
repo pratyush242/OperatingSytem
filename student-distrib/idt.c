@@ -7,6 +7,7 @@
 
 //CHECK FOR DIVISION BY 0 AND PRINT DIVIDE ERROR
 void divide_error(){
+    cli();
     clear();
     printf(" divide error");
     while(1);
@@ -15,6 +16,7 @@ void divide_error(){
 
 //CHECK FOR RESERVED AND PRINT RESERVED
 void Reserved(){
+    cli();
     clear();
     printf("Reserved");
     while(1);
@@ -22,6 +24,7 @@ void Reserved(){
 }
 //CHECK FOR NMI INTERRUPT AND PRINT NMI INTERRUPT
 void NMI_INTERRUPT(){
+    cli();
     clear();
     printf("NMI_INTERRUPT");
     while(1);
@@ -30,21 +33,24 @@ void NMI_INTERRUPT(){
 
 //CHECK FOR BREAKPOINT AND PRINT BREAKPOINT
 void BREAKPOINT(){
+    cli();
     clear();
     printf("BREAKPOINT");
     while(1);
    
 }
 
-//CHECK FOR OVERFLOW AND PRINT BREAKPOINT
+//CHECK FOR OVERFLOW AND PRINT OVERFLOW
 void OVERFLOW(){
+    cli();
     clear();
     printf("OVERFLOW");
     while(1);
    
 }
-//CHECK FOR BOUND AND PRINT BREAKPOINT
+//CHECK FOR BOUND AND PRINT BOUND
 void BOUND(){
+    cli();
     clear();
     printf("BOUND");
     while(1);
@@ -52,6 +58,7 @@ void BOUND(){
 }
 //CHECK FOR INVALID OPCODE AND PRINT BREAKPOINT
 void INVALID_OPCODE(){
+    cli();
     clear();
     printf("INVALID_OPCODE");
     while(1);
@@ -59,6 +66,7 @@ void INVALID_OPCODE(){
 }
 //CHECK FOR DEV NOT AVAILABLE AND PRINT BREAKPOINT
 void DEV_NOT_AVAILABLE(){
+    cli();
     clear();
     printf("DEV_NOT_AVAILABLE");
     while(1);
@@ -67,6 +75,7 @@ void DEV_NOT_AVAILABLE(){
 
 //CHECK FOR DOUBLE FAULT AND PRINT BREAKPOINT
 void DOUBLE_FAULT(){
+    cli();
     clear();
     printf("DOUBLE_FAULT");
     while(1);
@@ -75,6 +84,7 @@ void DOUBLE_FAULT(){
 
 //CHECK FOR SGEMENT OVERRUN AND PRINT BREAKPOINT
 void SEGMENT_OVERRUN(){
+    cli();
     clear();
     printf("SEGMENT_OVERRUN");
     while(1);
@@ -83,6 +93,7 @@ void SEGMENT_OVERRUN(){
 
 //CHECK FOR INVALID TSS AND PRINT BREAKPOINT
 void INVALID_TSS(){
+    cli();
     clear();
     printf("INAVLID_TSS");
     while(1);
@@ -91,7 +102,9 @@ void INVALID_TSS(){
 
 //CHECK FOR SEGMENT NOT PRESENT AND PRINT BREAKPOINT
 void SEGMENT_NOT_PRESENT(){
+    cli();
     clear();
+
     printf("SEGMENT_NOT_PRESENT");
     while(1);
    
@@ -99,6 +112,7 @@ void SEGMENT_NOT_PRESENT(){
 
 //CHECK FOR STACK SEGMENT FAULT AND PRINT BREAKPOINT
 void STACK_SEGMENT_FAULT(){
+    cli();
     clear();
     printf("STACK_sEGMENT_FAULT");
     while(1);
@@ -107,6 +121,7 @@ void STACK_SEGMENT_FAULT(){
 
 //CHECK FOR GENERAL PROTECTION AND PRINT BREAKPOINT
 void GENERAL_PROTECTION(){
+    cli();
     clear();
     printf("GENERAL_PROTECTION");
     while(1);
@@ -114,6 +129,7 @@ void GENERAL_PROTECTION(){
 
 //CHECK FOR PAGE FAULT AND PRINT BREAKPOINT
 void PAGE_FAULT(){
+    cli();
     clear();
     printf("PAGE_FAULT");
     while(1);
@@ -121,6 +137,7 @@ void PAGE_FAULT(){
 
 //CHECK FOR MATH FAULT AND PRINT BREAKPOINT
 void MATH_FAULT(){
+    cli();
     clear();
     printf("MATH_FAULT");
     while(1);
@@ -128,6 +145,7 @@ void MATH_FAULT(){
 
 //CHECK FOR ALIGNMENT CHECK AND PRINT BREAKPOINT
 void ALIGNMENT_CHECK(){
+    cli();
     clear();
     printf("ALIGNMENT_CHECK");
     while(1);
@@ -135,6 +153,7 @@ void ALIGNMENT_CHECK(){
 
 //CHECK FOR MACHINE CHECK AND PRINT BREAKPOINT
 void MACHINE_CHECK(){
+    cli();
     clear();
     printf("MACHINE_CHECK");
     while(1);
@@ -142,6 +161,7 @@ void MACHINE_CHECK(){
 
 //CHECK FOR SIMD_FLOATING_POINT_CHECK AND PRINT BREAKPOINT
 void SIMD_FLOATING_POINT_CHECK(){
+    cli();
     clear();
     printf("SIMD_FLOATING_POINT_CHECK");
     while(1);
@@ -185,6 +205,8 @@ void idt_init(){
     desc.reserved4 = 0x0;
     desc.seg_selector = KERNEL_CS;
     int i = 0;
+
+    // looping and setting idt entries
     for(i = 0;i<20;i++){
     if(i!=15)
 {
