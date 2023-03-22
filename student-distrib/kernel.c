@@ -10,6 +10,8 @@
 #include "tests.h"
 #include "idt.h"
 #include "paging.h"
+#include "keyboard.h"
+#include "rtc.h"
 #define RUN_TESTS 1
 
 /* Macros. */

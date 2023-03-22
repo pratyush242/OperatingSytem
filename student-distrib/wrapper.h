@@ -2,7 +2,8 @@
 #define _WRAPPER_H
 #ifndef ASM
 
-
+extern void keyboard_wrap();
+extern void rtc_wrap();
 
 
 

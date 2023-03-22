@@ -2,6 +2,7 @@
 #include "lib.h"
 #include "x86_desc.h"
 #include "wrapper.h"
+#include "keyboard.h"
 
 //FUNCTION HANDLER DEFINITIONS
 
@@ -167,21 +168,7 @@ void SIMD_FLOATING_POINT_CHECK(){
     while(1);
 
 }
-//KEYBOARD WRAP DECLARATION
-void keyboard_wrap(){
-    clear();
-    printf("keyboard");
-    while(1);
 
-}
-
-//RTC WRAP DECLARATION
-void rtc_wrap(){
-    clear();
-    printf("rtc");
-    while(1);
-
-}
 
 //SYSTEM CALL DECLARATION
 void systemcall(){
@@ -244,16 +231,13 @@ void idt_init(){
     SET_IDT_ENTRY(idt[19], SIMD_FLOATING_POINT_CHECK);
     
     /* Interrupts */
-    SET_IDT_ENTRY(desc, keyboard_wrap);
-    idt[33] = desc;
+    SET_IDT_ENTRY(idt[0x21], keyboard_wrap);
+    SET_IDT_ENTRY(idt[0x28], rtc_wrap);
 
-    SET_IDT_ENTRY(desc, rtc_wrap);
-    idt[40] = desc;
 
     // System Call 
     desc.dpl = 3;
-    SET_IDT_ENTRY(desc, systemcall);
-    idt[0x80] = desc;
+    SET_IDT_ENTRY(idt[0x80] , systemcall);
 
     // Load IDT 
     lidt(idt_desc_ptr);

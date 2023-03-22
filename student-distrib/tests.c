@@ -107,12 +107,11 @@ int null_test(){
 
 }
 
-// void rtc_test(){
-// 	TEST_HEADER;
-// 	printf("rtc");
-//     // __asm__("int 0x21");
-// 	return FAIL;
-// }
+int rtc_test(){
+	TEST_HEADER;
+	test_interrupts();
+	return FAIL;
+}
 
 // void system__call_test(){
 // 	TEST_HEADER;
@@ -136,9 +135,9 @@ void launch_tests(){
 	//idt_init();
 	TEST_OUTPUT("idt_test", idt_test());
 	//TEST_OUTPUT("video_memory_test", video_memory_test());
-	TEST_OUTPUT("division_by_zero_test", exceptions_test());
-	TEST_OUTPUT("null_test", null_test());
-	//TEST_OUTPUT("_test", rtc_test());
+	//TEST_OUTPUT("division_by_zero_test", exceptions_test());
+	//TEST_OUTPUT("null_test", null_test());
+	TEST_OUTPUT("_test", rtc_test());
 	// TEST_OUTPUT("system__call_test", system__call_test());
 	// launch your tests here
 }
