@@ -11,7 +11,7 @@ void rtc_init(){
     char prev = inb(0x71);	// read the current value of register B
     outb(0x8B, 0x70);		// set the index again (a read will reset the index to register D)
     outb(prev | 0x40, 0x71);	// write the previous value ORed with 0x40. This turns on bit 6 of register B
-    //enable_irq(RTC_IRQ);
+    enable_irq(RTC_IRQ);
     
 }
 
@@ -25,8 +25,9 @@ void rtc_handler(){
     inb(0x71);		// just throw away contents
     //test_interrupts();
     // end interrupt
-    send_eoi(RTC_IRQ);
     sti();
+    send_eoi(RTC_IRQ);
+   
 }
     
     
