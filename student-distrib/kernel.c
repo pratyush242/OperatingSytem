@@ -9,9 +9,10 @@
 #include "debug.h"
 #include "tests.h"
 #include "idt.h"
-#include "paging.h"
-#include "keyboard.h"
 #include "rtc.h"
+#include "keyboard.h"
+#include "paging.h"
+
 #define RUN_TESTS 1
 
 /* Macros. */
@@ -139,8 +140,6 @@ void entry(unsigned long magic, unsigned long addr) {
         ltr(KERNEL_TSS);
     }
 
-    
-    
     idt_init();
     /* Init the PIC */
     i8259_init();
@@ -154,10 +153,9 @@ void entry(unsigned long magic, unsigned long addr) {
     //  * PIC, any other initialization stuff... */
 
     //paging init
-    initializeTable();
-    initializeDirectory();
-
-
+    // initializeTable();
+    // initializeDirectory();
+    
     /* Enable interrupts */
     /* Do not enable the following until after you have set up your
      * IDT correctly otherwise QEMU will triple fault and simple close

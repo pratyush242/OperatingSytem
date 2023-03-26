@@ -1,49 +1,46 @@
 #define ASM 1
-
 #include "wrapper.h"
 
-
-
-
-
-
-/* pushal call popal then iret before each function call recommend making functions in here and calling them in the table in idt.c*/
-
-                 
+/* macro for push all genral registers and struct pt regs */
 #define pushall     \
-        pushl %eax ;\
-        pushl %ebp ;\
-        pushl %ebx ;\
-        pushl %ecx ;\
-        pushl %edx ;\
-        pushl %edi ;\
-        pushl %esi ;
-        
-#define popall     \
-        popl %esi ;\
-        popl %edi ;\
-        popl %edx ;\
-        popl %ecx ;\
-        popl %ebx ;\
-        popl %ebp ;\
-        popl %eax ;
-   
+    pushl   %fs;    \
+    pushl   %es;    \
+    pushl   %ds;    \
+    pushl   %eax;   \
+    pushl   %ebp;   \
+    pushl   %edi;   \
+    pushl   %esi;   \
+    pushl   %edx;   \
+    pushl   %ecx;   \
+    pushl   %ebx;
+
+/* macro for restore all genral registers and struct pt regs */
+#define popall      \
+    popl    %ebx;   \
+    popl    %ecx;   \
+    popl    %edx;   \
+    popl    %esi;   \
+    popl    %edi;   \
+    popl    %ebp;   \
+    popl    %eax;   \
+    popl    %ds;    \
+    popl    %es;    \
+    popl    %fs;
+
+/* keyboard interrupt linkage code */
 #define INTERRUPT_WRAPPER(name,function) \
         .globl name               ;\               
         name:                     ;\    
                 pushall           ;\
-                pushfl            ;\
-                cli               ;\
-                call function         ;\
-                sti               ;\
-                popall            ;\
-                popfl             ;\      
+                call function     ;\
+                popall            ;\     
                 iret         
 
 
 /*call the functions*/
 INTERRUPT_WRAPPER(keyboard_wrap,handler_keyboard)
 INTERRUPT_WRAPPER(rtc_wrap,rtc_handler)
+
 
 
 

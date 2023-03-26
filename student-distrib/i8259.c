@@ -28,6 +28,7 @@ void i8259_init(void) {
     // Mask all interrupts
     outb(0xff, (MASTER_8259_PORT + 1));
     outb(0xff, (SLAVE_8259_PORT + 1));
+
 }
 
 /* Enable (unmask) the specified IRQ */

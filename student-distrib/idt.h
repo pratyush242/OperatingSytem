@@ -1,7 +1,7 @@
 #ifndef _IDT_H
 #define _IDT_H
 
-
+/* Initialize IDT */
 extern void idt_init();
 extern void divide_error();
 extern void Reserved(); 
@@ -22,6 +22,5 @@ extern void MATH_FAULT();
 extern void ALIGNMENT_CHECK();
 extern void MACHINE_CHECK();
 extern void SIMD_FLOATING_POINT_CHECK();
-extern void system_call();
-
+extern void systemcall();
 #endif
