@@ -179,21 +179,8 @@ void systemcall(){
 
 // IDT INITIALIZER
 void idt_init(){
-    idt_desc_t desc;
-
-    // Setting specific bits for interrupt gate
-    desc.present = 0x1;
-    desc.dpl = 0x0;
-    desc.reserved0 = 0x0;
-    desc.size = 0x1;
-    desc.reserved1 = 0x1;
-    desc.reserved2 = 0x1;
-    desc.reserved3 = 0x0;
-    desc.reserved4 = 0x0;
-    desc.seg_selector = KERNEL_CS;
-    int i = 0;
-
-    // looping and setting idt entries
+    // looping and setting idt entries fir errors
+    int i;
     for(i = 0;i<20;i++){
     if(i!=15)
 {
@@ -229,15 +216,34 @@ void idt_init(){
     SET_IDT_ENTRY(idt[17], ALIGNMENT_CHECK);
     SET_IDT_ENTRY(idt[18], MACHINE_CHECK);
     SET_IDT_ENTRY(idt[19], SIMD_FLOATING_POINT_CHECK);
-    
+
+
+    idt[33].present = 0x1;
+    idt[33].dpl = 0x0;
+    idt[33].reserved0 = 0x0;
+    idt[33].size = 0x1;
+    idt[33].reserved1 = 0x1;
+    idt[33].reserved2 = 0x1;
+    idt[33].reserved3 = 0x1;
+    idt[33].reserved4 = 0x0;
+    idt[33].seg_selector = KERNEL_CS;  
+
+    idt[40].present = 0x1;
+    idt[40].dpl = 0x0;
+    idt[40].reserved0 = 0x0;
+    idt[40].size = 0x1;
+    idt[40].reserved1 = 0x1;
+    idt[40].reserved2 = 0x1;
+    idt[40].reserved3 = 0x1;
+    idt[40].reserved4 = 0x0;
+    idt[40].seg_selector = KERNEL_CS; 
     /* Interrupts */
-    SET_IDT_ENTRY(idt[0x21], keyboard_wrap);
-    SET_IDT_ENTRY(idt[0x28], rtc_wrap);
+    SET_IDT_ENTRY(idt[33], keyboard_wrap);
+    SET_IDT_ENTRY(idt[40], rtc_wrap);
 
 
     // System Call 
-    desc.dpl = 3;
-    SET_IDT_ENTRY(idt[0x80] , systemcall);
+   // SET_IDT_ENTRY(idt[0x80] , systemcall);
 
     // Load IDT 
     lidt(idt_desc_ptr);
