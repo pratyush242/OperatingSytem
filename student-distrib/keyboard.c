@@ -7,21 +7,12 @@ static unsigned int shift_flag = 0;
 static unsigned int control_flag = 0;
 static unsigned int alt_flag = 0;
 
-
-/* init_keyboard
- * 
- * initializes keyboard
-
-
- */
-
 void init_keyboard()
 {
     enable_irq(KEYBOARD_IRQ);
 }
 //nothing-----shift only----caps only----shift and caps
 // used the scan code given on https://wiki.osdev.org/PS/2_Keyboard for a "US QWERTY" keyboard only
-//keyboard_map
 unsigned char keyboard_map[128] =
 {
     0,  0, '1', '2', '3', '4', '5', '6', '7', '8','9', '0', '-', '=', '\b', // 0 isnt mapped--- 0 = esc key---- 0-9 ----- symbols---- backspace
@@ -52,9 +43,6 @@ unsigned char keyboard_map[128] =
     0,  // F12 Key 
     0,  // All other keys are undefined 
     };
-
-//keyboard_shift_map
-
 unsigned char keyboard_shift_map[128] =
 {
     0,  0, '!', '@', '#', '$', '%', '^', '&', '*','(', ')', '_', '+', '\b', // 0 isnt mapped--- 0 = esc key---- 0-9 ----- symbols---- backspace
@@ -85,9 +73,6 @@ unsigned char keyboard_shift_map[128] =
     0,  // F12 Key 
     0,  // All other keys are undefined     
 };
-
-
-//keyboard_caps_map
 unsigned char keyboard_caps_map[128] =
 {
     0,  0, '1', '2', '3', '4', '5', '6', '7', '8','9', '0', '-', '=', '\b', // 0 isnt mapped--- 0 = esc key---- 0-9 ----- symbols---- backspace
@@ -118,9 +103,6 @@ unsigned char keyboard_caps_map[128] =
     0,  // F12 Key 
     0,  // All other keys are undefined     
 };
-
-
-//keyboard_both_map
 unsigned char keyboard_both_map[128] =
 {
     0,  0, '!', '@', '#', '$', '%', '^', '&', '*','(', ')', '_', '+', '\b', // 0 isnt mapped--- 0 = esc key---- 0-9 ----- symbols---- backspace
@@ -152,7 +134,6 @@ unsigned char keyboard_both_map[128] =
     0,  // All other keys are undefined 
     };
 
-//handler_keybaord
 void handler_keyboard(){
     unsigned char keydata = 0;
     int i;
@@ -190,6 +171,7 @@ void handler_keyboard(){
     else if(keydata == 0x1C){ //enter pressed
         key_buffer[keybuffer_ptr] = '\n';
         keybuffer_ptr = keybuffer_ptr + 1; 
+        read_the_terminal = 1;
         terminal_newline();
     }  
     else if(keydata == 0x0E){ //backspace
@@ -227,8 +209,8 @@ void handler_keyboard(){
             if (keybuffer_ptr < 128){
                 if (control_flag){
                     if (keyprint == 'l' || keyprint == 'L'){
-                    terminal_reset();
-                    clear();
+                        terminal_reset();
+                        clear();
                     }
                 }
                 if(keyprint != 0){
@@ -245,3 +227,12 @@ void handler_keyboard(){
     sti();
 }
 
+void clear_buffer(){
+    int i;
+    for (i=0; i<127; i++){
+        key_buffer[i] = 0;  
+    }  
+    keybuffer_ptr = 0;
+	read_the_terminal = 0;
+    return;
+}

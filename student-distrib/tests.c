@@ -298,6 +298,23 @@ int rtc_close_test(){
 	return 1;
 }
 
+int test_terminal(){
+	char buffer[127];
+	int r = 0, w = 0;
+	terminal_open(0);
+	printf("terminal driver test begins\n");
+	while (1)
+	{
+		r = terminal_read(buffer, 127);
+		if(r >= 0){
+			w = terminal_write(buffer, 127);
+		}
+		if(r != w)
+			break;
+	}
+	terminal_close(0);
+	return -1;
+}
 
 
 /* Checkpoint 3 tests */
@@ -326,5 +343,6 @@ void launch_tests(){
 	//TEST_OUTPUT("_test", rtc_test());
 	//rtc_test();
 	//rtc_close_test();
+	//test_terminal();
 	// launch your tests here
 }
