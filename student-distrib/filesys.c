@@ -243,9 +243,9 @@ inode_t* node = (inode_t*)inode;
 uint32_t file_length = ((inode_t*)inode)->length;
 uint32_t current_block_index;
 uint32_t current_block;
- uint8_t* mem_offset;
- uint8_t* block_start;
-uint32_t end_of_file = 0;
+uint8_t* mem_offset;
+uint8_t* block_start;
+//uint32_t end_of_file = 0;
 if(buf == NULL){
     return -1;
 }

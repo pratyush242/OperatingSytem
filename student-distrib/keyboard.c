@@ -2,15 +2,27 @@
 #include "lib.h"
 #include "i8259.h"
 
+
+//flag definitions
+
 static unsigned int caps_flag = 0;
 static unsigned int shift_flag = 0;
 static unsigned int control_flag = 0;
 static unsigned int alt_flag = 0;
 
+
+/* init_keyboard
+ * 
+ * initializes keyboard
+
+
+ */
 void init_keyboard()
 {
     enable_irq(KEYBOARD_IRQ);
 }
+
+//keyboard map
 //nothing-----shift only----caps only----shift and caps
 // used the scan code given on https://wiki.osdev.org/PS/2_Keyboard for a "US QWERTY" keyboard only
 unsigned char keyboard_map[128] =
@@ -43,6 +55,7 @@ unsigned char keyboard_map[128] =
     0,  // F12 Key 
     0,  // All other keys are undefined 
     };
+//keyboard shift map
 unsigned char keyboard_shift_map[128] =
 {
     0,  0, '!', '@', '#', '$', '%', '^', '&', '*','(', ')', '_', '+', '\b', // 0 isnt mapped--- 0 = esc key---- 0-9 ----- symbols---- backspace
@@ -73,6 +86,8 @@ unsigned char keyboard_shift_map[128] =
     0,  // F12 Key 
     0,  // All other keys are undefined     
 };
+
+//keyboard caps map
 unsigned char keyboard_caps_map[128] =
 {
     0,  0, '1', '2', '3', '4', '5', '6', '7', '8','9', '0', '-', '=', '\b', // 0 isnt mapped--- 0 = esc key---- 0-9 ----- symbols---- backspace
@@ -103,6 +118,8 @@ unsigned char keyboard_caps_map[128] =
     0,  // F12 Key 
     0,  // All other keys are undefined     
 };
+
+//keyboard both map
 unsigned char keyboard_both_map[128] =
 {
     0,  0, '!', '@', '#', '$', '%', '^', '&', '*','(', ')', '_', '+', '\b', // 0 isnt mapped--- 0 = esc key---- 0-9 ----- symbols---- backspace
@@ -133,6 +150,11 @@ unsigned char keyboard_both_map[128] =
     0,  // F12 Key 
     0,  // All other keys are undefined 
     };
+
+/* handler_keyboard
+ * 
+ * handles keyboard interrupts
+ */
 
 void handler_keyboard(){
     unsigned char keydata = 0;
