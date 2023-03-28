@@ -17,3 +17,16 @@ We were getting this error becaus the interrupt handlers being passed in set idt
 ->   "void value not ignored as it ought to be"
 We were getting this error because our function declarations were incorrect.
 
+6, RTC Testing Adequecy
+-> Forgot to add a fail test for RTC hat ensure that the rates are powers of 2
+
+7, RTC Init
+-> Did not disable interrupts for init of RTC which caused problems during hceckpoint 1 while trying ti initialise RTC and call the interrupts
+
+8, File System
+->File System test was page faulting, thought the datablock was a memory address instead of an index
+
+
+
+9, File System
+->Was not dereferencing the data read from file when setting buf equal to it
