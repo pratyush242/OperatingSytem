@@ -173,19 +173,20 @@ void handler_keyboard(){
         else if(keydata == 0x1C){ //enter pressed
             key_buffer[keybuffer_ptr] = '\n';
             keybuffer_ptr = keybuffer_ptr + 1; 
-            /* if enter is pressed, set flag is_ready to tell the terminal ready to read */
-            //is_ready = 1;
+            terminal_newline();
         }  
         else if(keydata == 0x0E){ //backspace
             if (keybuffer_ptr>0){
                 keybuffer_ptr = keybuffer_ptr - 1 ;
-                key_buffer[keybuffer_ptr] = '\0';
+                key_buffer[keybuffer_ptr] = ' ';
+                terminal_backspace();
             }
         } 
         else if(keydata == 0x0F){ //tab
             for (i=0; i<4; i++){
                 key_buffer[keybuffer_ptr] = ' ';
                 keybuffer_ptr = keybuffer_ptr + 1; 
+                putc(' ');
             }
         } 
         else{
@@ -202,22 +203,27 @@ void handler_keyboard(){
             else{
                 keyprint = keyboard_map[keydata];
             }       
-
             //print out the keys 
-            if(keyprint == 0){
-                return;
-            }
-           else if (keybuffer_ptr < 128){
-            key_buffer[keybuffer_ptr] = keyprint;
-            keybuffer_ptr += 1;
-            putc(keyprint);
+
+            if (keybuffer_ptr < 128){
+                if (control_flag){
+                    if (keyprint == 'l' || keyprint == 'L'){
+                    terminal_reset();
+                    clear();
+                    }
+                }
+                if(keyprint != 0){
+                    key_buffer[keybuffer_ptr] = keyprint;
+                    keybuffer_ptr += 1;
+                    putc(keyprint);                    
+                }
             }
 
         }
     }
-
     // end interrupt
     send_eoi(KEYBOARD_IRQ);
     // enable interrupt
     sti();
 }
+

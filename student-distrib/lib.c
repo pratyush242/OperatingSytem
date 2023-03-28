@@ -475,3 +475,41 @@ void test_interrupts(void) {
         video_mem[i << 1]++;
     }
 }
+void terminal_reset(){
+        screen_y = 0;
+        screen_x = 0;
+        return;
+}
+void terminal_newline(){
+        screen_y++;
+        screen_x = 0;
+        terminal_scroll();
+}
+void terminal_backspace(){
+        screen_x--;
+        *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1)) = ' ';
+        *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1) + 1) = ATTRIB;
+        screen_x %= NUM_COLS;
+        screen_y = (screen_y + (screen_x / NUM_COLS)) % NUM_ROWS;
+}
+void terminal_scroll(){
+    // check if at bottom of screen 
+    if (screen_y == NUM_ROWS){
+        // move all previous lines up one 
+        int i,j;
+        for (j = 1; j < NUM_ROWS; j++){
+            for (i = 0; i < NUM_COLS; i++){
+                *(uint8_t *)(video_mem + ((NUM_COLS * (j - 1) + i) << 1)) = *(uint8_t *)(video_mem + ((NUM_COLS * j + i) << 1));
+                *(uint8_t *)(video_mem + ((NUM_COLS * (j - 1) + i) << 1) + 1) = ATTRIB;
+            }
+        }
+        // create new line 
+        for (i = 0; i < NUM_COLS; i++){
+            *(uint8_t *)(video_mem + ((NUM_COLS * (NUM_ROWS - 1) + i) << 1)) = ' ';
+            *(uint8_t *)(video_mem + ((NUM_COLS * (NUM_ROWS - 1) + i) << 1) + 1) = ATTRIB;
+        }
+        // place cursor at beginning of new line 
+        screen_x = 0;
+        screen_y = NUM_ROWS - 1;
+    }
+}
