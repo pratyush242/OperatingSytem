@@ -179,6 +179,117 @@ static inline void assertion_failure(){
 
 
 /* Checkpoint 2 tests */
+// int init_dir_test(){
+
+// uint8_t* temp_name;
+// int i;
+// temp_name = boot_block_A->dentry_start[8].filename;
+// printf("%s",temp_name);
+
+// 	return PASS;
+// }
+
+
+// int read_dentry_by_index_test(){
+// dentry_t temp;
+// uint8_t* temp_name;
+// read_dentry_by_index(3,&temp);
+
+
+// temp_name = temp.filename;
+// printf("%s",temp_name);
+// return PASS;
+// }
+
+// int read_dentry_by_name_test(){
+// dentry_t temp;
+// uint8_t* temp_test;
+// uint8_t temp_name[11] = "frame1.txt";
+// uint32_t val = read_dentry_by_name(temp_name,&temp);
+
+
+// temp_test = temp.filename;
+// if(val==-1){
+// 	printf("%d",val);
+// }
+// else{
+// printf("%s",temp_test);}
+// return PASS;
+// }
+
+// int read_text_file_test(){
+
+// uint8_t temp_name[11] = "frame0.txt";
+
+// uint8_t buf[8000];
+// uint32_t length = 8000;
+
+// read_file(temp_name,buf,length);
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+
+// printf("%s",buf);
+// return PASS;
+
+// }
+
+// int read_large_file_test(){
+
+// uint8_t temp_name[11] = "fish";
+
+// uint8_t buf[8000];
+// uint32_t length = 8000;
+
+//read_file(temp_name,buf,length);
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// int i;
+// for(i = 0; i<8000;i++){
+// 	putc(buf[i]);
+// }
+
+// return PASS;
+
+// }
+
+// int read_directory_test(){
+
+
+
+// uint8_t buf[500];
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("-------------\n");
+// int val = 1;
+// while(val!=0){
+// val = read_directory(buf);
+// printf("%s\n",buf);
+
+// }
+
+// return PASS;
+
+// }
+
+
 /* Checkpoint 3 tests */
 /* Checkpoint 4 tests */
 /* Checkpoint 5 tests */
@@ -191,6 +302,12 @@ void launch_tests(){
 	//division_by_zero_test();
 	//idt_init();
 	//TEST_OUTPUT("idt_test", idt_test());
+	//TEST_OUTPUT("read_text_file_test()", read_text_file_test());
+	//TEST_OUTPUT("read_large_file_test()", read_large_file_test());
+	//TEST_OUTPUT("read_directory_test()", read_directory_test());
+	//TEST_OUTPUT("read_dentry_by_name_test()", read_dentry_by_name_test());
+	//TEST_OUTPUT("read_dentry_by_index_test()", read_dentry_by_index_test());
+
 	//TEST_OUTPUT("video_memory_test", video_memory_test());
 	//TEST_OUTPUT("kernel_lower__fail_test", kernel_lower__fail_test());
 	//TEST_OUTPUT("division_by_zero_test", exceptions_test());
