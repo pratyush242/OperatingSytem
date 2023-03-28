@@ -73,6 +73,9 @@ int rtc_write (int32_t fd, const void* buf, int32_t nbytes) {
     
 
     rtc_change_frequency(*((int32_t*) buf));  // change frequency but first convert input to int32_t
+    if(rtc_change_frequency(*((int32_t*) buf)) == -1){
+        return -1;
+    }
     return 0;                           // else return success
     
 

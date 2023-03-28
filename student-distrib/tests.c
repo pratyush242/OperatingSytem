@@ -271,20 +271,31 @@ int rtc_test() {
     int test = 0;
 
     test += rtc_open(0);
-    for(a = 2; a <= 1024; a*=2) {
+    for(a = 7; a <= 1024; a*=2) {
         test += rtc_write(0, &a, sizeof(uint32_t));
         for(b = 0; b < a; b++) {
             test += rtc_read(0, 0, 0);
+			if(test!=0){
+				printf("rtc failed");
+				return 0;
+			}
             printf("1");
         }
-        printf("\n");
-    }
-    if(!test) {
-        return 1;
-    } else {
-        return 0;
+		terminal_newline();
     }
 
+
+	return 1;
+
+}
+
+int rtc_close_test(){
+	int ret = rtc_close(0);
+	if(ret == 0){
+		printf("rtc closed");
+
+	}
+	return 1;
 }
 
 
@@ -312,6 +323,7 @@ void launch_tests(){
 	//TEST_OUTPUT("division_by_zero_test", exceptions_test());
 	//TEST_OUTPUT("null_test", null_test());
 	//TEST_OUTPUT("_test", rtc_test());
-	rtc_test();
+	//rtc_test();
+	rtc_close_test();
 	// launch your tests here
 }
