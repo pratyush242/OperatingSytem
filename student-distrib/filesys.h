@@ -6,6 +6,9 @@
 #include "types.h"
 #include "lib.h"
 
+
+
+//struct for dentry
 typedef struct dentry{
     uint8_t filename[32];
     uint32_t filetype;
@@ -13,6 +16,7 @@ typedef struct dentry{
     uint8_t reserved[24];
 }dentry_t;
 
+//struct for booot_block
 typedef struct boot_block {
 uint32_t dir_count;
 uint32_t inode_count;
@@ -23,28 +27,26 @@ dentry_t dentry_start[63];
 
 }boot_block_t;
 
-
-
-
+//struct for inode
 typedef struct inode {
     uint32_t length;
     uint32_t data_block_num[1023];
 }inode_t;
 
+//variable for base address defines as an extern
 extern uint32_t file_system_base;
 
+//initialization and declaration of variables
 boot_block_t* boot_block_A;
 uint32_t num_dentry;
-
 uint32_t num_inode;
-
 uint32_t num_data_blocks;
-
-
 inode_t* inode_start;
-
 uint8_t*  data_block_start;
 
+
+
+//calling functions
 int init_filesys();
 int open();
 int close();
@@ -52,9 +54,7 @@ uint32_t read_dentry_by_name(const uint8_t* fname, dentry_t* dentry);
 uint32_t read_dentry_by_index(uint32_t index,dentry_t* dentry);
 uint32_t read_data(uint32_t inode, uint32_t offset, uint8_t* buf, uint32_t length);
 int write();
-
 uint32_t read_file(const uint8_t* fname, uint8_t* buf, uint32_t length);
-
 uint32_t read_directory( uint8_t* buf);
 
 #endif

@@ -3,6 +3,16 @@
 static uint32_t file_position = 0;
 
 static uint32_t directory_file = 0;
+
+/* init_filesys
+ * initializes file system 
+ * 
+ * returns 0
+ * Inputs: None
+ * 
+
+
+ */
 int init_filesys(){
     boot_block_A = (boot_block_t*) file_system_base;
     num_dentry = boot_block_A -> data_count;
@@ -16,13 +26,40 @@ int init_filesys(){
 }
 
 
+/* open
+ * opens files/directories
+ * 
+ * returns 0
+ * Inputs: None
+ * 
+
+
+ */
 int open(){
     return 0;
 }
+/* close
+ * closes files/directories
+ * 
+ * returns 0
+ * Inputs: None
+ * 
+
+
+ */
 int close(){
     return 0;
 
 }
+/* write
+ * writes files/directories
+ * 
+ * returns 0
+ * Inputs: None
+ * 
+
+
+ */
 
 int write(){
     return -1;
@@ -107,10 +144,6 @@ return -1;
 uint32_t read_directory( uint8_t* buf){
 
 dentry_t file_entry;
-
-
-
-
 read_dentry_by_index(directory_file,&file_entry);
 
 if(directory_file == num_dentry){

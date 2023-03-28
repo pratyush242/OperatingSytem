@@ -324,6 +324,6 @@ void launch_tests(){
 	//TEST_OUTPUT("null_test", null_test());
 	//TEST_OUTPUT("_test", rtc_test());
 	//rtc_test();
-	rtc_close_test();
+	//rtc_close_test();
 	// launch your tests here
 }
