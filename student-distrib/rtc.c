@@ -70,9 +70,11 @@ int rtc_write (int32_t fd, const void* buf, int32_t nbytes) {
     if (buf == NULL) {                      // if buffer is null write will fail
         return -1;
     }
-    else{
-        return 0;                           // else return success
-    }
+    
+
+    rtc_change_frequency(*((int32_t*) buf));  // change frequency but first convert input to int32_t
+    return 0;                           // else return success
+    
 
     
 }
