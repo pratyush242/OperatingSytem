@@ -475,16 +475,28 @@ void test_interrupts(void) {
         video_mem[i << 1]++;
     }
 }
+/* void terminal_reset(void)
+ * Inputs: void
+ * Return Value: void
+ * Function: sets screen_y and screen_x to 0  */
 void terminal_reset(){
         screen_y = 0;
         screen_x = 0;
         return;
 }
+/* void terminal_newline(void)
+ * Inputs: void
+ * Return Value: void
+ * Function: allows us to change lines */
 void terminal_newline(){
         screen_y++;
         screen_x = 0;
         terminal_scroll();
 }
+/* void terminal_newline(void)
+ * Inputs: void
+ * Return Value: void
+ * Function: allows us to backspace */
 void terminal_backspace(){
         screen_x--;
         *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1)) = ' ';
@@ -492,6 +504,10 @@ void terminal_backspace(){
         screen_x %= NUM_COLS;
         screen_y = (screen_y + (screen_x / NUM_COLS)) % NUM_ROWS;
 }
+/* void terminal_scroll(void)
+ * Inputs: void
+ * Return Value: void
+ * Function: allows us to scroll */
 void terminal_scroll(){
     // check if at bottom of screen 
     if (screen_y == NUM_ROWS){

@@ -15,6 +15,7 @@ int8_t *strrev(int8_t* s);
 uint32_t strlen(const int8_t* s);
 void clear(void);
 void test_interrupts(void);
+//function declarations defined locally
 void terminal_reset(void);
 void terminal_newline(void);
 void terminal_backspace(void);
