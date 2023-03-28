@@ -4,8 +4,9 @@
 
 int terminal_open();
 int terminal_close();
-int terminal_write(char* buf , int nbytes);
-int terminal_read(char *buf);
+int terminal_write(char* buf , int  nbytes);
+int terminal_read(unsigned char * buf, int nbytes);
+
 
 
 

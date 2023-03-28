@@ -4,7 +4,7 @@
 #include "i8259.h"
 #include "idt.h"
 #include "rtc.h"
-
+#include "filesys.h"
 #define PASS 1
 #define FAIL 0
 
@@ -155,115 +155,115 @@ static inline void assertion_failure(){
 
 
 /* Checkpoint 2 tests */
-// int init_dir_test(){
+int init_dir_test(){
 
-// uint8_t* temp_name;
-// int i;
-// temp_name = boot_block_A->dentry_start[8].filename;
-// printf("%s",temp_name);
+uint8_t* temp_name;
+int i;
+temp_name = boot_block_A->dentry_start[8].filename;
+printf("%s",temp_name);
 
-// 	return PASS;
-// }
-
-
-// int read_dentry_by_index_test(){
-// dentry_t temp;
-// uint8_t* temp_name;
-// read_dentry_by_index(3,&temp);
+	return PASS;
+}
 
 
-// temp_name = temp.filename;
-// printf("%s",temp_name);
-// return PASS;
-// }
-
-// int read_dentry_by_name_test(){
-// dentry_t temp;
-// uint8_t* temp_test;
-// uint8_t temp_name[11] = "frame1.txt";
-// uint32_t val = read_dentry_by_name(temp_name,&temp);
+int read_dentry_by_index_test(){
+dentry_t temp;
+uint8_t* temp_name;
+read_dentry_by_index(3,&temp);
 
 
-// temp_test = temp.filename;
-// if(val==-1){
-// 	printf("%d",val);
-// }
-// else{
-// printf("%s",temp_test);}
-// return PASS;
-// }
+temp_name = temp.filename;
+printf("%s",temp_name);
+return PASS;
+}
 
-// int read_text_file_test(){
-
-// uint8_t temp_name[11] = "frame0.txt";
-
-// uint8_t buf[8000];
-// uint32_t length = 8000;
-
-// read_file(temp_name,buf,length);
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-
-// printf("%s",buf);
-// return PASS;
-
-// }
-
-// int read_large_file_test(){
-
-// uint8_t temp_name[11] = "fish";
-
-// uint8_t buf[8000];
-// uint32_t length = 8000;
-
-//read_file(temp_name,buf,length);
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// int i;
-// for(i = 0; i<8000;i++){
-// 	putc(buf[i]);
-// }
-
-// return PASS;
-
-// }
-
-// int read_directory_test(){
+int read_dentry_by_name_test(){
+dentry_t temp;
+uint8_t* temp_test;
+uint8_t temp_name[11] = "frame1.txt";
+uint32_t val = read_dentry_by_name(temp_name,&temp);
 
 
+temp_test = temp.filename;
+if(val==-1){
+	printf("%d",val);
+}
+else{
+printf("%s",temp_test);}
+return PASS;
+}
 
-// uint8_t buf[500];
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("\n");
-// printf("-------------\n");
-// int val = 1;
-// while(val!=0){
-// val = read_directory(buf);
-// printf("%s\n",buf);
+int read_text_file_test(){
 
-// }
+uint8_t temp_name[11] = "frame0.txt";
 
-// return PASS;
+uint8_t buf[8000];
+uint32_t length = 8000;
 
-// }
+read_file(temp_name,buf,length);
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+
+printf("%s",buf);
+return PASS;
+
+}
+
+int read_large_file_test(){
+
+uint8_t temp_name[11] = "fish";
+
+uint8_t buf[8000];
+uint32_t length = 8000;
+
+read_file(temp_name,buf,length);
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+int i;
+for(i = 0; i<8000;i++){
+	putc(buf[i]);
+}
+
+return PASS;
+
+}
+
+int read_directory_test(){
+
+
+
+uint8_t buf[500];
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+printf("\n");
+printf("-------------\n");
+int val = 1;
+while(val!=0){
+val = read_directory(buf);
+printf("%s\n",buf);
+
+}
+
+return PASS;
+
+}
 
 int rtc_test() {
     int32_t a;
@@ -308,6 +308,7 @@ int rtc_close_test(){
 /* Test suite entry point */
 
 void launch_tests(){
+	//clear();
 	//printf("WEHITTHIS");
 	//division_by_zero_test();
 	//idt_init();

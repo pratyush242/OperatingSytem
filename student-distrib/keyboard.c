@@ -2,9 +2,6 @@
 #include "lib.h"
 #include "i8259.h"
 
-
-//flag definitions
-
 static unsigned int caps_flag = 0;
 static unsigned int shift_flag = 0;
 static unsigned int control_flag = 0;
@@ -17,14 +14,14 @@ static unsigned int alt_flag = 0;
 
 
  */
+
 void init_keyboard()
 {
     enable_irq(KEYBOARD_IRQ);
 }
-
-//keyboard map
 //nothing-----shift only----caps only----shift and caps
 // used the scan code given on https://wiki.osdev.org/PS/2_Keyboard for a "US QWERTY" keyboard only
+//keyboard_map
 unsigned char keyboard_map[128] =
 {
     0,  0, '1', '2', '3', '4', '5', '6', '7', '8','9', '0', '-', '=', '\b', // 0 isnt mapped--- 0 = esc key---- 0-9 ----- symbols---- backspace
@@ -55,7 +52,9 @@ unsigned char keyboard_map[128] =
     0,  // F12 Key 
     0,  // All other keys are undefined 
     };
-//keyboard shift map
+
+//keyboard_shift_map
+
 unsigned char keyboard_shift_map[128] =
 {
     0,  0, '!', '@', '#', '$', '%', '^', '&', '*','(', ')', '_', '+', '\b', // 0 isnt mapped--- 0 = esc key---- 0-9 ----- symbols---- backspace
@@ -87,7 +86,8 @@ unsigned char keyboard_shift_map[128] =
     0,  // All other keys are undefined     
 };
 
-//keyboard caps map
+
+//keyboard_caps_map
 unsigned char keyboard_caps_map[128] =
 {
     0,  0, '1', '2', '3', '4', '5', '6', '7', '8','9', '0', '-', '=', '\b', // 0 isnt mapped--- 0 = esc key---- 0-9 ----- symbols---- backspace
@@ -119,7 +119,8 @@ unsigned char keyboard_caps_map[128] =
     0,  // All other keys are undefined     
 };
 
-//keyboard both map
+
+//keyboard_both_map
 unsigned char keyboard_both_map[128] =
 {
     0,  0, '!', '@', '#', '$', '%', '^', '&', '*','(', ')', '_', '+', '\b', // 0 isnt mapped--- 0 = esc key---- 0-9 ----- symbols---- backspace
@@ -151,14 +152,9 @@ unsigned char keyboard_both_map[128] =
     0,  // All other keys are undefined 
     };
 
-/* handler_keyboard
- * 
- * handles keyboard interrupts
- */
-
+//handler_keybaord
 void handler_keyboard(){
     unsigned char keydata = 0;
-    unsigned char keyprint;
     int i;
     // mask interrupt
     cli();
@@ -170,48 +166,49 @@ void handler_keyboard(){
         }
     }
     // check if key is valid
-    if (keydata < 128){ 
-        if(keydata == 0x3A){ //capslock
-            caps_flag = ~caps_flag;
-        }  
-        else if(keydata == 0x2A || keydata == 0x36){//left shift pressed or right shift pressed
-            shift_flag = 1;
-        }  
-        else if(keydata == 0xAA || keydata == 0xB6){//left shift released or right shift released
-            shift_flag = 0;
-        }    
-        else if(keydata == 0x1D){ //control pressed
-            control_flag = 1;
-        }  
-        else if(keydata == 0x9D){ //control released
-            control_flag = 0;
-        }   
-        else if(keydata == 0x38){ //alt pressed
-            alt_flag = 1;
-        }  
-        else if(keydata == 0xB8){ //alt released
-            alt_flag = 0;
-        }  
-        else if(keydata == 0x1C){ //enter pressed
-            key_buffer[keybuffer_ptr] = '\n';
+    if(keydata == 0x3A){ //capslock
+        caps_flag = ~caps_flag;
+    }  
+    else if(keydata == 0x2A || keydata == 0x36){//left shift pressed or right shift pressed
+        shift_flag = 1;
+    }  
+    else if(keydata == 0xAA || keydata == 0xB6){//left shift released or right shift released
+        shift_flag = 0;
+    }    
+    else if(keydata == 0x1D){ //control pressed
+        control_flag = 1;
+    }  
+    else if(keydata == 0x9D){ //control released
+        control_flag = 0;
+    }   
+    else if(keydata == 0x38){ //alt pressed
+        alt_flag = 1;
+    }  
+    else if(keydata == 0xB8){ //alt released
+        alt_flag = 0;
+    }  
+    else if(keydata == 0x1C){ //enter pressed
+        key_buffer[keybuffer_ptr] = '\n';
+        keybuffer_ptr = keybuffer_ptr + 1; 
+        terminal_newline();
+    }  
+    else if(keydata == 0x0E){ //backspace
+        if (keybuffer_ptr>0){
+            keybuffer_ptr = keybuffer_ptr - 1 ;
+            key_buffer[keybuffer_ptr] = ' ';
+            terminal_backspace();
+        }
+    } 
+    else if(keydata == 0x0F){ //tab
+        for (i=0; i<4; i++){
+            key_buffer[keybuffer_ptr] = ' ';
             keybuffer_ptr = keybuffer_ptr + 1; 
-            terminal_newline();
-        }  
-        else if(keydata == 0x0E){ //backspace
-            if (keybuffer_ptr>0){
-                keybuffer_ptr = keybuffer_ptr - 1 ;
-                key_buffer[keybuffer_ptr] = ' ';
-                terminal_backspace();
-            }
-        } 
-        else if(keydata == 0x0F){ //tab
-            for (i=0; i<4; i++){
-                key_buffer[keybuffer_ptr] = ' ';
-                keybuffer_ptr = keybuffer_ptr + 1; 
-                putc(' ');
-            }
-        } 
-        else{
+            putc(' ');
+        }
+    } 
+    else{
+        if(keydata<128){
+            unsigned char keyprint;
             //print_key(keydata);
             if (shift_flag & caps_flag){
                 keyprint = keyboard_both_map[keydata];
@@ -240,7 +237,6 @@ void handler_keyboard(){
                     putc(keyprint);                    
                 }
             }
-
         }
     }
     // end interrupt

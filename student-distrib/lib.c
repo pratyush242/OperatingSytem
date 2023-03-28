@@ -172,13 +172,23 @@ void putc(uint8_t c) {
         // screen_y++;
         screen_y = (screen_y+1) % NUM_ROWS;
         screen_x = 0;
-    } else {
+    }
+    else if(screen_x == NUM_COLS - 1){
+        *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1)) = c;
+        *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1) + 1) = ATTRIB;
+        screen_y++;
+        screen_x = 0;
+        terminal_scroll();        
+    } 
+    else {
         *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1)) = c;
         *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1) + 1) = ATTRIB;
         screen_x++;
         screen_x %= NUM_COLS;
         screen_y = (screen_y + (screen_x / NUM_COLS)) % NUM_ROWS;
     }
+    uint16_t pos = screen_y * NUM_COLS + screen_x;
+    update_cursor(pos);
 }
 
 /* int8_t* itoa(uint32_t value, int8_t* buf, int32_t radix);
@@ -479,15 +489,20 @@ void test_interrupts(void) {
  * Inputs: void
  * Return Value: void
  * Function: sets screen_y and screen_x to 0  */
+
+
 void terminal_reset(){
         screen_y = 0;
         screen_x = 0;
+        update_cursor(0);
         return;
 }
 /* void terminal_newline(void)
  * Inputs: void
  * Return Value: void
  * Function: allows us to change lines */
+
+
 void terminal_newline(){
         screen_y++;
         screen_x = 0;
@@ -497,35 +512,65 @@ void terminal_newline(){
  * Inputs: void
  * Return Value: void
  * Function: allows us to backspace */
+
 void terminal_backspace(){
+    if(screen_x == 0 && screen_y == 0)
+        return;
+    else if(screen_x == 0) //when go back to the previous line
+    {   
+        screen_y--;
+        screen_x = NUM_COLS - 1;
+        uint32_t i = NUM_COLS * screen_y + screen_x;
+        *(uint8_t *)(video_mem + (i << 1)) = ' ';
+        *(uint8_t *)(video_mem + (i << 1) + 1) = ATTRIB;
+        screen_x %= NUM_COLS;
+        screen_y = (screen_y + (screen_x / NUM_COLS)) % NUM_ROWS;
+    } 
+    else{
         screen_x--;
         *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1)) = ' ';
         *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1) + 1) = ATTRIB;
         screen_x %= NUM_COLS;
         screen_y = (screen_y + (screen_x / NUM_COLS)) % NUM_ROWS;
+    }       
+        uint16_t pos = screen_y * NUM_COLS + screen_x;
+        update_cursor(pos);
 }
+
 /* void terminal_scroll(void)
  * Inputs: void
  * Return Value: void
  * Function: allows us to scroll */
+
 void terminal_scroll(){
     // check if at bottom of screen 
     if (screen_y == NUM_ROWS){
-        // move all previous lines up one 
         int i,j;
-        for (j = 1; j < NUM_ROWS; j++){
+        for (j = 1; j < NUM_ROWS; j++){ // move all previous lines up one 
             for (i = 0; i < NUM_COLS; i++){
                 *(uint8_t *)(video_mem + ((NUM_COLS * (j - 1) + i) << 1)) = *(uint8_t *)(video_mem + ((NUM_COLS * j + i) << 1));
                 *(uint8_t *)(video_mem + ((NUM_COLS * (j - 1) + i) << 1) + 1) = ATTRIB;
             }
         }
-        // create new line 
-        for (i = 0; i < NUM_COLS; i++){
+        for (i = 0; i < NUM_COLS; i++){// create new line 
             *(uint8_t *)(video_mem + ((NUM_COLS * (NUM_ROWS - 1) + i) << 1)) = ' ';
             *(uint8_t *)(video_mem + ((NUM_COLS * (NUM_ROWS - 1) + i) << 1) + 1) = ATTRIB;
         }
-        // place cursor at beginning of new line 
         screen_x = 0;
         screen_y = NUM_ROWS - 1;
     }
+}
+/* void update_cursor(uint16_t pos)
+ * Inputs: pos
+ * Return Value: void
+ * Function: updates cursor */
+
+void update_cursor(uint16_t pos){
+    outb(0x0f, 0x3d4);
+
+    // column 
+    outb((uint8_t)(pos & 0xff), 0x3d5);
+    outb(0x0e, 0x3d4);
+    // row 
+    outb((uint8_t)((pos >> 0x08) & 0xff), 0x3d5); //bitshift the position
 }

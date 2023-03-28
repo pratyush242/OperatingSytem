@@ -10,5 +10,6 @@ volatile int keybuffer_ptr;
 //declaration of functions
 extern void init_keyboard();
 extern void handler_keyboard();
+volatile int read_terminal;
 
 #endif

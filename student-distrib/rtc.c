@@ -4,7 +4,10 @@
 //void test_interrupts();
 
 
-//rtc initializer
+/* rtc_init
+ * 
+ * initializes rtc
+ */
 void rtc_init()
 {   int rate;
 
@@ -28,7 +31,10 @@ void rtc_init()
     sti();
     
 }
-//rtc handler
+/* rtc_handler
+ * 
+ * handles rtc interrupts
+ */
 void rtc_handler() {
     /* mask the interrupts*/
     cli();
@@ -45,18 +51,27 @@ void rtc_handler() {
 
 
 
-// RTC open() initializes RTC frequency to 2HZ, return 0
+// RTC open() 
+/* 
+ * 
+ * input: filename
+ */
+//initializes RTC frequency to 2HZ, return 0
 int rtc_open (const uint8_t* filename) {
     rtc_change_frequency(2);             // set frequency to 2
     return 0;
 }
 
-//RTC close() does nothing, return 0
+//RTC close() 
+//input: fd
+//does nothing, return 0
 int rtc_close(int32_t fd) {
     return 0;                        // do nothing 
 }
-
-// RTC read() should block until the next interrupt, return 0
+//rtc_read()
+//input: fd,buf,nbytes
+// RTC read() should block until the next interrupt, 
+//return 0
 int rtc_read(int32_t fd, void* buf, int32_t nbytes) {
     rtc_interrupt = 0;
     while(rtc_interrupt == 0);                       
