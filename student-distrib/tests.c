@@ -115,6 +115,24 @@ static inline void assertion_failure(){
 // 	return FAIL;
 // }
 
+void rtc_test() {
+    int a;
+    int b;
+    int c;
+    for(a = 2; a <= 1024; a*=2) {
+        rtc_write(a, 0, 0);
+        for(b = 0; b < 3; b++){
+            rtc_read(0,0,0);
+            printf("1");
+        }
+    }
+    rtc_open(0);
+    for(c = 0; c < 5; c++){
+        rtc_read(0,0,0);
+        printf("1");
+    }
+}
+
 
 
 // int kernel_lower__fail_test(){
@@ -178,5 +196,6 @@ void launch_tests(){
 	//TEST_OUTPUT("division_by_zero_test", exceptions_test());
 	//TEST_OUTPUT("null_test", null_test());
 	//TEST_OUTPUT("_test", rtc_test());
+	rtc_test();
 	// launch your tests here
 }
