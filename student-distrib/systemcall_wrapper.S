@@ -30,10 +30,10 @@ jumptable:
     .long 0x0                             /* there is no system call number 0 */
     .long halt
     .long execute
-    .long read
-    .long write
-    .long open
-    .long close
+    .long sys_read
+    .long sys_write
+    .long sys_open
+    .long sys_close
 
 pop_registers:
     popl %ebx
