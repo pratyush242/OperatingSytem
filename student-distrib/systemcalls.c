@@ -128,7 +128,7 @@ int32_t system_execute(const uint8_t* command){
     } 
 
 
-    if (read_data(dentry.inode_num, 0, buf, 4) == -1){
+    if (read_file(filename, buf, 4) == -1){
         return -1;
     } 
 
