@@ -1,8 +1,8 @@
 #include "systemcalls.h"
 
 
-int32_t prog_count = 0;
-int32_t pid = 0;
+
+
 
 int32_t sys_open(const char* fname){
     dentry_t dentry;
@@ -74,9 +74,9 @@ int32_t execute(const uint8_t* command){
         return -1;
     } 
    
-    if(prog_count >= 8){
-        return 0;
-    } 
+   
+
+    
     
     /* parsing arguments */
 
@@ -117,18 +117,22 @@ int32_t execute(const uint8_t* command){
     // } 
 
 
-    /* entry point */
+    /* get entry point */
     read_data(dentry.inode_num, 24, buf, 4);
 
     entry_point = *((uint32_t*) buf);
 
-   
+    
+
 
     
     
     /* paging */
     
-    initializeDirectory();   
+    initializeProgram();   /* still need to figure out */  
+    
+
+    /* flush tlb */
   
 
     return 0;
