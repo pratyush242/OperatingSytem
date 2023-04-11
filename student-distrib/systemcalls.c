@@ -68,71 +68,92 @@ int32_t halt(uint8_t status){
     return 0;
 }
 
-int32_t execute(const uint8_t* command){
+int32_t system_execute(const uint8_t* command){
    
     if(command == NULL){
         return -1;
     } 
    
    
-
     
     
     /* parsing arguments */
 
-    uint8_t filename[32];    
-    
+     
+
+
+
+
+
    
     int32_t i;
+    int counter = 0;
+  
+   
 
     for (i = 0; i < 32; i++){
-        if (command[i] == ' '){
+        if (command[i] == ' '  || command[i] == '\n'){
             break;
         } 
-        else{
-            filename[i] = command[i];
-        } 
+     
+        counter++;
     }
-                                    
+    uint8_t filename[counter];   
+
+    for (i = 0; i < counter; i++){
+       
+        filename[i] = command[i];
+        
+    }
+
+
+
+    // printf("______________ \n");
+
+    // printf("%s",filename);
+    
+    // printf("\n______________ \n");
+
+
     
     /* executable check */
     dentry_t dentry;
     uint8_t  buf[4];
     uint32_t entry_point;
 
+
         
     if (read_dentry_by_name(filename, &dentry) == -1){
         return -1;
     } 
 
-        
 
     if (read_data(dentry.inode_num, 0, buf, 4) == -1){
         return -1;
     } 
 
-    // /* Checks ELF magic constant */     
-    // if ((buf[0] != 0x7F) || (buf[1] != 0x45) || (buf[2] != 0x4C) || (buf[3] != 0x46)){
-    //     return -1;
-    // } 
+    /* Checks ELF magic constant */     
+    if ((buf[0] != 0x7F) || (buf[1] != 0x45) || (buf[2] != 0x4C) || (buf[3] != 0x46)){
+        return -1;
+    } 
 
 
-    /* get entry point */
-    read_data(dentry.inode_num, 24, buf, 4);
+    // /* get entry point */
+    // read_data(dentry.inode_num, 24, buf, 4);
 
-    entry_point = *((uint32_t*) buf);
-
-    
-
+    // entry_point = *((uint32_t*) buf);
 
     
+
+
     
-    /* paging */
     
-    initializeProgram();   /* still need to figure out */  
+    // /* paging */
+    
+    // initializeProgram();   /* still need to figure out */  
     
 
-    /* flush tlb */
+    // /* flush tlb */
   
 
     return 0;

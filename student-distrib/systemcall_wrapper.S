@@ -29,7 +29,7 @@ invalid:
 jumptable:
     .long 0x0                             /* there is no system call number 0 */
     .long halt
-    .long execute
+    .long system_execute
     .long sys_read
     .long sys_write
     .long sys_open
