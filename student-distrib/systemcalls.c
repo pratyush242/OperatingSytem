@@ -80,7 +80,7 @@ int32_t execute(const uint8_t* command){
     
     /* parsing arguments */
 
-    uint8_t argv[32];    
+    uint8_t filename[32];    
     
    
     int32_t i;
@@ -90,7 +90,7 @@ int32_t execute(const uint8_t* command){
             break;
         } 
         else{
-            argv[i] = command[i];
+            filename[i] = command[i];
         } 
     }
                                     
@@ -101,21 +101,23 @@ int32_t execute(const uint8_t* command){
     uint32_t entry_point;
 
         
-    if (read_dentry_by_name(cmd, &dentry) == -1){
+    if (read_dentry_by_name(filename, &dentry) == -1){
         return -1;
     } 
 
         
 
-    if (read_data(dentry.inode_num, 0, buf, 4) <=0){
+    if (read_data(dentry.inode_num, 0, buf, 4) == -1){
         return -1;
     } 
 
-        
-    if ((buf[0] != 0x7F) || (buf[1] != 0x45) || (buf[2] != 0x4C) || (buf[3] != 0x46)){
-        return -1;
-    } 
+    // /* Checks ELF magic constant */     
+    // if ((buf[0] != 0x7F) || (buf[1] != 0x45) || (buf[2] != 0x4C) || (buf[3] != 0x46)){
+    //     return -1;
+    // } 
 
+
+    /* entry point */
     read_data(dentry.inode_num, 24, buf, 4);
 
    
@@ -124,7 +126,7 @@ int32_t execute(const uint8_t* command){
     
     /* paging */
     
-    initializeProgram(pid);   // still need to do
+    initializeDirectory();   
   
 
     return 0;
