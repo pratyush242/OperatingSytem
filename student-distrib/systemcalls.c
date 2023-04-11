@@ -120,6 +120,8 @@ int32_t execute(const uint8_t* command){
     /* entry point */
     read_data(dentry.inode_num, 24, buf, 4);
 
+    entry_point = *((uint32_t*) buf);
+
    
 
     
