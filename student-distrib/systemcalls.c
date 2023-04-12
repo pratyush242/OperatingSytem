@@ -1,7 +1,8 @@
 #include "systemcalls.h"
+#include "x86_desc.h"
 
 
-int32_t pid = -1
+int32_t pid = -1;
 
 
 int32_t sys_open(const char* fname){
@@ -67,6 +68,33 @@ int32_t sys_write(int32_t fd, void* buf, int32_t nbytes){
 int32_t halt(uint8_t status){
     return 0;
 }
+
+
+pcb_t* pcb_adress(uint32_t pid){
+    return (pcb_t*) (0x800000 - ((pid+1) * 0x2000));
+   
+}
+
+// uint32_t null_open(){
+//     return -1;
+   
+// }
+
+// uint32_t null_close(){
+//     return -1;
+   
+// }
+
+// uint32_t null_read(){
+//     return -1;
+   
+// }
+
+// uint32_t null_write(){
+//     return -1;
+   
+// }
+
 
 int32_t system_execute(const uint8_t* command){
    
@@ -152,6 +180,45 @@ int32_t system_execute(const uint8_t* command){
 
     
 
+    register uint32_t saved_ebp asm("ebp");
+    register uint32_t saved_esp asm("esp");
+    file_op_table_init();
+    pcb_t* PCB;
+    PCB = pcb_adress(0);
+    pcb_t* PCB_parent;
+    PCB_parent = pcb_adress(1);
+    
+    
+    PCB->pid = pid;
+    
+    PCB->parent_id = PCB_parent;
+    PCB->saved_ebp = saved_ebp;
+    PCB->saved_esp = saved_esp;
+    PCB->active = 1;
+    
+
+    
+    for(i = 0; i < 8; i++){
+        PCB->file_descriptor[i].op = &fopsarray[5];    // file operator table 
+        PCB->file_descriptor[i].inode = 0 ;     // inode index 
+        PCB->file_descriptor[i].fileoffset = 0; // offset in current file 
+        PCB->file_descriptor[i].flags = 0;
+               
+        if(i==0||i==1){
+            PCB->file_descriptor[i].flags = 1;
+            PCB->file_descriptor[i].op = &fopsarray[i+3];
+        }
+   
+    }
+
+    // TSS
+    tss.ss0 = KERNEL_DS;
+    tss.esp0 = (0x800000 - ((pid) * 0x2000) - sizeof(uint32_t));                    // will point to the top of your stack
+
+  
+    PCB->ss0 = tss.esp0;
+    PCB->esp0 = tss.esp0;
+
     
 
 
@@ -168,4 +235,8 @@ int32_t system_execute(const uint8_t* command){
     return 0;
     
 }
+
+
+
+
 

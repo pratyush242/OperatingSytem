@@ -14,7 +14,7 @@ lib.o: lib.c lib.h types.h
 paging.o: paging.c paging.h x86_desc.h types.h
 rtc.o: rtc.c rtc.h types.h lib.h i8259.h
 systemcalls.o: systemcalls.c systemcalls.h types.h filesys.h lib.h \
-  terminal.h rtc.h
+  terminal.h rtc.h x86_desc.h
 terminal.o: terminal.c terminal.h keyboard.h lib.h types.h
 tests.o: tests.c tests.h x86_desc.h types.h lib.h i8259.h idt.h rtc.h \
   filesys.h keyboard.h terminal.h
