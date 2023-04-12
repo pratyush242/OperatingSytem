@@ -1,7 +1,7 @@
 #include "systemcalls.h"
 
 
-
+int32_t pid = -1
 
 
 int32_t sys_open(const char* fname){
@@ -82,9 +82,14 @@ int32_t system_execute(const uint8_t* command){
      
 
 
+    if(pid+1 >5){
+        printf("Max number of processes running \n");
+        return -1;
+    }
 
-
-
+    else{
+        pid+=1;
+    }
    
     int32_t i;
     int counter = 0;
@@ -138,10 +143,14 @@ int32_t system_execute(const uint8_t* command){
     } 
 
 
-    // /* get entry point */
-    // read_data(dentry.inode_num, 24, buf, 4);
+    /* get entry point */
+    if(read_data(dentry.inode_num, 24, buf, 4)==-1)
+    {
+        return -1;
+    }
 
-    // entry_point = *((uint32_t*) buf);
+
+    
 
     
 
