@@ -157,169 +157,176 @@ static inline void assertion_failure(){
 
 
 /* Checkpoint 2 tests */
-int init_dir_test(){
+// int init_dir_test(){
 
-uint8_t* temp_name;
-int i;
-temp_name = boot_block_A->dentry_start[8].filename;
-printf("%s",temp_name);
+// uint8_t* temp_name;
+// int i;
+// temp_name = boot_block_A->dentry_start[8].filename;
+// printf("%s",temp_name);
 
-	return PASS;
-}
-
-
-int read_dentry_by_index_test(){
-dentry_t temp;
-uint8_t* temp_name;
-read_dentry_by_index(3,&temp);
+// 	return PASS;
+// }
 
 
-temp_name = temp.filename;
-printf("%s",temp_name);
-return PASS;
-}
-
-int read_dentry_by_name_test(){
-dentry_t temp;
-uint8_t* temp_test;
-uint8_t temp_name[11] = "frame1.txt";
-uint32_t val = read_dentry_by_name(temp_name,&temp);
+// int read_dentry_by_index_test(){
+// dentry_t temp;
+// uint8_t* temp_name;
+// read_dentry_by_index(3,&temp);
 
 
-temp_test = temp.filename;
-if(val==-1){
-	printf("%d",val);
-}
-else{
-printf("%s",temp_test);}
-return PASS;
-}
+// temp_name = temp.filename;
+// printf("%s",temp_name);
+// return PASS;
+// }
 
-int read_text_file_test(){
-
-uint8_t temp_name[11] = "frame0.txt";
-
-uint8_t buf[8000];
-uint32_t length = 8000;
-
-read_file(temp_name,buf,length);
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-
-printf("%s",buf);
-return PASS;
-
-}
-
-int read_large_file_test(){
-
-uint8_t temp_name[11] = "fish";
-
-uint8_t buf[8000];
-uint32_t length = 8000;
-
-read_file(temp_name,buf,length);
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-int i;
-for(i = 0; i<8000;i++){
-	putc(buf[i]);
-}
-
-return PASS;
-
-}
-
-int read_directory_test(){
+// int read_dentry_by_name_test(){
+// dentry_t temp;
+// uint8_t* temp_test;
+// uint8_t temp_name[11] = "frame1.txt";
+// uint32_t val = read_dentry_by_name(temp_name,&temp);
 
 
+// temp_test = temp.filename;
+// if(val==-1){
+// 	printf("%d",val);
+// }
+// else{
+// printf("%s",temp_test);}
+// return PASS;
+// }
 
-uint8_t buf[500];
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("\n");
-printf("-------------\n");
-int val = 1;
-while(val!=0){
-val = read_directory(buf);
-printf("%s\n",buf);
+// int read_text_file_test(){
 
-}
+// uint8_t temp_name[11] = "frame0.txt";
 
-return PASS;
+// uint8_t buf[8000];
+// uint32_t length = 8000;
 
-}
+// read_file(temp_name,buf,length);
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
 
-int rtc_test() {
-    int32_t a;
-    int b;
-    int test = 0;
+// printf("%s",buf);
+// return PASS;
 
-    test += rtc_open(0);
-    for(a = 7; a <= 1024; a*=2) {
-        test += rtc_write(0, &a, sizeof(uint32_t));
-        for(b = 0; b < a; b++) {
-            test += rtc_read(0, 0, 0);
-			if(test!=0){
-				printf("rtc failed");
-				return 0;
-			}
-            printf("1");
-        }
-		terminal_newline();
-    }
+// }
+
+// int read_large_file_test(){
+
+// uint8_t temp_name[11] = "fish";
+
+// uint8_t buf[8000];
+// uint32_t length = 8000;
+
+// read_file(temp_name,buf,length);
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// int i;
+// for(i = 0; i<8000;i++){
+// 	putc(buf[i]);
+// }
+
+// return PASS;
+
+// }
+
+// int read_directory_test(){
 
 
-	return 1;
 
-}
+// uint8_t buf[500];
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("\n");
+// printf("-------------\n");
+// int val = 1;
+// while(val!=0){
+// val = read_directory(buf);
+// printf("%s\n",buf);
 
-int rtc_close_test(){
-	int ret = rtc_close(0);
-	if(ret == 0){
-		printf("rtc closed");
+// }
 
-	}
-	return 1;
-}
+// return PASS;
 
-int test_terminal(){
-	char buffer[127];
-	int r = 0, w = 0;
-	terminal_open(0);
-	printf("terminal driver test begins\n");
-	while (1)
-	{
-		r = terminal_read(buffer, 127);
-		if(r >= 0){
-			w = terminal_write(buffer, 127);
-		}
-		if(r != w)
-			break;
-	}
-	terminal_close(0);
-	return -1;
-}
+// }
+
+// int rtc_test() {
+//     int32_t a;
+//     int b;
+//     int test = 0;
+
+//     test += rtc_open(0);
+//     for(a = 7; a <= 1024; a*=2) {
+//         test += rtc_write(0, &a, sizeof(uint32_t));
+//         for(b = 0; b < a; b++) {
+//             test += rtc_read(0, 0, 0);
+// 			if(test!=0){
+// 				printf("rtc failed");
+// 				return 0;
+// 			}
+//             printf("1");
+//         }
+// 		terminal_newline();
+//     }
+
+
+// 	return 1;
+
+// }
+
+// int rtc_close_test(){
+// 	int ret = rtc_close(0);
+// 	if(ret == 0){
+// 		printf("rtc closed");
+
+// 	}
+// 	return 1;
+// }
+
+// int test_terminal(){
+// 	char buffer[127];
+// 	int r = 0, w = 0;
+// 	terminal_open(0);
+// 	printf("terminal driver test begins\n");
+// 	while (1)
+// 	{
+// 		r = terminal_read(buffer, 127);
+// 		if(r >= 0){
+// 			w = terminal_write(buffer, 127);
+// 		}
+// 		if(r != w)
+// 			break;
+// 	}
+// 	terminal_close(0);
+// 	return -1;
+// }
 
 
 /* Checkpoint 3 tests */
+int program1_paging_test(){
+    TEST_HEADER;
+    char* temp_pointer = (char*)0x8048001;
+    char final = *temp_pointer;
+    return PASS;
+}
+
 /* Checkpoint 4 tests */
 /* Checkpoint 5 tests */
 
@@ -331,6 +338,7 @@ void launch_tests(){
 	//printf("WEHITTHIS");
 	//division_by_zero_test();
 	//idt_init();
+	TEST_OUTPUT("program1_paging_test()", program1_paging_test());
 	//TEST_OUTPUT("idt_test", idt_test());
 	//TEST_OUTPUT("read_text_file_test()", read_text_file_test());
 	//TEST_OUTPUT("read_large_file_test()", read_large_file_test());
