@@ -144,6 +144,7 @@ void entry(unsigned long magic, unsigned long addr) {
         ltr(KERNEL_TSS);
     }
 
+    
     idt_init();
     /* Init the PIC */
     i8259_init();
@@ -169,13 +170,15 @@ void entry(unsigned long magic, unsigned long addr) {
      * without showing you any output */
     /*printf("Enabling Interrupts\n");
     sti();*/
-
+clear();
+terminal_reset();
+system_execute((uint8_t*)"shell");
 #ifdef RUN_TESTS
     /* Run tests */
     launch_tests();
 #endif
     /* Execute the first program ("shell") ... */
-    system_execute("shell");
+    
     /* Spin (nicely, so we don't chew up cycles) */
     asm volatile (".1: hlt; jmp .1;");
 }
