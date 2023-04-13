@@ -57,7 +57,7 @@ void rtc_handler() {
  * input: filename
  */
 //initializes RTC frequency to 2HZ, return 0
-int rtc_open (const uint8_t* filename) {
+int32_t rtc_open (const char* filename) {
     rtc_change_frequency(2);             // set frequency to 2
     return 0;
 }
@@ -65,14 +65,14 @@ int rtc_open (const uint8_t* filename) {
 //RTC close() 
 //input: fd
 //does nothing, return 0
-int rtc_close(int32_t fd) {
+int32_t rtc_close(int32_t fd) {
     return 0;                        // do nothing 
 }
 //rtc_read()
 //input: fd,buf,nbytes
 // RTC read() should block until the next interrupt, 
 //return 0
-int rtc_read(int32_t fd, void* buf, int32_t nbytes) {
+int32_t rtc_read(int32_t fd, void* buf, int32_t nbytes) {
     rtc_interrupt = 0;
     while(rtc_interrupt == 0);                       
     return 0;
@@ -80,7 +80,7 @@ int rtc_read(int32_t fd, void* buf, int32_t nbytes) {
 
 
 //RTC write() must be able to change frequency, return 0 or -1
-int rtc_write (int32_t fd, const void* buf, int32_t nbytes) {
+int32_t rtc_write (int32_t fd, void* buf, int32_t nbytes) {
     
     if (buf == NULL) {                      // if buffer is null write will fail
         return -1;
