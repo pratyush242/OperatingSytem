@@ -133,7 +133,12 @@ unsigned char keyboard_both_map[128] =
     0,  // F12 Key 
     0,  // All other keys are undefined 
     };
-
+/* handler_keyboard
+ * 
+ * helps parse through the keyboard interupts and turns it into ascii
+ * Inputs: none
+ * Outputs: none
+ */
 void handler_keyboard(){
     unsigned char keydata = 0;
     int i;
