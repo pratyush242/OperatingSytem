@@ -9,11 +9,10 @@
 void initializeTable();
 
 void initializeDirectory();
-
+extern void sysCallPaging(uint32_t pid);
 extern void enablePaging();
 
 extern void loadDirectory(PageDirectoryEntry* pg_dir);
-
+extern void flush();
 #endif
 #endif
-
