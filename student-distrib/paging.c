@@ -109,4 +109,28 @@ void initializeDirectory(){
 
 }
 
+void sysCallPaging(uint32_t pid){
+    
+
+
+    PageDir[32].FourMB.Present = 1;
+    PageDir[32].FourMB.ReadWrite = 1;
+    PageDir[32].FourMB.UserSupervisor = 1;
+    PageDir[32].FourMB.WriteThrough  = 0;
+    PageDir[32].FourMB.CacheDisabled  = 0;
+    PageDir[32].FourMB.Accessed  = 0;
+    PageDir[32].FourMB.Dirty   = 0;
+    PageDir[32].FourMB.PageSize    = 1;
+    PageDir[32].FourMB.GlobalPage  = 0; //mod
+    PageDir[32].FourMB.ProgUse   = 0;
+    PageDir[32].FourMB.PageTableAttr = 0;
+    PageDir[32].FourMB.Reserved  = 0;
+
+
+    PageDir[32].FourMB.PageBaseAddr = (0x800000 + (0x400000*pid)) >> 22;
+    
+    flush();
+}
+
+
 
