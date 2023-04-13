@@ -29,11 +29,11 @@
 
 /* keyboard interrupt linkage code */
 #define INTERRUPT_WRAPPER(name,function) \
-        .globl name               ;\               
-        name:                     ;\    
+        .globl name               ;\
+        name:                     ;\
                 pushall           ;\
                 call function     ;\
-                popall            ;\     
+                popall            ;\
                 iret         
 
 
