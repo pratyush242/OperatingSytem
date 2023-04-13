@@ -2,13 +2,22 @@
 #include "x86_desc.h"
 
 #define progImage 0x08048000
+#define mb_8 0x800000
+#define kb_8 0x2000
+
 
 static fops_table_t fopsarray[6];
 int32_t pid = -1;
 
 
+/* helper function to get the adress of your pcb
+Input: PID number
+Output: A pointer to your adress that has that PCB */
+
 pcb_t* pcb_adress(uint32_t in){
-    return (pcb_t*) (0x800000 - ((in+1) * 0x2000));
+    return (pcb_t*) (mb_8 - ((in+1) * kb_8));                  // mb_8 0x800000 kb_8 0x2000
+
+
    
 }
 /* sys_open
@@ -96,6 +105,14 @@ int32_t sys_write(int32_t fd, void* buf, int32_t nbytes){
     return file_descriptor_array[fd].op->sys_write(fd, buf, nbytes);
 }
 
+/* halt
+ * 
+ * The halt system call terminates a process, returning the specified value to its parent process
+ * Inputs: status
+ * Outputs: 0 for succes, -1 for failure
+ */
+
+
 int32_t halt(uint8_t status){
    
 
@@ -116,13 +133,13 @@ int32_t halt(uint8_t status){
     }
    
    
-
+    // clear flags 
     int i;
     for (i = 0; i < 8; i++) {
         pcb->file_descriptor[i].flags = 0;
        
     }
-
+    // tss 
     tss.esp0 = pcb->esp0;
     tss.ss0 = pcb->ss0;
     
@@ -133,7 +150,7 @@ int32_t halt(uint8_t status){
     pcb_parent = pcb_adress(pcb->parent_id);
     pid = pcb_parent->pid;
 
-  
+    // restore parent paging 
     sysCallPaging(pid);
 
    
@@ -219,6 +236,14 @@ void file_op_table_init()
     fopsarray[5].sys_write = null_write;         
 }
 
+/* system_execute
+ * 
+ * The execute system call attempts to load and execute a new program, handing off the processor to the new program
+   until it terminates.
+ * Inputs: command -- The command is a space-separated sequence of words. 
+ * Outputs: 0 for success, if error then ret -1
+ */
+
 
 int32_t system_execute(const uint8_t* command){
     if(command == NULL){
@@ -260,9 +285,9 @@ int32_t system_execute(const uint8_t* command){
     
     // printf("\n______________ \n");
 
-
+    /* SET UP PAGING */
     sysCallPaging(pid);
-    /* executable check */
+    /* loading file */
     inode_t* file_inode = (inode_t*)(inode_start + dentry.inode_num);
     int32_t errCheck = read_file((int32_t)filename,(uint8_t*)progImage, file_inode->length );
 
@@ -272,18 +297,21 @@ int32_t system_execute(const uint8_t* command){
         return -1;
     } 
     uint8_t* file = (uint8_t*)progImage;
+
+
     /* Checks ELF magic constant */     
     if ((file[0] != 0x7F) || (file[1] != 0x45) || (file[2] != 0x4C) || (file[3] != 0x46)){
         return -1;
     } 
 
-    /* get entry point */
-    //int32_t errCheck =  read_file(filename,  loc, 30);
+    
 
     if(errCheck==-1)
     {
         return -1;
     }
+
+    /* SET UP PCB */
 
     register uint32_t saved_ebp asm("ebp");
     register uint32_t saved_esp asm("esp");
@@ -314,16 +342,18 @@ int32_t system_execute(const uint8_t* command){
 
     file_descriptor_array =  PCB->file_descriptor;
 
-    // TSS
+    // set TSS values in PCB 
 
     PCB->ss0 = tss.ss0;
     PCB->esp0 = tss.esp0;
 
     tss.ss0 = KERNEL_DS;
-    tss.esp0 = (0x800000 - ((pid) * 0x2000) - 4); // will point to the top of your stack
+    tss.esp0 = (mb_8 - ((pid) * kb_8) - 4); // will point to the top of your stack
 
     uint32_t esp_context = 0x8000000 + 0x400000 - 4;
+    
 
+     // store EIP value for context switching
     uint8_t eip_loc[4];
     eip_loc[0]= file[24];
     eip_loc[1]= file[25];
@@ -335,7 +365,7 @@ int32_t system_execute(const uint8_t* command){
     contextSwitch(eip_context,esp_context);
     
 
-    // /* flush tlb */
+    
   
     asm volatile("end_of_execute:");
     return 0;
