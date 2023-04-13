@@ -77,7 +77,7 @@ uint32_t read_dentry_by_name(const uint8_t* fname, dentry_t* dentry){
 
 int i;
 
-uint32_t fname_length = strlen(fname);
+uint32_t fname_length = strlen((const char*)fname);
 
 uint8_t* temp_name;
 
@@ -85,9 +85,9 @@ for(i = 0; i<63;i++){
 
 temp_name = boot_block_A->dentry_start[i].filename;
 
-if(fname_length == strlen(temp_name)){
+if(fname_length == strlen((const char*)temp_name)){
     
-    if(strncmp(fname,temp_name,32) == 0){
+    if(strncmp((const char*)fname,(const char*)temp_name,32) == 0){
 
         read_dentry_by_index(i,dentry);
 
@@ -117,7 +117,7 @@ if(index < 63){
 dentry_t temp = (dentry_t)(boot_block_A->dentry_start[index]);
 
 
-strncpy((uint8_t*)(dentry->filename),(uint8_t*)(temp.filename),32);
+strncpy((char*)(dentry->filename),(const char*)(temp.filename),32);
 
 dentry->filetype = temp.filetype;
 
@@ -141,7 +141,7 @@ return -1;
 
 
 
-uint32_t read_directory( uint8_t* buf){
+uint32_t read_directory(int32_t fd, void* buf, int32_t nbytes){
 
 dentry_t file_entry;
 read_dentry_by_index(directory_file,&file_entry);
@@ -150,11 +150,10 @@ if(directory_file == num_dentry){
     return 0;
 }
 
-
 int i;
 int j;
 for(i = 0;i<32;i++){
-    buf[i] = file_entry.filename[i];
+    ((uint8_t*)buf)[i] = file_entry.filename[i];
     j++;
 }
 
@@ -186,11 +185,11 @@ return j;
 
  */
 
-uint32_t read_file(const uint8_t* fname, uint8_t* buf, uint32_t length){
+uint32_t read_file( int32_t  fname,void* buf, int32_t length){ 
 
 dentry_t file_entry;
 
-read_dentry_by_name(fname,&file_entry);
+read_dentry_by_name((const uint8_t *)fname,&file_entry);
 
 if(buf == NULL){
     return -1;
@@ -204,7 +203,7 @@ if(file_inode < 0){
     return -1;
 }
 
-uint32_t val = read_data(file_inode,file_position, buf, length);
+uint32_t val = read_data((uint32_t)file_inode,file_position,(uint8_t*)buf,(uint32_t) length);
 
 
 if(val == 0){
