@@ -23,4 +23,5 @@ extern void ALIGNMENT_CHECK();
 extern void MACHINE_CHECK();
 extern void SIMD_FLOATING_POINT_CHECK();
 extern void systemcall();
+extern void system_call_linkage();
 #endif
