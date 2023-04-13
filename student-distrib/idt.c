@@ -131,7 +131,7 @@ void GENERAL_PROTECTION(){
 //CHECK FOR PAGE FAULT AND PRINT PAGE FAULT
 void PAGE_FAULT(){
     cli();
-    clear();
+   
     printf("PAGE_FAULT");
     while(1);
 }
@@ -181,7 +181,7 @@ void systemcall(){
 void idt_init(){
     // looping and setting idt entries fir errors
     int i;
-    for(i = 0;i<20;i++){
+    for(i = 0;i<256;i++){
     if(i!=15)
 {
     idt[i].present = 0x1;
@@ -194,6 +194,7 @@ void idt_init(){
     idt[i].reserved4 = 0x0;
     idt[i].seg_selector = KERNEL_CS;
 }
+    
     }
 
     // Sets IDT entries in the interrupt descriptor table 
@@ -241,9 +242,17 @@ void idt_init(){
     SET_IDT_ENTRY(idt[33], keyboard_wrap);
     SET_IDT_ENTRY(idt[40], rtc_wrap);
 
-
+    idt[0x80].present = 0x1;
+    idt[0x80].dpl = 3;
+    idt[0x80].reserved0 = 0x0;
+    idt[0x80].size = 0x1;
+    idt[0x80].reserved1 = 0x1;
+    idt[0x80].reserved2 = 0x1;
+    idt[0x80].reserved3 = 0x0;
+    idt[0x80].reserved4 = 0x0;
+    idt[0x80].seg_selector = KERNEL_CS;
     // System Call 
-   // SET_IDT_ENTRY(idt[0x80] , systemcall);
+   SET_IDT_ENTRY(idt[0x80] ,system_call_linkage);
 
     // Load IDT 
     lidt(idt_desc_ptr);
