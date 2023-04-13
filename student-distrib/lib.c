@@ -505,8 +505,11 @@ void terminal_reset(){
 
 void terminal_newline(){
         screen_y++;
-        screen_x = 0;
         terminal_scroll();
+        screen_x = 0;
+        uint16_t pos = screen_y * NUM_COLS + screen_x;
+        update_cursor(pos);
+
 }
 /* void terminal_newline(void)
  * Inputs: void
