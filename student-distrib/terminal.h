@@ -2,14 +2,19 @@
 #define _TERMINAL_H
 
 
-int terminal_open();
-int terminal_close();
-int terminal_write(char* buf , int  nbytes);
-int terminal_read(unsigned char * buf, int nbytes);
+#include "keyboard.h"
+#include "lib.h"
+#include "types.h"
+
+extern int32_t terminal_open(const char* fname);
+extern int32_t terminal_close(int32_t fd);
+extern int32_t terminal_write(int32_t fd, void* buf, int32_t nbytes);
+extern int32_t terminal_read(int32_t fd, void* buf, int32_t nbytes);
 
 
 
 
 
 #endif
+
 
