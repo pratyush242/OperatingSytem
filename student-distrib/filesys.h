@@ -54,10 +54,10 @@ uint32_t read_dentry_by_name(const uint8_t* fname, dentry_t* dentry);
 uint32_t read_dentry_by_index(uint32_t index,dentry_t* dentry);
 uint32_t read_data(uint32_t inode, uint32_t offset, uint8_t* buf, uint32_t length);
 int write();
-uint32_t read_file(int32_t  fname,void* buf, int32_t length);
-uint32_t read_directory(int32_t fd, void* buf, int32_t nbytes);
-uint32_t open_directory(const char* fname);
-uint32_t close_directory(int32_t fd);
-uint32_t write_directory(int32_t fd, void* buf, int32_t nbytes);
+int32_t read_file(int32_t  fname,void* buf, int32_t length);
+int32_t read_directory(int32_t fd, void* buf, int32_t nbytes);
+int32_t open_directory(const char* fname);
+int32_t close_directory(int32_t fd);
+int32_t write_directory(int32_t fd, void* buf, int32_t nbytes);
 
 #endif

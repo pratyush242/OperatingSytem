@@ -1,5 +1,5 @@
 #include "filesys.h"
-//static uint32_t file_position = 0;
+static uint32_t file_position = 0;
 
 static uint32_t directory_file = 0;
 
@@ -140,7 +140,7 @@ return -1;
 
 
 
-uint32_t read_directory(int32_t fd, void* buf, int32_t nbytes){
+int32_t read_directory(int32_t fd, void* buf, int32_t nbytes){
 
 dentry_t file_entry;
 read_dentry_by_index(directory_file,&file_entry);
@@ -162,15 +162,15 @@ return j;
 
 }
 
-uint32_t open_directory(const char* fname){
+int32_t open_directory(const char* fname){
     directory_file = 0;
     return 0;
 }
-uint32_t close_directory(int32_t fd){
+int32_t close_directory(int32_t fd){
     return 0;
 }
 
-uint32_t write_directory(int32_t fd, void* buf, int32_t nbytes){
+int32_t write_directory(int32_t fd, void* buf, int32_t nbytes){
     return -1;
 }
 
@@ -193,8 +193,8 @@ uint32_t write_directory(int32_t fd, void* buf, int32_t nbytes){
 
  */
 
-uint32_t read_file( int32_t  fname,void* buf, int32_t length){ 
-uint32_t file_position = 0; 
+int32_t read_file( int32_t  fname,void* buf, int32_t length){ 
+file_position = 0; 
 
 dentry_t file_entry;
 
