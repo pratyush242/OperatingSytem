@@ -56,5 +56,8 @@ uint32_t read_data(uint32_t inode, uint32_t offset, uint8_t* buf, uint32_t lengt
 int write();
 uint32_t read_file(int32_t  fname,void* buf, int32_t length);
 uint32_t read_directory(int32_t fd, void* buf, int32_t nbytes);
+uint32_t open_directory(const char* fname);
+uint32_t close_directory(int32_t fd);
+uint32_t write_directory(int32_t fd, void* buf, int32_t nbytes);
 
 #endif

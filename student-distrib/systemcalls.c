@@ -205,10 +205,10 @@ void file_op_table_init()
     fopsarray[0].sys_write = rtc_write;
 
     // init dir operation table 
-    // fopsarray[1].sys_open  = open_directory ;
-    // fopsarray[1].sys_close = close_directory;
+    fopsarray[1].sys_open  = open_directory ;
+    fopsarray[1].sys_close = close_directory;
     fopsarray[1].sys_read  = read_directory ;
-    // fopsarray[1].sys_write = write_directory;
+    fopsarray[1].sys_write = write_directory;
 
     // init file operation table 
     fopsarray[2].sys_open  = open;

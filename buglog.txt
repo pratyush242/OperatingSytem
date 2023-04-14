@@ -36,3 +36,8 @@ We were getting this error because our function declarations were incorrect.
 11. sys_read sys_write returning -1 with correct register values
 -> in systemcall handler we were pushing in eflags as the arguments instead of ebx ecx edx
 
+12. General Protection Fault:
+
+-> due to incorrect pushing of values in context switch
+
+

@@ -7,6 +7,9 @@
 
 .globl contextSwitch
 
+// eip
+//esp
+//
 contextSwitch:
     pushl %ebp
     movl %esp, %ebp

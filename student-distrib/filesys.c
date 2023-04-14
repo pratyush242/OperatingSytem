@@ -1,8 +1,8 @@
 #include "filesys.h"
 
-static uint32_t file_position = 0;
+//static uint32_t file_position = 0;
 
-static uint32_t directory_file = 0;
+uint32_t directory_file = 0;
 
 /* init_filesys
  * initializes file system 
@@ -163,8 +163,17 @@ return j;
 
 }
 
+uint32_t open_directory(const char* fname){
+    directory_file = 0;
+    return 0;
+}
+uint32_t close_directory(int32_t fd){
+    return 0;
+}
 
-
+uint32_t write_directory(int32_t fd, void* buf, int32_t nbytes){
+    return -1;
+}
 
 
 
@@ -186,6 +195,7 @@ return j;
  */
 
 uint32_t read_file( int32_t  fname,void* buf, int32_t length){ 
+uint32_t file_position = 0; file_position = 0;
 
 dentry_t file_entry;
 
