@@ -8,6 +8,8 @@
 
 static fops_table_t fopsarray[6];
 int32_t pid = -1;
+uint8_t glob_ret = -1; 
+
 
 
 /* helper function to get the adress of your pcb
@@ -125,36 +127,46 @@ int32_t sys_write(int32_t fd, void* buf, int32_t nbytes){
 int32_t halt(uint8_t status){
    
    
-    pcb_t* pcb;
-    pcb_t* pcb_parent;
+    pcb_t* PCB;
+    pcb_t* PCB_parent;
 
+
+    glob_ret = status;
     
     
-    pcb = pcb_adress(pid);
-    pid = pcb->pid;
+    PCB = pcb_adress(pid);
+    pid = PCB->pid;
 
-    if (pid == 0) {
-        system_execute((uint8_t *) "shell");
-        return -1;
-    }
+    // tss 
+    tss.esp0 = PCB->esp0;
+    tss.ss0 = PCB->ss0;
+
+   
    
    
     // clear flags 
     int i;
     for (i = 0; i < 8; i++) {
-        pcb->file_descriptor[i].flags = 0;
+        PCB->file_descriptor[i].flags = 0;
        
     }
-    // tss 
-    tss.esp0 = pcb->esp0;
-    tss.ss0 = pcb->ss0;
+
+    
+
+
+
+    if (pid == 0) {
+        system_execute((uint8_t *) "shell");
+        return -1;
+    }
+    
     
     
    
 
    
-    pcb_parent = pcb_adress(pcb->parent_id);
-    pid = pcb_parent->pid;
+    PCB_parent = pcb_adress(PCB->parent_id);
+    pid = PCB_parent->pid;
 
     // restore parent paging 
     sysCallPaging(pid);
@@ -166,7 +178,7 @@ int32_t halt(uint8_t status){
         jmp end_of_execute          \n\
         "
         :
-        : "a"(pcb->saved_esp), "b"(pcb->saved_ebp)
+        : "a"(PCB->saved_esp), "b"(PCB->saved_ebp)
     );
 
     return 0;
@@ -256,6 +268,9 @@ int32_t system_execute(const uint8_t* command){
         return -1;
     } 
 
+    pcb_t* PCB;
+    pcb_t* PCB_parent;
+
     int32_t i;
     int counter = 0;
     dentry_t dentry;
@@ -277,7 +292,9 @@ int32_t system_execute(const uint8_t* command){
     } 
 
     /* parsing arguments */
-    int32_t parent_id = pid; 
+    int32_t parent_id = pid;
+    PCB_parent = pcb_adress(pid); 
+
     if(pid+1 >5){
         printf("Max number of processes running \n");
         return -1;
@@ -285,11 +302,19 @@ int32_t system_execute(const uint8_t* command){
     else{
         pid+=1;
     }
-    // printf("______________ \n");
-
-    // printf("%s",filename);
     
-    // printf("\n______________ \n");
+
+    
+
+     
+
+
+
+    
+
+
+
+
 
     /* SET UP PAGING */
     sysCallPaging(pid);
@@ -322,10 +347,10 @@ int32_t system_execute(const uint8_t* command){
     register uint32_t saved_ebp asm("ebp");
     register uint32_t saved_esp asm("esp");
     file_op_table_init();
-    pcb_t* PCB;
+    
     PCB = pcb_adress(pid);
-    // pcb_t* PCB_parent;
-    // PCB_parent = pcb_adress(1);
+    
+   
     
     PCB->pid = pid;
     
@@ -374,7 +399,7 @@ int32_t system_execute(const uint8_t* command){
     
   
     asm volatile("end_of_execute:");
-    return 0;
+    return glob_ret;
     
 }
 
