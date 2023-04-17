@@ -44,6 +44,7 @@ int32_t sys_open(const char* fname){
     file_descriptor_array[fd_id].op = &fopsarray[dentry.filetype];
     file_descriptor_array[fd_id].filetype = dentry.filetype;
     file_descriptor_array[fd_id].offset = 0;
+    memcpy(file_descriptor_array[fd_id].filename, dentry.filename, sizeof(dentry.filename));
     if ((file_descriptor_array[fd_id].op->sys_open(fname)) == -1){
         return -1;
     }
@@ -123,9 +124,6 @@ int32_t sys_write(int32_t fd, void* buf, int32_t nbytes){
 
 int32_t halt(uint8_t status){
    
-
-   
-
    
     pcb_t* pcb;
     pcb_t* pcb_parent;

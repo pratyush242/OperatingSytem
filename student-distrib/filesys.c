@@ -201,12 +201,12 @@ int32_t write_directory(int32_t fd, void* buf, int32_t nbytes){
 
  */
 
-int32_t read_file( int32_t  fname,void* buf, int32_t length){ 
+int32_t read_file( file_descriptor_t* fd,void* buf, int32_t length){ 
 file_position = 0; 
 
 dentry_t file_entry;
 
-read_dentry_by_name((const uint8_t *)fname,&file_entry);
+read_dentry_by_name((const uint8_t *)fd->filename,&file_entry);
 
 if(buf == NULL){
     return -1;
@@ -220,12 +220,12 @@ if(file_inode < 0){
     return -1;
 }
 
-uint32_t val = read_data((uint32_t)file_inode,file_position,(uint8_t*)buf,(uint32_t) length);
+uint32_t val = read_data((uint32_t)file_inode,fd->fileoffset,(uint8_t*)buf,(uint32_t) length);
 
 
 if(val == 0){
 
-    file_position = file_inode->length;
+    fd->fileoffset = file_inode->length;
 
     return 0;
 }else if(val == -1){
@@ -234,7 +234,7 @@ if(val == 0){
     return -1;
 }
 else{
-    file_position +=val;
+    fd->fileoffset +=val;
     return val;
 }
 
