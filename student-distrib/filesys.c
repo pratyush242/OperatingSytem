@@ -1,7 +1,7 @@
 #include "filesys.h"
 static uint32_t file_position = 0;
 
-static uint32_t directory_file = 0;
+
 
 /* init_filesys
  * initializes file system 
@@ -140,30 +140,38 @@ return -1;
 
 
 
-int32_t read_directory(int32_t fd, void* buf, int32_t nbytes){
+int32_t read_directory(file_descriptor_t* fd, void* buf, int32_t nbytes){
 
 dentry_t file_entry;
-read_dentry_by_index(directory_file,&file_entry);
+uint32_t directory_file = fd->fileoffset;
+//printf("%d \n", directory_file);
+int32_t err = read_dentry_by_index(directory_file,&file_entry);
+//printf("%s", file_entry.filename);
+if(err == -1){
+    return -1;
+}
 
-if(directory_file == num_dentry){
+
+
+if(directory_file == 17){
     return 0;
 }
 
 int i;
-int j;
+int j = 0;
 for(i = 0;i<32;i++){
     ((uint8_t*)buf)[i] = file_entry.filename[i];
     j++;
 }
 
-directory_file++;
+fd->fileoffset+=1;
 
 return j;
 
 }
 
 int32_t open_directory(const char* fname){
-    directory_file = 0;
+   
     return 0;
 }
 int32_t close_directory(int32_t fd){

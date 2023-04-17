@@ -44,7 +44,21 @@ uint32_t num_data_blocks;
 inode_t* inode_start;
 uint8_t*  data_block_start;
 
+typedef struct fops_table_t {
+   int32_t (*sys_read)(int32_t fd, void* buf, int32_t nbytes);
+   int32_t (*sys_write)(int32_t fd, void* buf, int32_t nbytes);
+   int32_t (*sys_open)(const char* fname);
+  int32_t (*sys_close)(int32_t fd);
+} fops_table_t;
 
+typedef struct file_descriptor_t {
+    fops_table_t* op;    // file operator table 
+    uint32_t inode;     // inode index 
+    uint32_t fileoffset;   // offset in current file 
+    uint32_t flags;    
+    uint32_t offset;   
+    uint32_t filetype; 
+} file_descriptor_t;
 
 //calling functions
 int init_filesys();
@@ -55,7 +69,7 @@ uint32_t read_dentry_by_index(uint32_t index,dentry_t* dentry);
 uint32_t read_data(uint32_t inode, uint32_t offset, uint8_t* buf, uint32_t length);
 int write();
 int32_t read_file(int32_t  fname,void* buf, int32_t length);
-int32_t read_directory(int32_t fd, void* buf, int32_t nbytes);
+int32_t read_directory(file_descriptor_t* fd, void* buf, int32_t nbytes);
 int32_t open_directory(const char* fname);
 int32_t close_directory(int32_t fd);
 int32_t write_directory(int32_t fd, void* buf, int32_t nbytes);

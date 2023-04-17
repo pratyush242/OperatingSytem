@@ -35,19 +35,7 @@ extern int32_t contextSwitch(uint32_t buf,uint32_t espArg);
 
 
 /* struct for fops */
-typedef struct fops_table_t {
-   int32_t (*sys_read)(int32_t fd, void* buf, int32_t nbytes);
-   int32_t (*sys_write)(int32_t fd, void* buf, int32_t nbytes);
-   int32_t (*sys_open)(const char* fname);
-  int32_t (*sys_close)(int32_t fd);
-} fops_table_t;
 
-typedef struct file_descriptor_t {
-    fops_table_t* op;    // file operator table 
-    uint32_t inode;     // inode index 
-    uint32_t fileoffset;   // offset in current file 
-    uint32_t flags;        
-} file_descriptor_t;
 
 // pointer pointing to fd array
 file_descriptor_t* file_descriptor_array;

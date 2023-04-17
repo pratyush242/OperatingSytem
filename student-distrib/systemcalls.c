@@ -42,6 +42,8 @@ int32_t sys_open(const char* fname){
         return -1;
     //if there are no errors call the fop
     file_descriptor_array[fd_id].op = &fopsarray[dentry.filetype];
+    file_descriptor_array[fd_id].filetype = dentry.filetype;
+    file_descriptor_array[fd_id].offset = 0;
     if ((file_descriptor_array[fd_id].op->sys_open(fname)) == -1){
         return -1;
     }
@@ -88,6 +90,12 @@ int32_t sys_read(int32_t fd, void* buf, int32_t nbytes){
     //printf("sys_read \n");
     if (fd < 0 || fd > 8 || buf == NULL || file_descriptor_array == NULL || file_descriptor_array[fd].flags == 0 || file_descriptor_array[fd].op == NULL){
         return -1;
+    }
+
+    if(file_descriptor_array[fd].filetype == 1){
+
+        int32_t bytesRead = file_descriptor_array[fd].op->sys_read(&file_descriptor_array[fd], buf, nbytes);
+        return bytesRead;
     }
     return file_descriptor_array[fd].op->sys_read(fd, buf, nbytes);
 }
