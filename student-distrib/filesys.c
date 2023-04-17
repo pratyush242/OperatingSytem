@@ -291,3 +291,48 @@ for(i = 0;i<length;i++){
 return length;
 
 }
+
+
+
+int32_t read_file_2( int32_t  fname,void* buf, int32_t length){ 
+file_position = 0; 
+
+dentry_t file_entry;
+
+read_dentry_by_name((const uint8_t *)fname,&file_entry);
+
+if(buf == NULL){
+    return -1;
+}
+
+
+
+inode_t* file_inode = (inode_t*)(inode_start + file_entry.inode_num);
+
+if(file_inode < 0){
+    return -1;
+}
+
+uint32_t val = read_data((uint32_t)file_inode,file_position,(uint8_t*)buf,(uint32_t) length);
+
+
+if(val == 0){
+
+    file_position = file_inode->length;
+
+    return 0;
+}else if(val == -1){
+
+
+    return -1;
+}
+else{
+    file_position +=val;
+    return val;
+}
+
+return -1;
+
+
+}
+

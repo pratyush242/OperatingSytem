@@ -179,6 +179,7 @@ system_execute((uint8_t*)"shell");
 #endif
     /* Execute the first program ("shell") ... */
     
+    
     /* Spin (nicely, so we don't chew up cycles) */
     asm volatile (".1: hlt; jmp .1;");
 }

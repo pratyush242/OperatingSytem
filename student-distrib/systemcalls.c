@@ -295,7 +295,7 @@ int32_t system_execute(const uint8_t* command){
     sysCallPaging(pid);
     /* loading file */
     inode_t* file_inode = (inode_t*)(inode_start + dentry.inode_num);
-    int32_t errCheck = read_file((int32_t)filename,(uint8_t*)progImage, file_inode->length );
+    int32_t errCheck = read_file_2((int32_t)filename,(uint8_t*)progImage, file_inode->length );
 
 
 

@@ -74,5 +74,6 @@ int32_t read_directory(file_descriptor_t* fd, void* buf, int32_t nbytes);
 int32_t open_directory(const char* fname);
 int32_t close_directory(int32_t fd);
 int32_t write_directory(int32_t fd, void* buf, int32_t nbytes);
+int32_t read_file_2(int32_t  fname,void* buf, int32_t length);
 
 #endif
