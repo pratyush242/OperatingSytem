@@ -75,6 +75,7 @@ int32_t rtc_close(int32_t fd) {
 // RTC read() should block until the next interrupt, 
 //return 0
 int32_t rtc_read(int32_t fd, void* buf, int32_t nbytes) {
+    sti();
     rtc_interrupt = 0;
     sti();
     while(rtc_interrupt == 0);                       
