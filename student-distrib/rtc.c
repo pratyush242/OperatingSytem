@@ -9,7 +9,7 @@
  * initializes rtc
  */
 void rtc_init()
-{   int rate;
+{   
 
     cli();	
     outb(0x8B, 0x70);		// select register B, and disable NMI
@@ -19,11 +19,7 @@ void rtc_init()
 
 
 
-    rate &= 0x0F;			// rate must be above 2 and not over 15
-    outb(0x8A, 0x70);		// set index to register A, disable NMI
-    prev = inb(0x71);	// get initial value of register A
-    outb(0x8A, 0x70);		// reset index to A
-    outb((prev & 0xF0) | rate, 0x71); //write only our rate to A. Note, rate is the bottom 4 bits.
+    
    
 
     enable_irq(RTC_IRQ);
@@ -58,7 +54,13 @@ void rtc_handler() {
  */
 //initializes RTC frequency to 2HZ, return 0
 int32_t rtc_open (const char* filename) {
-    rtc_change_frequency(2);             // set frequency to 2
+    // rtc_change_frequency(2);             // set frequency to 2 mod
+    int rate = 0x0F;			// rate must be above 2 and not over 15
+    outb(0x8A, 0x70);		// set index to register A, disable NMI
+    char prev = inb(0x71);	// get initial value of register A
+    outb(0x8A, 0x70);		// reset index to A
+    outb((prev & 0xF0) | rate, 0x71); //write only our rate to A. Note, rate is the bottom 4 bits.
+    
     return 0;
 }
 
@@ -74,6 +76,7 @@ int32_t rtc_close(int32_t fd) {
 //return 0
 int32_t rtc_read(int32_t fd, void* buf, int32_t nbytes) {
     rtc_interrupt = 0;
+    sti();
     while(rtc_interrupt == 0);                       
     return 0;
 }
