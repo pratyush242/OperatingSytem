@@ -6,6 +6,10 @@
 
 #include "x86_desc.h"
 
+static PageDirectoryEntry PageDir[1024] __attribute__((aligned (4096))); 
+static PageTableEntry PageTable[1024] __attribute__((aligned (4096))); 
+static PageTableEntry video_page_table[1024] __attribute__((aligned(4096)));
+
 void initializeTable();
 
 void initializeDirectory();

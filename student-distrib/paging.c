@@ -2,8 +2,6 @@
 
 #include "paging.h"
 
-static PageDirectoryEntry PageDir[1024] __attribute__((aligned (4096))); 
-static PageTableEntry PageTable[1024] __attribute__((aligned (4096))); 
 
 /* initializeTable()
  * 
