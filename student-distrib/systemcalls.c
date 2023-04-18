@@ -8,7 +8,7 @@
 
 static fops_table_t fopsarray[6];
 int32_t pid = -1;
-uint8_t glob_ret = -1; 
+
 
 
 
@@ -131,7 +131,7 @@ int32_t halt(uint8_t status){
     pcb_t* PCB_parent;
 
 
-    glob_ret = status;
+    // glob_ret = status;
     
     
     PCB = pcb_adress(pid);
@@ -399,7 +399,7 @@ int32_t system_execute(const uint8_t* command){
     
   
     asm volatile("end_of_execute:");
-    return glob_ret;
+    return 0;
     
 }
 
