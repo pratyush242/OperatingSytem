@@ -18,9 +18,6 @@ Output: A pointer to your adress that has that PCB */
 
 pcb_t* pcb_adress(uint32_t in){
     return (pcb_t*) (mb_8 - ((in+1) * kb_8));                  // mb_8 0x800000 kb_8 0x2000
-
-
-   
 }
 /* sys_open
  * 
@@ -484,6 +481,13 @@ int32_t vidmap(uint8_t** screen_start)
     video_page_table[0].PageBaseAddr = 0xB8000 >> 12;
     flush();
     return 0;
+}
+
+int32_t set_handler(int32_t signum, void* handler_address){
+    return -1;
+}
+int32_t sigreturn(void){
+    return -1;
 }
 
 
