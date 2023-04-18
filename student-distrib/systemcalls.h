@@ -6,6 +6,10 @@
 #include "terminal.h"
 #include "rtc.h"
 #include "lib.h"
+#include "paging.h"
+
+
+#define VIDMAP_OFFSET           35          /* 140/4 */
 
 //pcb_t* pcb_adress(uint32_t pid);
 
@@ -32,6 +36,10 @@ int32_t null_write();
 int32_t null_close();
 
 extern int32_t contextSwitch(uint32_t buf,uint32_t espArg);
+
+int32_t vidmap(uint8_t** screen_start);
+
+int32_t getargs(uint8_t* buf, int32_t nbytes);
 
 
 /* struct for fops */
@@ -89,6 +97,7 @@ typedef struct pcb_t {
     uint32_t parent_id;
     uint32_t ss0;   
     uint32_t esp0;
+    uint8_t arg[128];
     int active;
 
 } pcb_t;
