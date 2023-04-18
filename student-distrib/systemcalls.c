@@ -178,14 +178,17 @@ int32_t halt(uint8_t status){
     sysCallPaging(pid);
     tss.ss0 = KERNEL_DS;
     tss.esp0 = (mb_8 - ((pid) * kb_8) - 4); 
+
+    uint32_t sendstatus = (uint8_t)status;
    
     asm volatile ("                 \n\
         movl    %0, %%esp           \n\
         movl    %1, %%ebp           \n\
+        movl    %2, %%eax           \n\
         jmp end_of_execute          \n\
         "
         :
-        : "a"(PCB->saved_esp), "b"(PCB->saved_ebp)
+        : "a"(PCB->saved_esp), "b"(PCB->saved_ebp), "c"(sendstatus)
     );
 
     return 0;

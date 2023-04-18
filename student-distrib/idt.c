@@ -9,170 +9,171 @@
 //CHECK FOR DIVISION BY 0 AND PRINT DIVIDE ERROR
 void divide_error(){
     cli();
-    clear();
-    printf(" divide error");
-    while(1);
+    
+    printf(" divide error \n");
+    halt(256);
    
 }
 
 //CHECK FOR RESERVED AND PRINT RESERVED
 void Reserved(){
     cli();
-    clear();
-    printf("Reserved");
-    while(1);
+    
+    printf("Reserved \n");
+    halt(256);
+    
     
 }
 //CHECK FOR NMI INTERRUPT AND PRINT NMI INTERRUPT
 void NMI_INTERRUPT(){
     cli();
-    clear();
-    printf("NMI_INTERRUPT");
-    while(1);
+    
+    printf("NMI_INTERRUPT \n");
+    halt(256);
    
 }
 
 //CHECK FOR BREAKPOINT AND PRINT BREAKPOINT
 void BREAKPOINT(){
     cli();
-    clear();
-    printf("BREAKPOINT");
-    while(1);
+    
+    printf("BREAKPOINT \n");
+    halt(256);
    
 }
 
 //CHECK FOR OVERFLOW AND PRINT OVERFLOW
 void OVERFLOW(){
     cli();
-    clear();
-    printf("OVERFLOW");
-    while(1);
+   
+    printf("OVERFLOW \n");
+    halt(256);
    
 }
 //CHECK FOR BOUND AND PRINT BOUND
 void BOUND(){
     cli();
-    clear();
-    printf("BOUND");
-    while(1);
+    
+    printf("BOUND \n");
+    halt(256);
    
 }
 //CHECK FOR INVALID OPCODE AND PRINT INVALID OPCODE
 void INVALID_OPCODE(){
     cli();
-    clear();
-    printf("INVALID_OPCODE");
-    while(1);
+   
+    printf("INVALID_OPCODE \n");
+    halt(256);
    
 }
 //CHECK FOR DEV NOT AVAILABLE AND PRINT DEV NOT AVAILABLE
 void DEV_NOT_AVAILABLE(){
     cli();
-    clear();
-    printf("DEV_NOT_AVAILABLE");
-    while(1);
+    
+    printf("DEV_NOT_AVAILABLE \n");
+    halt(256);
    
 }
 
 //CHECK FOR DOUBLE FAULT AND PRINT DOUBLE FAULT
 void DOUBLE_FAULT(){
     cli();
-    clear();
-    printf("DOUBLE_FAULT");
-    while(1);
+ 
+    printf("DOUBLE_FAULT \n");
+    halt(256);
    
 }
 
 //CHECK FOR SEGEMENT OVERRUN AND SEGEMENT OVERRUN
 void SEGMENT_OVERRUN(){
     cli();
-    clear();
-    printf("SEGMENT_OVERRUN");
-    while(1);
+    
+    printf("SEGMENT_OVERRUN \n");
+    halt(256);
    
 }
 
 //CHECK FOR INVALID TSS AND PRINT INVALID TSS
 void INVALID_TSS(){
     cli();
-    clear();
-    printf("INAVLID_TSS");
-    while(1);
+   
+    printf("INAVLID_TSS \n");
+    halt(256);
    
 }
 
 //CHECK FOR SEGMENT NOT PRESENT AND PRINT SEGMENT NOT PRESENT
 void SEGMENT_NOT_PRESENT(){
     cli();
-    clear();
+   
 
-    printf("SEGMENT_NOT_PRESENT");
-    while(1);
+    printf("SEGMENT_NOT_PRESENT \n");
+    halt(256);
    
 }
 
 //CHECK FOR STACK SEGMENT FAULT AND PRINT STACK SEGMENT FAULT
 void STACK_SEGMENT_FAULT(){
     cli();
-    clear();
-    printf("STACK_sEGMENT_FAULT");
-    while(1);
+    
+    printf("STACK_sEGMENT_FAULT \n");
+    halt(256);
    
 }
 
 //CHECK FOR GENERAL PROTECTION AND PRINT GENERAL PROTECTION
 void GENERAL_PROTECTION(){
     cli();
-    clear();
-    printf("GENERAL_PROTECTION");
-    while(1);
+   
+    printf("GENERAL_PROTECTION \n");
+    halt(256);
 }
 
 //CHECK FOR PAGE FAULT AND PRINT PAGE FAULT
 void PAGE_FAULT(){
     cli();
    
-    printf("PAGE_FAULT");
-    while(1);
+    printf("PAGE_FAULT \n");
+    halt(256);
 }
 
 //CHECK FOR MATH FAULT AND PRINT MATH FAULT
 void MATH_FAULT(){
     cli();
-    clear();
-    printf("MATH_FAULT");
-    while(1);
+    
+    printf("MATH_FAULT \n");
+    halt(256);
 }
 
 //CHECK FOR ALIGNMENT CHECK AND PRINT ALIGNMENT CHECK
 void ALIGNMENT_CHECK(){
     cli();
-    clear();
-    printf("ALIGNMENT_CHECK");
-    while(1);
+   
+    printf("ALIGNMENT_CHECK \n");
+    halt(256);
 }
 
 //CHECK FOR MACHINE CHECK AND PRINT MACHINE CHECK
 void MACHINE_CHECK(){
     cli();
-    clear();
-    printf("MACHINE_CHECK");
-    while(1);
+   
+    printf("MACHINE_CHECK \n");
+    halt(256);
 }
 
 //CHECK FOR SIMD_FLOATING_POINT_CHECK AND PRINT SIMD_FLOATING_POINT_CHECK
 void SIMD_FLOATING_POINT_CHECK(){
     cli();
-    clear();
-    printf("SIMD_FLOATING_POINT_CHECK");
-    while(1);
+   
+    printf("SIMD_FLOATING_POINT_CHECK \n");
+    halt(256);
 
 }
 
 
 //SYSTEM CALL DECLARATION
 void systemcall(){
-    printf("System Call");
+    printf("System Call \n");
 
 }
 
