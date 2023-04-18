@@ -220,14 +220,19 @@ if(file_inode < 0){
     return -1;
 }
 
+if(fd->fileoffset >= file_inode->length){
+    return 0;
+}
+
 uint32_t val = read_data((uint32_t)file_inode,fd->fileoffset,(uint8_t*)buf,(uint32_t) length);
+
 
 
 if(val == 0){
 
     fd->fileoffset = file_inode->length;
 
-    return 0;
+    return file_inode->length;
 }else if(val == -1){
 
 
