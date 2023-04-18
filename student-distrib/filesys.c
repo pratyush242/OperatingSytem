@@ -231,7 +231,7 @@ uint32_t val = read_data((uint32_t)file_inode,fd->fileoffset,(uint8_t*)buf,(uint
 if(val == 0){
 
     fd->fileoffset = file_inode->length;
-
+    //return 0;
     return file_inode->length;
 }else if(val == -1){
 
