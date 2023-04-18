@@ -135,10 +135,7 @@ int32_t sys_write(int32_t fd, void* buf, int32_t nbytes){
 
 
 int32_t halt(uint8_t status){
-    printf("5");
-   
-   
-    pcb_t* PCB;
+ pcb_t* PCB;
     pcb_t* PCB_parent;
 
 
@@ -148,9 +145,7 @@ int32_t halt(uint8_t status){
     PCB = pcb_adress(pid);
     pid = PCB->pid;
 
-    // tss 
-    tss.esp0 = PCB->esp0;
-    tss.ss0 = PCB->ss0;
+
 
    
    
@@ -164,9 +159,9 @@ int32_t halt(uint8_t status){
 
     
 
-
-
-    if (pid == 0) {
+    pid--;
+    
+    if (pid == -1) {
         system_execute((uint8_t *) "shell");
         return -1;
     }
@@ -177,11 +172,12 @@ int32_t halt(uint8_t status){
 
    
     PCB_parent = pcb_adress(PCB->parent_id);
-    pid = PCB_parent->pid;
+    // pid = PCB_parent->pid;
 
     // restore parent paging 
     sysCallPaging(pid);
-
+    tss.ss0 = KERNEL_DS;
+    tss.esp0 = (mb_8 - ((pid) * kb_8) - 4); 
    
     asm volatile ("                 \n\
         movl    %0, %%esp           \n\
