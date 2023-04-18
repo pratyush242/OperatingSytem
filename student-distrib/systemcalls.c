@@ -94,7 +94,7 @@ int32_t sys_close(int32_t fd){
 int32_t sys_read(int32_t fd, void* buf, int32_t nbytes){
     //printf("3");
     //printf("sys_read \n");
-    if (fd < 0 || fd > 8 || buf == NULL || file_descriptor_array == NULL || file_descriptor_array[fd].flags == 0 || file_descriptor_array[fd].op == NULL){
+    if (fd < 0 || fd > 8 || buf == NULL || file_descriptor_array == NULL  ){
         return -1;
     }
 
@@ -104,7 +104,7 @@ int32_t sys_read(int32_t fd, void* buf, int32_t nbytes){
     }
     if(file_descriptor_array[fd].filetype == 2){
         int32_t bytesRead = file_descriptor_array[fd].op->sys_read(&file_descriptor_array[fd], buf, nbytes);
-       // printf("%s",(uint8_t*)buf);
+        //printf("%s",(uint8_t*)buf);
         return bytesRead;
     }
     return file_descriptor_array[fd].op->sys_read(fd, buf, nbytes);
@@ -118,7 +118,7 @@ int32_t sys_read(int32_t fd, void* buf, int32_t nbytes){
 int32_t sys_write(int32_t fd, void* buf, int32_t nbytes){
     //printf("4");
     //printf("sys_write \n");
-    if (fd < 0 || fd > 8 || buf == NULL || file_descriptor_array == NULL || file_descriptor_array[fd].flags == 0 || file_descriptor_array[fd].op == NULL){
+    if (fd < 0 || fd > 8 || buf == NULL || file_descriptor_array == NULL ){
         return -1;
     }
     return file_descriptor_array[fd].op->sys_write(fd, buf, nbytes);
@@ -133,20 +133,12 @@ int32_t sys_write(int32_t fd, void* buf, int32_t nbytes){
 
 
 int32_t halt(uint8_t status){
- pcb_t* PCB;
+    pcb_t* PCB;
     pcb_t* PCB_parent;
-
-
-    
-    
     
     PCB = pcb_adress(pid);
     pid = PCB->pid;
 
-
-
-   
-   
    
     // clear flags 
     int i;
@@ -155,19 +147,16 @@ int32_t halt(uint8_t status){
        
     }
 
-    
+  
 
     pid--;
+
+
     
     if (pid == -1) {
         system_execute((uint8_t *) "shell");
-        return -1;
+        return 0;
     }
-    
-    
-    
-   
-
    
     PCB_parent = pcb_adress(PCB->parent_id);
     // pid = PCB_parent->pid;
