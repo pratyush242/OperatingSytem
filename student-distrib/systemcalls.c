@@ -131,7 +131,7 @@ int32_t halt(uint8_t status){
     pcb_t* PCB_parent;
 
 
-    // glob_ret = status;
+    
     
     
     PCB = pcb_adress(pid);
