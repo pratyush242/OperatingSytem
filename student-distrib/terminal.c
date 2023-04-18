@@ -46,7 +46,7 @@ int32_t terminal_read(int32_t fd, void* buf, int32_t nbytes){
  * Outputs: the actual number of bytes that are written successfully, if error then ret -1
  */
 int32_t terminal_write(int32_t fd, void* buf, int32_t nbytes){
-    if(NULL == buf || 0 == nbytes){
+    if(NULL == buf){
         return -1;
     }
     int i;

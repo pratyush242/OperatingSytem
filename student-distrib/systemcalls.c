@@ -29,7 +29,7 @@ pcb_t* pcb_adress(uint32_t in){
  * Outputs: fd index for sucess and -1 if failed
  */
 int32_t sys_open(const char* fname){
-    printf("2");
+    //printf("2");
     //printf("sys_open \n");
     dentry_t dentry;
     int fd_id;
@@ -73,7 +73,7 @@ int32_t sys_open(const char* fname){
  * Outputs: 0 for success -1 for fail
  */
 int32_t sys_close(int32_t fd){
-    printf("4");
+    //printf("4");
      //printf("sys_close \n");
     if (fd < 2 || fd > 8 || file_descriptor_array == NULL || file_descriptor_array[fd].flags == 0)
         return -1;
@@ -95,7 +95,7 @@ int32_t sys_close(int32_t fd){
  * Outputs: the actual number of bytes that are read successfully, if error then ret -1
  */
 int32_t sys_read(int32_t fd, void* buf, int32_t nbytes){
-    printf("3");
+    //printf("3");
     //printf("sys_read \n");
     if (fd < 0 || fd > 8 || buf == NULL || file_descriptor_array == NULL || file_descriptor_array[fd].flags == 0 || file_descriptor_array[fd].op == NULL){
         return -1;
@@ -107,6 +107,7 @@ int32_t sys_read(int32_t fd, void* buf, int32_t nbytes){
     }
     if(file_descriptor_array[fd].filetype == 2){
         int32_t bytesRead = file_descriptor_array[fd].op->sys_read(&file_descriptor_array[fd], buf, nbytes);
+        printf("%s",(uint8_t*)buf);
         return bytesRead;
     }
     return file_descriptor_array[fd].op->sys_read(fd, buf, nbytes);
@@ -118,7 +119,7 @@ int32_t sys_read(int32_t fd, void* buf, int32_t nbytes){
  * Outputs: the actual number of bytes that are written successfully, if error then ret -1
  */
 int32_t sys_write(int32_t fd, void* buf, int32_t nbytes){
-    printf("4");
+    //printf("4");
     //printf("sys_write \n");
     if (fd < 0 || fd > 8 || buf == NULL || file_descriptor_array == NULL || file_descriptor_array[fd].flags == 0 || file_descriptor_array[fd].op == NULL){
         return -1;
@@ -245,12 +246,12 @@ void file_op_table_init()
     fopsarray[3].sys_open  = terminal_open;
     fopsarray[3].sys_close = terminal_close;
     fopsarray[3].sys_read  = terminal_read;        // would be 1 cuz read only
-    fopsarray[3].sys_write = terminal_write;         // would be 0 cuz read only
+    fopsarray[3].sys_write = null_write;         // would be 0 cuz read only
 
     //stdout
     fopsarray[4].sys_open  = terminal_open;
     fopsarray[4].sys_close = terminal_close;
-    fopsarray[4].sys_read  = terminal_read;          // would be 1 cuz write only
+    fopsarray[4].sys_read  = null_read;          // would be 1 cuz write only
     fopsarray[4].sys_write = terminal_write;          // would be 1 cuz write only
 
     //null
@@ -271,8 +272,8 @@ void file_op_table_init()
 
 
 int32_t system_execute(const uint8_t* command){
-    printf("1");
-    uint8_t argument[128];
+    //printf("1");
+    uint8_t argument[10];
     int end;
     if(command == NULL){
         return -1;
@@ -320,12 +321,12 @@ int32_t system_execute(const uint8_t* command){
 
 
 
-    // if(filename[counter] = "cat"){
-    //     uint8_t* string = "frame0.txt ";
-    //     for(i = 0; i <11; i++){
-    //         argument[i] = string[i];
-    //     }
-    // }
+    if(filename[counter] = "cat"){
+        uint8_t* string = "frame0.txt";
+        for(i = 0; i <10; i++){
+            argument[i] = string[i];
+        }
+    }
     
 
 
@@ -402,7 +403,7 @@ int32_t system_execute(const uint8_t* command){
 
     file_descriptor_array =  PCB->file_descriptor;
 
-    strncpy((int8_t*)PCB->arg,(int8_t*)argument, 128);
+    strncpy((int8_t*)PCB->arg,(int8_t*)argument, 10);
 
     // set TSS values in PCB 
 
@@ -445,7 +446,7 @@ int32_t getargs(uint8_t* buf, int32_t nbytes){
 
 int32_t vidmap(uint8_t** screen_start)
 {
-    printf("6");
+    //printf("6");
     /* check if the pointer is in user space */
     if ((unsigned int)screen_start <= 0x08000000 || (unsigned int)screen_start >= 0x08400000)
 		return -1;
