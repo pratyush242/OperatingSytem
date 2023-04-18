@@ -277,6 +277,7 @@ void file_op_table_init()
 int32_t system_execute(const uint8_t* command){
     printf("1");
     uint8_t argument[128];
+    int end;
     if(command == NULL){
         return -1;
     } 
@@ -299,22 +300,37 @@ int32_t system_execute(const uint8_t* command){
     for (i = 0; i < counter; i++){
         filename[i] = command[i];
     }
-    int end;
-    int start = i;
-    while (' ' == command[start]) start++;
+    //argument parsing
     /* get the length of argument */
-    end = start;
-    while (command[end] != '\0' && command[end] != ' ' && command[end] != '\n') end++;
-    /* also stores the argument into a buffer */
-    for (i = start; i < end; i++)
-        argument[i-start] = command[i];
-    /* end of the argument */
-    argument[i-start] = '\0';
+    // end = counter;
+    // while (command[end] != '\0' && command[end] != ' ' && command[end] != '\n') end++;
+    // /* also stores the argument into a buffer */
+    // for (i = counter; i < end; i++)
+    //     argument[i-counter] = command[i];
+    // /* end of the argument */
+    // argument[i-counter] = '\0';
 
 
 
 
+    // for(i = counter; i<32; i++){
+    //     if (command[i] == ' '  || command[i] == '\n'){
+    //         break;
+    //     } 
+     
+    //     counter++;
+    // }
 
+
+
+
+    // if(filename[counter] = "cat"){
+    //     uint8_t* string = "frame0.txt ";
+    //     for(i = 0; i <11; i++){
+    //         argument[i] = string[i];
+    //     }
+    // }
+    
 
 
     if (read_dentry_by_name(filename, &dentry) == -1){
@@ -332,19 +348,6 @@ int32_t system_execute(const uint8_t* command){
     else{
         pid+=1;
     }
-    
-
-    
-
-     
-
-
-
-    
-
-
-
-
 
     /* SET UP PAGING */
     sysCallPaging(pid);
