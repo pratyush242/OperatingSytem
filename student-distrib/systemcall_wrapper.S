@@ -47,3 +47,5 @@ jumptable:
     .long sys_write
     .long sys_open
     .long sys_close
+    .long getargs
+    .long vidmap
