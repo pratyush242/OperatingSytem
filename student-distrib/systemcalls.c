@@ -107,7 +107,7 @@ int32_t sys_read(int32_t fd, void* buf, int32_t nbytes){
     }
     if(file_descriptor_array[fd].filetype == 2){
         int32_t bytesRead = file_descriptor_array[fd].op->sys_read(&file_descriptor_array[fd], buf, nbytes);
-        printf("%s",(uint8_t*)buf);
+       // printf("%s",(uint8_t*)buf);
         return bytesRead;
     }
     return file_descriptor_array[fd].op->sys_read(fd, buf, nbytes);
@@ -273,7 +273,7 @@ void file_op_table_init()
 
 int32_t system_execute(const uint8_t* command){
     //printf("1");
-    uint8_t argument[10];
+    //uint8_t argument[10];
     int end;
     if(command == NULL){
         return -1;
@@ -281,52 +281,63 @@ int32_t system_execute(const uint8_t* command){
 
     pcb_t* PCB;
     pcb_t* PCB_parent;
-
-    int32_t i;
-    int counter = 0;
     dentry_t dentry;
-    for (i = 0; i < 32; i++){
-        if (command[i] == ' '  || command[i] == '\n'){
-            break;
-        } 
-     
-        counter++;
+    int32_t i;
+
+    uint8_t filename[128];
+    uint8_t argument[128];
+    int length = strlen((const int8_t*)command);
+    int file_start = 0;    //file_cmd first index
+    int arg_start = 0;
+    int blank_count =0;
+    int file_cmd_length = 0;
+    int file_arg_length = 0;
+    int j;
+
+    for (i=0;i<128;++i){
+      filename[i] = '\0';
+      argument[i] = '\0';
     }
-    uint8_t filename[counter];   
 
-    for (i = 0; i < counter; i++){
-        filename[i] = command[i];
-    }
-    //argument parsing
-    /* get the length of argument */
-    // end = counter;
-    // while (command[end] != '\0' && command[end] != ' ' && command[end] != '\n') end++;
-    // /* also stores the argument into a buffer */
-    // for (i = counter; i < end; i++)
-    //     argument[i-counter] = command[i];
-    // /* end of the argument */
-    // argument[i-counter] = '\0';
-
-
-
-
-    // for(i = counter; i<32; i++){
-    //     if (command[i] == ' '  || command[i] == '\n'){
-    //         break;
-    //     } 
-     
-    //     counter++;
-    // }
-
-
-
-
-    if(filename[counter] = "cat"){
-        uint8_t* string = "frame0.txt";
-        for(i = 0; i <10; i++){
-            argument[i] = string[i];
+    //parse cmd
+    for(i = 0; i < length; ++i){
+        //Gets the args and file name from the command word.
+        if(command[i] != ' '){
+            filename[file_start] = command[i];
+            ++file_cmd_length;
+            ++file_start;
+        }
+        else{
+            ++blank_count;
+            if(file_cmd_length > 0)
+                break;
         }
     }
+
+    //parse arg
+    for(i = file_start+blank_count; i< length; ++i){
+        if(command[i] != ' '){
+            for(j=i;j<length;j++){
+                argument[arg_start] = command[j];
+                ++arg_start;                
+            }    
+            break;
+        }
+        else{
+            if(file_arg_length > 0)
+                break;
+        }
+    }
+
+
+
+
+    // if(filename[counter] = "cat"){
+    //     uint8_t* string = "frame0.txt";
+    //     for(i = 0; i <10; i++){
+    //         argument[i] = string[i];
+    //     }
+    // }
     
 
 
@@ -403,7 +414,7 @@ int32_t system_execute(const uint8_t* command){
 
     file_descriptor_array =  PCB->file_descriptor;
 
-    strncpy((int8_t*)PCB->arg,(int8_t*)argument, 10);
+    strncpy((int8_t*)PCB->arg,(int8_t*)argument, 128);
 
     // set TSS values in PCB 
 
