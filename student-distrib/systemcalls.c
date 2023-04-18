@@ -29,11 +29,15 @@ pcb_t* pcb_adress(uint32_t in){
  * Outputs: fd index for sucess and -1 if failed
  */
 int32_t sys_open(const char* fname){
+    printf("2");
     //printf("sys_open \n");
     dentry_t dentry;
     int fd_id;
     if(fname == NULL || file_descriptor_array == NULL)
         return -1;
+    if(strlen((char*)fname) == NULL){
+        return -1;  /* empty string*/
+    }
     // find unused file descriptor 
     for(fd_id = 2; fd_id < 8; fd_id++){
         if(file_descriptor_array[fd_id].flags == 0)
@@ -69,6 +73,7 @@ int32_t sys_open(const char* fname){
  * Outputs: 0 for success -1 for fail
  */
 int32_t sys_close(int32_t fd){
+    printf("4");
      //printf("sys_close \n");
     if (fd < 2 || fd > 8 || file_descriptor_array == NULL || file_descriptor_array[fd].flags == 0)
         return -1;
@@ -90,13 +95,17 @@ int32_t sys_close(int32_t fd){
  * Outputs: the actual number of bytes that are read successfully, if error then ret -1
  */
 int32_t sys_read(int32_t fd, void* buf, int32_t nbytes){
+    printf("3");
     //printf("sys_read \n");
     if (fd < 0 || fd > 8 || buf == NULL || file_descriptor_array == NULL || file_descriptor_array[fd].flags == 0 || file_descriptor_array[fd].op == NULL){
         return -1;
     }
 
     if(file_descriptor_array[fd].filetype == 1){
-
+        int32_t bytesRead = file_descriptor_array[fd].op->sys_read(&file_descriptor_array[fd], buf, nbytes);
+        return bytesRead;
+    }
+    if(file_descriptor_array[fd].filetype == 2){
         int32_t bytesRead = file_descriptor_array[fd].op->sys_read(&file_descriptor_array[fd], buf, nbytes);
         return bytesRead;
     }
@@ -109,6 +118,7 @@ int32_t sys_read(int32_t fd, void* buf, int32_t nbytes){
  * Outputs: the actual number of bytes that are written successfully, if error then ret -1
  */
 int32_t sys_write(int32_t fd, void* buf, int32_t nbytes){
+    printf("4");
     //printf("sys_write \n");
     if (fd < 0 || fd > 8 || buf == NULL || file_descriptor_array == NULL || file_descriptor_array[fd].flags == 0 || file_descriptor_array[fd].op == NULL){
         return -1;
@@ -125,6 +135,7 @@ int32_t sys_write(int32_t fd, void* buf, int32_t nbytes){
 
 
 int32_t halt(uint8_t status){
+    printf("5");
    
    
     pcb_t* PCB;
@@ -264,6 +275,8 @@ void file_op_table_init()
 
 
 int32_t system_execute(const uint8_t* command){
+    printf("1");
+    uint8_t argument[128];
     if(command == NULL){
         return -1;
     } 
@@ -286,6 +299,23 @@ int32_t system_execute(const uint8_t* command){
     for (i = 0; i < counter; i++){
         filename[i] = command[i];
     }
+    int end;
+    int start = i;
+    while (' ' == command[start]) start++;
+    /* get the length of argument */
+    end = start;
+    while (command[end] != '\0' && command[end] != ' ' && command[end] != '\n') end++;
+    /* also stores the argument into a buffer */
+    for (i = start; i < end; i++)
+        argument[i-start] = command[i];
+    /* end of the argument */
+    argument[i-start] = '\0';
+
+
+
+
+
+
 
     if (read_dentry_by_name(filename, &dentry) == -1){
         return -1;
@@ -373,6 +403,8 @@ int32_t system_execute(const uint8_t* command){
 
     file_descriptor_array =  PCB->file_descriptor;
 
+    strncpy((int8_t*)PCB->arg,(int8_t*)argument, 128);
+
     // set TSS values in PCB 
 
     PCB->ss0 = tss.ss0;
@@ -402,6 +434,51 @@ int32_t system_execute(const uint8_t* command){
     return 0;
     
 }
+
+int32_t getargs(uint8_t* buf, int32_t nbytes){
+    if(buf==NULL){
+        return 0;
+    }
+    pcb_t* cur_pcb = pcb_adress(pid);
+    strncpy((int8_t*)buf, (int8_t*)(cur_pcb->arg), nbytes);
+    return 0;
+}
+
+int32_t vidmap(uint8_t** screen_start)
+{
+    printf("6");
+    /* check if the pointer is in user space */
+    if ((unsigned int)screen_start <= 0x08000000 || (unsigned int)screen_start >= 0x08400000)
+		return -1;
+
+    *screen_start = (uint8_t*)0x08c00000;
+
+    /* initialize the VIDMAP page */
+    PageDir[VIDMAP_OFFSET].FourKB.Present = 1;    // present
+    PageDir[VIDMAP_OFFSET].FourKB.ReadWrite = 1;
+    PageDir[VIDMAP_OFFSET].FourKB.UserSupervisor = 1;    // user mode
+    PageDir[VIDMAP_OFFSET].FourKB.PageBaseAddr   = (unsigned int)video_page_table >> 12;
+    PageDir[VIDMAP_OFFSET].FourKB.WriteThrough = 0;
+    PageDir[VIDMAP_OFFSET].FourKB.CacheDisabled = 0;
+    PageDir[VIDMAP_OFFSET].FourKB.Accessed= 0;
+    PageDir[VIDMAP_OFFSET].FourKB.Reserved = 0;
+    PageDir[VIDMAP_OFFSET].FourKB.PageSize = 0;
+    PageDir[VIDMAP_OFFSET].FourKB.GlobalPage = 0;
+    PageDir[VIDMAP_OFFSET].FourKB.ProgUse = 0;
+
+
+    video_page_table[0].Present = 1;    
+    video_page_table[0].ReadWrite = 1;  
+    video_page_table[0].UserSupervisor = 1;
+    video_page_table[0].PageBaseAddr = 0xB8000 >> 12;
+    flush();
+    return 0;
+}
+
+
+
+
+
 
 
 
