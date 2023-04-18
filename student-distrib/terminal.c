@@ -10,7 +10,7 @@
  */
 int32_t terminal_read(int32_t fd, void* buf, int32_t nbytes){
     if(NULL == buf || 0 == nbytes){
-        return -1;
+        return 0;
     }
     int i;
     int j = 0;
