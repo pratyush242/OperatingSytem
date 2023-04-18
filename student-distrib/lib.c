@@ -169,24 +169,20 @@ int32_t puts(int8_t* s) {
  *  Function: Output a character to the console */
 void putc(uint8_t c) {
     if(c == '\n' || c == '\r') {
-        // screen_y++;
-        screen_y = (screen_y+1) % NUM_ROWS;
-        screen_x = 0;
-    }
-    else if(screen_x == NUM_COLS - 1){
-        *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1)) = c;
-        *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1) + 1) = ATTRIB;
-        screen_y++;
-        screen_x = 0;
-        terminal_scroll();        
+        terminal_newline();
+        return;
     } 
-    else {
-        *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1)) = c;
-        *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1) + 1) = ATTRIB;
-        screen_x++;
-        screen_x %= NUM_COLS;
-        screen_y = (screen_y + (screen_x / NUM_COLS)) % NUM_ROWS;
+    
+    *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1)) = c;
+    *(uint8_t *)(video_mem + ((NUM_COLS * screen_y + screen_x) << 1) + 1) = ATTRIB;
+    screen_x++;
+    // screen_x %= NUM_COLS;
+    // screen_y = (screen_y + (screen_x / NUM_COLS)) % NUM_ROWS;
+    
+    if(screen_x == NUM_COLS){
+        terminal_newline();
     }
+
     uint16_t pos = screen_y * NUM_COLS + screen_x;
     update_cursor(pos);
 }
