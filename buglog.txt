@@ -53,6 +53,17 @@ We were getting this error because our function declarations were incorrect.
 12. page fault when halting
 -> We weren't pushing status on the stack
 
+13. can only halt twice 
+-> we werent restoring file despritor array to the pervious one (PCB_parent->file_descriptor)
+
+14. GREP was causing a pagefault and gave random symbols 
+->when opening the last file the offset didnt reset in file offset trying to read values that werent there 
+    changes were made in read_dentry_by_name which now returns offset-original
+
+15. syserr was pagefaulting at file open 
+-> did not have an empty string check, added it to file open 
+
+
 
 
 
