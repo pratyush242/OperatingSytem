@@ -104,7 +104,7 @@ int32_t sys_read(int32_t fd, void* buf, int32_t nbytes){
     }
     if(file_descriptor_array[fd].filetype == 2){
         int32_t bytesRead = file_descriptor_array[fd].op->sys_read(&file_descriptor_array[fd], buf, nbytes);
-       // printf("%s",(uint8_t*)buf);
+    
         return bytesRead;
     }
     return file_descriptor_array[fd].op->sys_read(fd, buf, nbytes);

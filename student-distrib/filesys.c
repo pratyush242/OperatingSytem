@@ -84,7 +84,15 @@ for(i = 0; i<63;i++){
 
 temp_name = boot_block_A->dentry_start[i].filename;
 
-if(fname_length == strlen((const char*)temp_name)){
+uint32_t fileSize = strlen((const char*)temp_name);
+
+
+
+if(fileSize > 32){
+    fileSize = 32;
+}
+
+if(fname_length == fileSize){
     
     if(strncmp((const char*)fname,(const char*)temp_name,32) == 0){
 
@@ -266,6 +274,7 @@ uint32_t current_block_index;
 uint32_t current_block;
 uint8_t* mem_offset;
 uint8_t* block_start;
+uint32_t original = offset;
 //uint32_t end_of_file = 0;
 if(buf == NULL){
     return -1;
@@ -274,7 +283,7 @@ int i;
 for(i = 0;i<length;i++){
 
     if(offset== file_length){
-        return 0;
+        return offset-original ;
     }
 
     current_block_index = (uint32_t)(offset/4096);
