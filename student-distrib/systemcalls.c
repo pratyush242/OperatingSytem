@@ -4,6 +4,9 @@
 #define progImage 0x08048000
 #define mb_8 0x800000
 #define kb_8 0x2000
+#define start 0x08c00000
+#define PHYS_MEM_BASE 0x08400000
+#define PHYS_MEM_TOP 0x08000000
 
 
 static fops_table_t fopsarray[6];
@@ -132,7 +135,7 @@ int32_t sys_write(int32_t fd, void* buf, int32_t nbytes){
  */
 
 
-int32_t halt(uint8_t status){
+int32_t halt(int32_t status){
  pcb_t* PCB;
     pcb_t* PCB_parent;
 
@@ -467,10 +470,10 @@ int32_t vidmap(uint8_t** screen_start)
 {
     //printf("6");
     /* check if the pointer is in user space */
-    if ((unsigned int)screen_start <= 0x08000000 || (unsigned int)screen_start >= 0x08400000)
+    if ((unsigned int)screen_start <= PHYS_MEM_TOP || (unsigned int)screen_start >= PHYS_MEM_BASE)
 		return -1;
 
-    *screen_start = (uint8_t*)0x08c00000;
+    *screen_start = (uint8_t*)start;
 
     /* initialize the VIDMAP page */
     PageDir[VIDMAP_OFFSET].FourKB.Present = 1;    // present

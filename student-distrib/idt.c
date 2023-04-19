@@ -3,7 +3,8 @@
 #include "x86_desc.h"
 #include "wrapper.h"
 #include "keyboard.h"
-//#include "systemcalls.h"
+#include "systemcalls.h"
+
 
 //FUNCTION HANDLER DEFINITIONS
 

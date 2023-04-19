@@ -25,7 +25,7 @@ int32_t sys_write(int32_t fd, void* buf, int32_t nbytes);
 
 int32_t system_execute(const uint8_t* cmd);
 
-int32_t halt(uint8_t status);
+int32_t halt(int32_t status);
 
 int32_t null_open();
 

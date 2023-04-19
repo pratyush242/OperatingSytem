@@ -320,12 +320,12 @@ static inline void assertion_failure(){
 
 
 /* Checkpoint 3 tests */
-int program1_paging_test(){
-    TEST_HEADER;
-    char* temp_pointer = (char*)0x8048001;
-    char final = *temp_pointer;
-    return PASS;
-}
+// int program1_paging_test(){
+//     TEST_HEADER;
+//     char* temp_pointer = (char*)0x8048001;
+//     char final = *temp_pointer;
+//     return PASS;
+// }
 
 /* Checkpoint 4 tests */
 /* Checkpoint 5 tests */
