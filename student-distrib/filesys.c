@@ -148,10 +148,10 @@ return -1;
 
 
 
-int32_t read_directory(file_descriptor_t* fd, void* buf, int32_t nbytes){
+int32_t read_directory(int32_t fd, void* buf, int32_t nbytes){
 
 dentry_t file_entry;
-uint32_t directory_file = fd->fileoffset;
+uint32_t directory_file = ((file_descriptor_t*)fd)->fileoffset;
 //printf("%d \n", directory_file);
 int32_t err = read_dentry_by_index(directory_file,&file_entry);
 //printf("%s", file_entry.filename);
@@ -172,7 +172,7 @@ for(i = 0;i<32;i++){
     j++;
 }
 
-fd->fileoffset+=1;
+((file_descriptor_t*)fd)->fileoffset+=1;
 
 return j;
 
@@ -209,12 +209,12 @@ int32_t write_directory(int32_t fd, void* buf, int32_t nbytes){
 
  */
 
-int32_t read_file( file_descriptor_t* fd,void* buf, int32_t length){ 
+int32_t read_file( int32_t fd,void* buf, int32_t length){ 
 file_position = 0; 
 
 dentry_t file_entry;
 
-read_dentry_by_name((const uint8_t *)fd->filename,&file_entry);
+read_dentry_by_name((const uint8_t *)((file_descriptor_t*)fd)->filename,&file_entry);
 
 if(buf == NULL){
     return -1;
@@ -228,17 +228,17 @@ if(file_inode < 0){
     return -1;
 }
 
-if(fd->fileoffset >= file_inode->length){
+if(((file_descriptor_t*)fd)->fileoffset >= file_inode->length){
     return 0;
 }
 
-uint32_t val = read_data((uint32_t)file_inode,fd->fileoffset,(uint8_t*)buf,(uint32_t) length);
+uint32_t val = read_data((uint32_t)file_inode,((file_descriptor_t*)fd)->fileoffset,(uint8_t*)buf,(uint32_t) length);
 
 
 
 if(val == 0){
 
-    fd->fileoffset = file_inode->length;
+    ((file_descriptor_t*)fd)->fileoffset = file_inode->length;
     //return 0;
     return file_inode->length;
 }else if(val == -1){
@@ -247,7 +247,7 @@ if(val == 0){
     return -1;
 }
 else{
-    fd->fileoffset +=val;
+    ((file_descriptor_t*)fd)->fileoffset +=val;
     return val;
 }
 

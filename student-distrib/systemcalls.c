@@ -99,11 +99,11 @@ int32_t sys_read(int32_t fd, void* buf, int32_t nbytes){
     }
 
     if(file_descriptor_array[fd].filetype == 1){
-        int32_t bytesRead = file_descriptor_array[fd].op->sys_read(&file_descriptor_array[fd], buf, nbytes);
+        int32_t bytesRead = file_descriptor_array[fd].op->sys_read((int32_t)&file_descriptor_array[fd], buf, nbytes);
         return bytesRead;
     }
     if(file_descriptor_array[fd].filetype == 2){
-        int32_t bytesRead = file_descriptor_array[fd].op->sys_read(&file_descriptor_array[fd], buf, nbytes);
+        int32_t bytesRead = file_descriptor_array[fd].op->sys_read((int32_t)&file_descriptor_array[fd], buf, nbytes);
     
         return bytesRead;
     }
@@ -136,17 +136,10 @@ int32_t halt(uint8_t status){
  pcb_t* PCB;
     pcb_t* PCB_parent;
 
-
-    
-    
-    
     PCB = pcb_adress(pid);
     pid = PCB->pid;
 
 
-
-   
-   
    
     // clear flags 
     int i;
@@ -276,7 +269,6 @@ void file_op_table_init()
 int32_t system_execute(const uint8_t* command){
     //printf("1");
     //uint8_t argument[10];
-    int end;
     if(command == NULL){
         return -1;
     } 
@@ -291,7 +283,7 @@ int32_t system_execute(const uint8_t* command){
     int length = strlen((const int8_t*)command);
     int file_start = 0;    //file_cmd first index
     int arg_start = 0;
-    int blank_count =0;
+    int blank_count = 0;
     int file_cmd_length = 0;
     int file_arg_length = 0;
     int j;
@@ -448,7 +440,14 @@ int32_t system_execute(const uint8_t* command){
     return 0;
     
 }
-
+/* 
+ * getargs
+ * Description: get args from command and copy it to buffer
+ * Input:   buf -- destination buffer's pointer
+ *          nbytes -- number of bytes to copy
+ * Output: 0 for success, -1 for failure
+ * Side Effect: copy args to buffer
+ */
 int32_t getargs(uint8_t* buf, int32_t nbytes){
     if(buf==NULL){
         return 0;
@@ -457,7 +456,13 @@ int32_t getargs(uint8_t* buf, int32_t nbytes){
     strncpy((int8_t*)buf, (int8_t*)(cur_pcb->arg), nbytes);
     return 0;
 }
-
+/* 
+ *  vidmap
+ *  Description: maps user space virtual vidmem to physical video memory 
+ *               and return virtual vidmem address to user
+ *  Input:  screen_start -- a pointer points to a place where to output virtual video memory addr for user
+ *  Output: 0 for success, -1 for failure, virtual vidmem address
+ */
 int32_t vidmap(uint8_t** screen_start)
 {
     //printf("6");
@@ -472,13 +477,6 @@ int32_t vidmap(uint8_t** screen_start)
     PageDir[VIDMAP_OFFSET].FourKB.ReadWrite = 1;
     PageDir[VIDMAP_OFFSET].FourKB.UserSupervisor = 1;    // user mode
     PageDir[VIDMAP_OFFSET].FourKB.PageBaseAddr   = (unsigned int)video_page_table >> 12;
-    PageDir[VIDMAP_OFFSET].FourKB.WriteThrough = 0;
-    PageDir[VIDMAP_OFFSET].FourKB.CacheDisabled = 0;
-    PageDir[VIDMAP_OFFSET].FourKB.Accessed= 0;
-    PageDir[VIDMAP_OFFSET].FourKB.Reserved = 0;
-    PageDir[VIDMAP_OFFSET].FourKB.PageSize = 0;
-    PageDir[VIDMAP_OFFSET].FourKB.GlobalPage = 0;
-    PageDir[VIDMAP_OFFSET].FourKB.ProgUse = 0;
 
 
     video_page_table[0].Present = 1;    

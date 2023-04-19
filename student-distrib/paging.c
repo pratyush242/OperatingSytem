@@ -29,7 +29,6 @@ void initializeTable() {
        PageTable[i].ProgUse = 0;
        PageTable[i].PageBaseAddr = 0x2;
     }
-
     //0xB8 is the virtual and physical address of video memory
     PageTable[0xB8].PageBaseAddr = 0xB8;
     PageTable[0xB8].Present = 1;
