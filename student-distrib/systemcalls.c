@@ -136,12 +136,17 @@ int32_t sys_write(int32_t fd, void* buf, int32_t nbytes){
 
 
 int32_t halt(int32_t status){
- pcb_t* PCB;
+    pcb_t* PCB;
     pcb_t* PCB_parent;
 
     PCB = pcb_adress(pid);
+    if(!PCB){
+        return -1;
+    }
     pid = PCB->pid;
-
+    if (pid<-1){
+        return -1;
+    }
 
    
     // clear flags 
@@ -452,9 +457,16 @@ int32_t system_execute(const uint8_t* command){
  * Side Effect: copy args to buffer
  */
 int32_t getargs(uint8_t* buf, int32_t nbytes){
+
+    //buf null check
     if(buf==NULL){
         return 0;
     }
+    //nbytes null check
+    if(nbytes==0){
+        return -1;
+    }
+    //copies into buf
     pcb_t* cur_pcb = pcb_adress(pid);
     strncpy((int8_t*)buf, (int8_t*)(cur_pcb->arg), nbytes);
     return 0;

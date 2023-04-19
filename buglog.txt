@@ -20,6 +20,8 @@ We were getting this error because our function declarations were incorrect.
 
 6, RTC Testing Adequecy
 -> Forgot to add a fail test for RTC hat ensure that the rates are powers of 2
+
+
 #CP3.2
 7, RTC Init
 -> Did not disable interrupts for init of RTC which caused problems during hceckpoint 1 while trying ti initialise RTC and call the interrupts
@@ -29,7 +31,9 @@ We were getting this error because our function declarations were incorrect.
 
 9, File System
 ->Was not dereferencing the data read from file when setting buf equal to it
- #CP3.3
+
+
+#CP3.3
 10. page fault if a faulty file name was put in 
 -> pid paging was being called before varifying if the file is valid 
 
@@ -39,5 +43,18 @@ We were getting this error because our function declarations were incorrect.
 12. General Protection Fault:
 
 -> due to incorrect pushing of values in context switch
+
+
+#CP3.4
+
+11. page fault when trying to run fish
+-> page dir page table and video page table were set to static
+
+12. page fault when halting
+-> We weren't pushing status on the stack
+
+
+
+
 
 
