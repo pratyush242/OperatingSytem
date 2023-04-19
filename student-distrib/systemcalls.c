@@ -7,6 +7,7 @@
 #define start 0x08c00000
 #define PHYS_MEM_BASE 0x08400000
 #define PHYS_MEM_TOP 0x08000000
+#define VID_MEM 0xB8000
 
 
 static fops_table_t fopsarray[6];
@@ -497,7 +498,7 @@ int32_t vidmap(uint8_t** screen_start)
     video_page_table[0].Present = 1;    
     video_page_table[0].ReadWrite = 1;  
     video_page_table[0].UserSupervisor = 1;
-    video_page_table[0].PageBaseAddr = 0xB8000 >> 12;
+    video_page_table[0].PageBaseAddr = VID_MEM >> 12;
     flush();
     return 0;
 }
