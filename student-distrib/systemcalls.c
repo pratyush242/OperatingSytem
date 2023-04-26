@@ -13,7 +13,7 @@
 static fops_table_t fopsarray[6];
 int32_t pid = -1;
 
-
+int32_t pidArray[6] = {0,0,0,0,0,0};
 
 
 /* helper function to get the adress of your pcb
@@ -144,7 +144,7 @@ int32_t halt(int32_t status){
     if(!PCB){
         return -1;
     }
-    pid = PCB->pid;
+    
     if (pid<-1){
         return -1;
     }
@@ -158,8 +158,9 @@ int32_t halt(int32_t status){
     }
 
 
-
-    pid--;
+    pidArray[pid] = 0;
+    pid = PCB->parent_id;
+    
     
     if (pid == -1) {
         system_execute((uint8_t *) "shell");
@@ -167,11 +168,11 @@ int32_t halt(int32_t status){
     }
     
     
-    
+    PCB_parent = pcb_adress(pid);
    
 
    
-    PCB_parent = pcb_adress(PCB->parent_id);
+ 
 
     file_descriptor_array = PCB_parent->file_descriptor;
     // pid = PCB_parent->pid;
@@ -352,12 +353,22 @@ int32_t system_execute(const uint8_t* command){
     int32_t parent_id = pid;
     PCB_parent = pcb_adress(pid); 
 
-    if(pid+1 >5){
+    uint32_t k;
+    uint32_t total_process = 0;
+    for(k = 0; k<6;k++){
+
+        if(pidArray[k]==0){
+            pid = k;
+            total_process = 1;
+            pidArray[k] = 1;
+            break;
+        }
+    
+    }
+
+    if(total_process >= 0){
         printf("Max number of processes running \n");
         return -1;
-    }
-    else{
-        pid+=1;
     }
 
     /* SET UP PAGING */
