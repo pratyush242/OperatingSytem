@@ -105,4 +105,20 @@ typedef struct pcb_t {
     int active;
 
 } pcb_t;
+
+
+typedef struct terminal_t{
+
+    uint32_t pid;
+    terminal_t* nextTerminal
+
+} terminal_t;
+
+
+
+
 #endif
+
+
+
+

@@ -15,6 +15,7 @@ int32_t pid = -1;
 
 int32_t pidArray[6] = {0,0,0,0,0,0};
 
+terminal_t runningTerminal;
 
 /* helper function to get the adress of your pcb
 Input: PID number
@@ -522,3 +523,42 @@ int32_t sigreturn(void){
 }
 
 
+
+void scheduler(){
+
+
+register uint32_t saved_ebp asm("ebp");
+register uint32_t saved_esp asm("esp");
+
+pcb_t* curPCB = pcb_adress(runningTerminal.pid);
+
+
+curPCB->saved_ebp = saved_ebp;
+curPCB->saved_esp = saved_esp;
+
+
+
+runningTerminal = *(runningTerminal.nextTerminal);
+
+pcb_t* PCB = pcb_adress(runningTerminal.pid);
+
+sysCallPaging(runningTerminal.pid);
+
+
+
+file_descriptor_array = PCB->file_descriptor;
+
+tss.ss0 = KERNEL_DS;
+tss.esp0 = (mb_8 - ((runningTerminal.pid) * kb_8) - 4); 
+
+
+    asm volatile ("                 \n\
+        movl    %0, %%esp           \n\
+        movl    %1, %%ebp           \n\
+        "
+        :
+        : "a"(PCB->saved_esp), "b"(PCB->saved_ebp)
+    );
+
+return 0;
+}
