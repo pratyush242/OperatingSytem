@@ -18,11 +18,11 @@ void pit_init()
     
 }
 
-void pit_init()
+void pit_handler()
 {   
     
     enable_irq(0x20);
-    switch(); /* video memory and context switch */
+    scheduler(); /* video memory and context switch */
   
     
 }
