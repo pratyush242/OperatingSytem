@@ -30,7 +30,7 @@ typedef struct terminal_t{
 terminal_t multi_terminal[3];
 uint32_t curr_terminal_ID;
 
-
+terminal_t runningTerminal;
 
 #endif
 

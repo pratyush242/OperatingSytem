@@ -7,6 +7,7 @@
 #include "rtc.h"
 #include "lib.h"
 #include "paging.h"
+#include "x86_desc.h"
 
 
 #define VIDMAP_OFFSET           35          /* 140/4 */
@@ -52,47 +53,6 @@ int32_t sigreturn(void);
 // pointer pointing to fd array
 file_descriptor_t* file_descriptor_array;
 
-
-// void file_op_table_init()
-// {
-//     // init rtc operation table 
-//     fopsarray[0].open  = rtc_open;
-//     fopsarray[0].close = rtc_close;
-//     fopsarray[0].read  = rtc_read;
-//     fopsarray[0].write = rtc_write;
-
-//     // init dir operation table 
-//     // fopsarray[1].open  = open_directory ;
-//     // fopsarray[1].close = close_directory;
-//     fopsarray[1].read  = read_directory ;
-//     // fopsarray[1].write = write_directory;
-
-//     // init file operation table 
-//     fopsarray[2].open  = open;
-//     fopsarray[2].close = close;
-//     fopsarray[2].read  = read_file;
-//     fopsarray[2].write = write;
-
-//     // stdin
-//     fopsarray[3].open  = terminal_open;
-//     fopsarray[3].close = terminal_close;
-//     fopsarray[3].read  = terminal_read;        // would be 1 cuz read only
-//     fopsarray[3].write = terminal_write;         // would be 0 cuz read only
-
-//     //stdout
-//     fopsarray[4].open  = terminal_open;
-//     fopsarray[4].close = terminal_close;
-//     fopsarray[4].read  = terminal_read;          // would be 1 cuz write only
-//     fopsarray[4].write = terminal_write;          // would be 1 cuz write only
-
-//     //null
-    
-//     fopsarray[5].open  = -1;
-//     fopsarray[5].close = -1;
-//     fopsarray[5].read  = -1;         
-//     fopsarray[5].write = -1;         
-// }
-
 typedef struct pcb_t {
     uint32_t pid;    // file operator table 
     file_descriptor_t file_descriptor[8];   // inode index 
@@ -106,7 +66,7 @@ typedef struct pcb_t {
 
 } pcb_t;
 
-terminal_t runningTerminal;
+
 
 
 #endif
