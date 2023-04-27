@@ -1,6 +1,4 @@
 #include "terminal.h"
-#include "keyboard.h"
-#include "lib.h"
 
 /* terminal_read
  * 
@@ -80,4 +78,68 @@ int32_t terminal_open(const char* fname){
 int32_t terminal_close(int32_t fd){
     return 0;
 }
+/* terminal_init
+ *
+ * initialize all terminals 
+ * Inputs: none
+ * Outputs: 0
+ * Return: 0 if success, 1 if fail
+ */
+int32_t terminal_init()
+{
+    int i,j;
+    for(i = 0; i < 3; i++){
+        // set inital values of multiterminal 
+        multi_terminal[i].id = i;
+        multi_terminal[i].pid = -1;
+        multi_terminal[i].x = 0;
+        multi_terminal[i].y = 0;
+        // init terminal buffer
+        for(j = 0; i < 128; j++)
+            multi_terminal[i].terminal_buffer[j] = '\0';
+    }
+    runningTerminal = multi_terminal[0];
+}
+int32_t terminal_switch(uint32_t terminal_ID)
+{
+    cli();
+    // if it is the current terminal, do nothing 
+    if(curr_terminal_ID == terminal_ID){
+        sti();
+        return 0;
+    }
+    // save terminal  
+    terminal_save(curr_terminal_ID);
+    // restore terminal  
+    terminal_return(terminal_ID);
+    //it is the new terminal, run shell for this terminal 
+    sti();
+    if(multi_terminal[terminal_ID].pid == -1){
+        system_execute((uint8_t*)"shell");
+    }
+    return 0;
+}
 
+int32_t terminal_save(uint32_t terminal_ID)
+{
+    if(terminal_ID >= 3){
+        return -1;
+    }
+    // save current cursor position 
+    multi_terminal[terminal_ID].x = get_x();
+    multi_terminal[terminal_ID].y = get_y();
+    return 0;
+}
+
+int32_t terminal_return(uint32_t terminal_ID)
+{
+    if(terminal_ID >= 3) {
+        return -1;
+    }
+    // set current terminal id 
+    curr_terminal_ID = terminal_ID;
+    // restore current cursor position 
+    set_xy(multi_terminal[terminal_ID].x, multi_terminal[terminal_ID].y);
+
+    return 0;
+}

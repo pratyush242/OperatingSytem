@@ -573,3 +573,18 @@ void update_cursor(uint16_t pos){
     // row 
     outb((uint8_t)((pos >> 0x08) & 0xff), 0x3d5); //bitshift the position
 }
+
+uint32_t get_x(){
+    return screen_x;
+}
+uint32_t get_y(){
+    return screen_y;
+}
+void set_xy(int x, int y){
+    screen_x = x;
+    screen_y = y;
+    uint16_t pos = y * NUM_COLS + x;
+    update_cursor(pos);
+}
+
+

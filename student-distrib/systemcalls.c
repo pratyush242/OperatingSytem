@@ -15,7 +15,7 @@ int32_t pid = -1;
 
 int32_t pidArray[6] = {0,0,0,0,0,0};
 
-terminal_t runningTerminal;
+
 
 /* helper function to get the adress of your pcb
 Input: PID number
@@ -364,10 +364,12 @@ int32_t system_execute(const uint8_t* command){
             pidArray[k] = 1;
             break;
         }
-    
+        else{
+            total_process+=1;
+        }
     }
 
-    if(total_process >= 0){
+    if(total_process >= 6){
         printf("Max number of processes running \n");
         return -1;
     }
@@ -538,8 +540,13 @@ curPCB->saved_esp = saved_esp;
 
 
 
-runningTerminal = *(runningTerminal.nextTerminal);
-
+int next_terminal_id = (runningTerminal.id)+1;
+if(next_terminal_id > 2){
+    runningTerminal = multi_terminal[0];
+}
+else{
+    runningTerminal = multi_terminal[next_terminal_id];
+}
 pcb_t* PCB = pcb_adress(runningTerminal.pid);
 
 sysCallPaging(runningTerminal.pid);
@@ -559,6 +566,6 @@ tss.esp0 = (mb_8 - ((runningTerminal.pid) * kb_8) - 4);
         :
         : "a"(PCB->saved_esp), "b"(PCB->saved_ebp)
     );
-
-return 0;
 }
+
+
