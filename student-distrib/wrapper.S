@@ -38,9 +38,9 @@
 
 
 /*call the functions*/
-INTERRUPT_WRAPPER(keyboard_wrap,handler_keyboard)
+INTERRUPT_WRAPPER(pit_wrap,pit_handler)
 INTERRUPT_WRAPPER(rtc_wrap,rtc_handler)
-
+INTERRUPT_WRAPPER(keyboard_wrap, handler_keyboard)
 
 
 

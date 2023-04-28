@@ -153,6 +153,9 @@ void entry(unsigned long magic, unsigned long addr) {
     //rtc init
     rtc_init();
 
+    //pit init
+    pit_init();
+
     
     // /* Initialize devices, memory, filesystem, enable device interrupts on the
     //  * PIC, any other initialization stuff... */

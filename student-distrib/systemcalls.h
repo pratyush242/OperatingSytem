@@ -48,6 +48,8 @@ int32_t sigreturn(void);
 
 void file_op_table_init();
 
+void scheduler();
+
 
 /* struct for fops */
 

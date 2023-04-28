@@ -222,6 +222,17 @@ void idt_init(){
     SET_IDT_ENTRY(idt[19], SIMD_FLOATING_POINT_CHECK);
 
 
+    idt[32].present = 0x1;
+    idt[32].dpl = 0x0;
+    idt[32].reserved0 = 0x0;
+    idt[32].size = 0x1;
+    idt[32].reserved1 = 0x1;
+    idt[32].reserved2 = 0x1;
+    idt[32].reserved3 = 0x1;
+    idt[32].reserved4 = 0x0;
+    idt[32].seg_selector = KERNEL_CS;  
+
+
     idt[33].present = 0x1;
     idt[33].dpl = 0x0;
     idt[33].reserved0 = 0x0;
@@ -242,6 +253,8 @@ void idt_init(){
     idt[40].reserved4 = 0x0;
     idt[40].seg_selector = KERNEL_CS; 
     /* Interrupts */
+    
+    SET_IDT_ENTRY(idt[32], pit_wrap);
     SET_IDT_ENTRY(idt[33], keyboard_wrap);
     SET_IDT_ENTRY(idt[40], rtc_wrap);
 
