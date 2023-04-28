@@ -194,6 +194,14 @@ void handler_keyboard(){
         }
     } 
     else{
+        if(alt_flag){
+            if (keydata == 0x3B)
+                terminal_switch(0);
+            else if (keydata == 0x3B)
+                terminal_switch(1);
+            else if (keydata == 0x3D)
+                terminal_switch(2);
+        }
         if(keydata<128){
             unsigned char keyprint;
             //print_key(keydata);

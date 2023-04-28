@@ -16,6 +16,7 @@ extern int32_t terminal_init();
 extern int32_t terminal_switch(uint32_t terminal_ID);
 extern int32_t terminal_save(uint32_t terminal_ID);
 extern int32_t terminal_return(uint32_t terminal_ID);
+extern int32_t launch_first_terminal();
 
 typedef struct terminal_t{
 

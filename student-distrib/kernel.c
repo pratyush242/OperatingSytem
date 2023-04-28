@@ -163,6 +163,10 @@ void entry(unsigned long magic, unsigned long addr) {
 
 
     init_filesys();
+
+    file_op_table_init();
+
+    //terminal_init();
     
     /* Enable interrupts */
     /* Do not enable the following until after you have set up your
@@ -170,9 +174,9 @@ void entry(unsigned long magic, unsigned long addr) {
      * without showing you any output */
     /*printf("Enabling Interrupts\n");
     sti();*/
-clear();
-terminal_reset();
-system_execute((uint8_t*)"shell");
+// clear();
+// terminal_reset();
+// system_execute((uint8_t*)"shell");
 #ifdef RUN_TESTS
     /* Run tests */
     launch_tests();

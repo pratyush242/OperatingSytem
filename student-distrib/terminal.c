@@ -143,3 +143,13 @@ int32_t terminal_return(uint32_t terminal_ID)
 
     return 0;
 }
+
+
+int32_t launch_first_terminal(){
+    /* get init terminal info */
+    terminal_return(0);
+    sti();
+    system_execute((uint8_t*)"shell");
+    /* never reach here */
+    return 0;
+}
