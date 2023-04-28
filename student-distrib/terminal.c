@@ -100,7 +100,7 @@ int32_t terminal_init()
             multi_terminal[i].terminal_buffer[j] = '\0';
     }
     curr_terminal_ID = 0;
-    system_execute((uint8_t*)"shell");
+    
     runningTerminal = multi_terminal[0];
     
   

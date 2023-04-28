@@ -380,7 +380,7 @@ int32_t system_execute(const uint8_t* command){
         return -1;
     }
 
-    multi_terminal[curr_terminal_ID].pid = pid;
+    runningTerminal.pid = pid;
 
     
     /* SET UP PAGING */
@@ -540,7 +540,9 @@ void scheduler(){
 
 register uint32_t saved_ebp asm("ebp");
 register uint32_t saved_esp asm("esp");
-
+if(runningTerminal.pid == -1){
+    system_execute((uint8_t*)"shell");
+}
 pcb_t* curPCB = pcb_adress(runningTerminal.pid);
  
 int next_terminal_id = (runningTerminal.id)+1;
@@ -576,6 +578,8 @@ tss.esp0 = (mb_8 - ((runningTerminal.pid) * kb_8) - 4);
         :
         : "a"(PCB->saved_esp), "b"(PCB->saved_ebp)
     );
+
+return 0;
 }
 
 
