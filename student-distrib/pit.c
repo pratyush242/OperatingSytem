@@ -22,8 +22,9 @@ void pit_handler()
 {   
    
     printf("PITISWORKING \n");
+    
     send_eoi(0x0);
-    //scheduler(); /* video memory and context switch */
+    scheduler(); /* video memory and context switch */
     
     
     

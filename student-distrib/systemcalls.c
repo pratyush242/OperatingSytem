@@ -542,13 +542,7 @@ register uint32_t saved_ebp asm("ebp");
 register uint32_t saved_esp asm("esp");
 
 pcb_t* curPCB = pcb_adress(runningTerminal.pid);
-
-
-curPCB->saved_ebp = saved_ebp;
-curPCB->saved_esp = saved_esp;
-
-
-
+ 
 int next_terminal_id = (runningTerminal.id)+1;
 if(next_terminal_id > 2){
     runningTerminal = multi_terminal[0];
@@ -556,6 +550,13 @@ if(next_terminal_id > 2){
 else{
     runningTerminal = multi_terminal[next_terminal_id];
 }
+remap_vidmem(runningTerminal.id);
+curPCB->saved_ebp = saved_ebp;
+curPCB->saved_esp = saved_esp;
+
+
+
+
 pcb_t* PCB = pcb_adress(runningTerminal.pid);
 
 sysCallPaging(runningTerminal.pid);
