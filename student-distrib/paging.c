@@ -128,6 +128,36 @@ void sysCallPaging(uint32_t pid){
     
     flush();
 }
+int * curr_term = 0;
+int * present_term = 0;
+unsigned int OFF = 0 ;     //have to calculate
+void remap_vidmem()
+{
+    PageDir[35].FourKB.Present = 1;    
+    PageDir[35].FourKB.ReadWrite = 1;
+    PageDir[35].FourKB.UserSupervisor = 1;    
+    PageDir[35].FourKB.PageBaseAddr   = (unsigned int)video_page_table >> 12;
+
+    if(curr_term == present_term){
+        PageTable[0xB8].Present = 1;
+        PageTable[0XB8].ReadWrite= 1;
+        PageTable[0XB8].UserSupervisor = 1;
+        PageTable[0XB8].PageBaseAddr = (unsigned int)video_page_table >> 12;   
+    }
+        
+    else{
+        PageTable[0xB8].Present = 1;
+        PageTable[0XB8].ReadWrite= 1;
+        PageTable[0XB8].UserSupervisor = 1;
+        PageTable[0XB8].PageBaseAddr = (unsigned int)video_page_table >> 12+OFF;  
+    
+    }
+
+    
+    flush();
+
+    return;
+}
 
 
 
