@@ -380,6 +380,9 @@ int32_t system_execute(const uint8_t* command){
         return -1;
     }
 
+    multi_terminal[curr_terminal_ID].pid = pid;
+
+    
     /* SET UP PAGING */
     sysCallPaging(pid);
     /* loading file */

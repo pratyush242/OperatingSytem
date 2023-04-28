@@ -18,21 +18,21 @@ void initializeTable() {
     int i; 
     //1024 is the size of the table
     for (i=0; i < 1024; i++) {
-       PageTable[i].Present = 0;
-       PageTable[i].ReadWrite = 1;
-       PageTable[i].UserSupervisor = 0;
-       PageTable[i].WriteThrough= 0;
-       PageTable[i].CacheDisabled = 0;
-       PageTable[i].Accessed = 0;
-       PageTable[i].Dirty= 0;
-       PageTable[i].PageTableAttr = 0;
-       PageTable[i].GlobalPage = 1;
-       PageTable[i].ProgUse = 0;
-       PageTable[i].PageBaseAddr = 0x2;
+       video_page_table[i].Present = 0;
+       video_page_table[i].ReadWrite = 1;
+       video_page_table[i].UserSupervisor = 0;
+       video_page_table[i].WriteThrough= 0;
+       video_page_table[i].CacheDisabled = 0;
+       video_page_table[i].Accessed = 0;
+       video_page_table[i].Dirty= 0;
+       video_page_table[i].PageTableAttr = 0;
+       video_page_table[i].GlobalPage = 1;
+       video_page_table[i].ProgUse = 0;
+       video_page_table[i].PageBaseAddr = 0x2;
     }
     //0xB8 is the virtual and physical address of video memory
-    PageTable[0xB8].PageBaseAddr = 0xB8;
-    PageTable[0xB8].Present = 1;
+    video_page_table[0xB8].PageBaseAddr = 0xB8;
+    video_page_table[0xB8].Present = 1;
 
 }
 
@@ -77,7 +77,7 @@ void initializeDirectory(){
     PageDir[0].FourKB.ProgUse = 0;
 
     //shift by 12 because the last 12 bits don't matter
-    PageDir[0].FourKB.PageBaseAddr = (uint32_t)PageTable>>12;
+    PageDir[0].FourKB.PageBaseAddr = (uint32_t)video_page_table>>12;
 
 
 
@@ -136,32 +136,50 @@ int curr_term = 0; //have to use runningTerminal instead of this
 
 
 unsigned int OFF = 0 ;     //have to calculate
-void remap_vidmem()
-{
-    PageDir[35].FourKB.Present = 1;    
-    PageDir[35].FourKB.ReadWrite = 1;
-    PageDir[35].FourKB.UserSupervisor = 1;    
-    PageDir[35].FourKB.PageBaseAddr   = (unsigned int)video_page_table >> 12;
 
-    if(curr_term == run_term){
-        PageTable[0xB8].Present = 1;
-        PageTable[0XB8].ReadWrite= 1;
-        PageTable[0XB8].UserSupervisor = 1;
-        PageTable[0XB8].PageBaseAddr = (unsigned int)video_page_table >> 12;   
-    }
-        
-    else{
-        PageTable[0xB8].Present = 1;
-        PageTable[0XB8].ReadWrite= 1;
-        PageTable[0XB8].UserSupervisor = 1;
-        PageTable[0XB8].PageBaseAddr = (unsigned int)video_page_table >> 12+OFF;  
-    
-    }
 
-    
+
+void init_vidmem(){
+    PageDir[0].FourKB.Present = 1;    // present
+    PageDir[0].FourKB.ReadWrite = 1;
+    PageDir[0].FourKB.UserSupervisor = 1;    // user mode
+    PageDir[0].FourKB.PageBaseAddr   = (unsigned int)video_page_table >> 12;
+
+
+
+    video_page_table[0xB9].Present = 1;    
+    video_page_table[0xB9].ReadWrite = 1;  
+    video_page_table[0xB9].UserSupervisor = 1;
+    video_page_table[0xB9].PageBaseAddr = 0xB9;
+
+
+
+    video_page_table[0xBA].Present = 1;    
+    video_page_table[0xBA].ReadWrite = 1;  
+    video_page_table[0xBA].UserSupervisor = 1;
+    video_page_table[0xBA].PageBaseAddr = 0xBA;
+
+
+    video_page_table[0xBB].Present = 1;    
+    video_page_table[0xBB].ReadWrite = 1;  
+    video_page_table[0xBB].UserSupervisor = 1;
+    video_page_table[0xBB].PageBaseAddr = 0xBB;
+
+
+
     flush();
+}
 
-    return;
+
+void remap_vidmem(uint32_t nextTerminalID)
+{
+
+//copy current video memory to current terminal's video memory
+memcpy( (char*)(0xB9000 + curr_terminal_ID * 4*1024 ), (char*)0xB8000, 4*1024);
+
+//copy next terminal's video memory to video memory
+memcpy( (char*)0xB8000, (char*)(0xB9000 + nextTerminalID * 4*1024 ), 4*1024);
+
 }
 
 

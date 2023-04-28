@@ -87,6 +87,7 @@ int32_t terminal_close(int32_t fd){
  */
 int32_t terminal_init()
 {
+    init_vidmem();
     int i,j;
     for(i = 0; i < 3; i++){
         // set inital values of multiterminal 
@@ -98,7 +99,11 @@ int32_t terminal_init()
         for(j = 0; j < 128; j++)
             multi_terminal[i].terminal_buffer[j] = '\0';
     }
+    curr_terminal_ID = 0;
+    system_execute((uint8_t*)"shell");
     runningTerminal = multi_terminal[0];
+    
+  
 }
 int32_t terminal_switch(uint32_t terminal_ID)
 {
@@ -111,14 +116,18 @@ int32_t terminal_switch(uint32_t terminal_ID)
     }
     // save terminal  
     terminal_save(curr_terminal_ID);
+    remap_vidmem(terminal_ID);
     // restore terminal  
     terminal_return(terminal_ID);
     //it is the new terminal, run shell for this terminal 
+    
     if(multi_terminal[terminal_ID].pid == -1){
+        send_eoi(KEYBOARD_IRQ);
         system_execute((uint8_t*)"shell");
     }
     sti();
 
+    
     return 0;
 }
 
