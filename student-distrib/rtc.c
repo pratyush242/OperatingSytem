@@ -4,6 +4,14 @@
 //void test_interrupts();
 
 
+volatile int rtc_interrupt;
+
+volatile int rtc_count = 512;
+
+volatile int rtc_max = 512;
+
+
+
 /* rtc_init
  * 
  * initializes rtc
@@ -17,6 +25,10 @@ void rtc_init()
     outb(0x8B, 0x70);		// set the index again (a read will reset the index to register D)
     outb(prev  | 0x40, 0x71);	// write the previous value ORed with 0x40. This turns on bit 6 of register B
 
+    rtc_max = 512;
+
+
+
 
 
     
@@ -24,6 +36,7 @@ void rtc_init()
 
     enable_irq(RTC_IRQ);
     enable_irq(SLAVE_IRQ); 
+    rtc_change_frequency(1024);
     sti();
     
 }
@@ -38,7 +51,13 @@ void rtc_handler() {
     outb(0x0C, 0x70); // select register C
     inb(0x71); // just throw away contents
 
-    rtc_interrupt = 1;
+    rtc_count--;
+    if(rtc_count == 0){
+        rtc_interrupt = 1;
+        rtc_count = rtc_max;
+    }
+
+    //rtc_interrupt = 1;
     // end interrupt
     send_eoi(RTC_IRQ);
     
@@ -55,11 +74,13 @@ void rtc_handler() {
 //initializes RTC frequency to 2HZ, return 0
 int32_t rtc_open (const char* filename) {
     // rtc_change_frequency(2);             // set frequency to 2 mod
-    int rate = 0x0F;			// rate must be above 2 and not over 15
-    outb(0x8A, 0x70);		// set index to register A, disable NMI
-    char prev = inb(0x71);	// get initial value of register A
-    outb(0x8A, 0x70);		// reset index to A
-    outb((prev & 0xF0) | rate, 0x71); //write only our rate to A. Note, rate is the bottom 4 bits.
+    // int rate = 0x0F;			// rate must be above 2 and not over 15
+    // outb(0x8A, 0x70);		// set index to register A, disable NMI
+    // char prev = inb(0x71);	// get initial value of register A
+    // outb(0x8A, 0x70);		// reset index to A
+    // outb((prev & 0xF0) | rate, 0x71); //write only our rate to A. Note, rate is the bottom 4 bits.
+
+    rtc_max = 512;
     
     return 0;
 }
@@ -85,16 +106,22 @@ int32_t rtc_read(int32_t fd, void* buf, int32_t nbytes) {
 
 //RTC write() must be able to change frequency, return 0 or -1
 int32_t rtc_write (int32_t fd, void* buf, int32_t nbytes) {
+    int32_t frequency;
     
     if (buf == NULL) {                      // if buffer is null write will fail
         return -1;
     }
     
+    frequency = *((int32_t*) buf);
+    //rtc_change_frequency(*((int32_t*) buf));  // change frequency but first convert input to int32_t
+    // if(rtc_change_frequency(*((int32_t*) buf)) == -1){
+    //     return -1;
+    // }
 
-    rtc_change_frequency(*((int32_t*) buf));  // change frequency but first convert input to int32_t
-    if(rtc_change_frequency(*((int32_t*) buf)) == -1){
-        return -1;
-    }
+
+    cli();
+    rtc_max = 1024/frequency;
+    sti();
     return 0;                           // else return success
     
 
