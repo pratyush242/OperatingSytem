@@ -174,9 +174,9 @@ void entry(unsigned long magic, unsigned long addr) {
      * without showing you any output */
     /*printf("Enabling Interrupts\n");
     sti();*/
-// clear();
-// terminal_reset();
-// system_execute((uint8_t*)"shell");
+clear();
+terminal_reset();
+system_execute((uint8_t*)"shell");
 #ifdef RUN_TESTS
     /* Run tests */
     launch_tests();

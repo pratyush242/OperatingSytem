@@ -4,10 +4,16 @@
 #define progImage 0x08048000
 #define mb_8 0x800000
 #define kb_8 0x2000
-#define start 0x08c00000
+#define start 0xB8000
 #define PHYS_MEM_BASE 0x08400000
 #define PHYS_MEM_TOP 0x08000000
 #define VID_MEM 0xB8000
+
+
+
+
+
+
 
 
 static fops_table_t fopsarray[6];
@@ -503,16 +509,16 @@ int32_t vidmap(uint8_t** screen_start)
     *screen_start = (uint8_t*)start;
 
     /* initialize the VIDMAP page */
-    PageDir[VIDMAP_OFFSET].FourKB.Present = 1;    // present
-    PageDir[VIDMAP_OFFSET].FourKB.ReadWrite = 1;
-    PageDir[VIDMAP_OFFSET].FourKB.UserSupervisor = 1;    // user mode
-    PageDir[VIDMAP_OFFSET].FourKB.PageBaseAddr   = (unsigned int)video_page_table >> 12;
+    PageDir[0].FourKB.Present = 1;    // present
+    PageDir[0].FourKB.ReadWrite = 1;
+    PageDir[0].FourKB.UserSupervisor = 1;    // user mode
+    PageDir[0].FourKB.PageBaseAddr   = (unsigned int)video_page_table >> 12;
 
 
-    video_page_table[0].Present = 1;    
-    video_page_table[0].ReadWrite = 1;  
-    video_page_table[0].UserSupervisor = 1;
-    video_page_table[0].PageBaseAddr = VID_MEM >> 12;
+    video_page_table[0xB8].Present = 1;    
+    video_page_table[0xB8].ReadWrite = 1;  
+    video_page_table[0xB8].UserSupervisor = 1;
+    video_page_table[0xB8].PageBaseAddr = VID_MEM >> 12;
     flush();
     return 0;
 }

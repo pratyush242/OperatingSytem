@@ -95,13 +95,14 @@ int32_t terminal_init()
         multi_terminal[i].x = 0;
         multi_terminal[i].y = 0;
         // init terminal buffer
-        for(j = 0; i < 128; j++)
+        for(j = 0; j < 128; j++)
             multi_terminal[i].terminal_buffer[j] = '\0';
     }
     runningTerminal = multi_terminal[0];
 }
 int32_t terminal_switch(uint32_t terminal_ID)
 {
+    printf("we lit: %d \n", terminal_ID);
     cli();
     // if it is the current terminal, do nothing 
     if(curr_terminal_ID == terminal_ID){
@@ -114,9 +115,7 @@ int32_t terminal_switch(uint32_t terminal_ID)
     terminal_return(terminal_ID);
     //it is the new terminal, run shell for this terminal 
     sti();
-    if(multi_terminal[terminal_ID].pid == -1){
-        system_execute((uint8_t*)"shell");
-    }
+
     return 0;
 }
 
