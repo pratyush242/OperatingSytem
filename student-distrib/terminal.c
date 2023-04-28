@@ -102,7 +102,7 @@ int32_t terminal_init()
 }
 int32_t terminal_switch(uint32_t terminal_ID)
 {
-    printf("we lit: %d \n", terminal_ID);
+   
     cli();
     // if it is the current terminal, do nothing 
     if(curr_terminal_ID == terminal_ID){
@@ -114,6 +114,9 @@ int32_t terminal_switch(uint32_t terminal_ID)
     // restore terminal  
     terminal_return(terminal_ID);
     //it is the new terminal, run shell for this terminal 
+    if(multi_terminal[terminal_ID].pid == -1){
+        system_execute((uint8_t*)"shell");
+    }
     sti();
 
     return 0;
