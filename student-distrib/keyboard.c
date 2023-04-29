@@ -1,6 +1,5 @@
 #include "keyboard.h"
-#include "lib.h"
-#include "i8259.h"
+
 
 static unsigned int caps_flag = 0;
 static unsigned int shift_flag = 0;
@@ -143,7 +142,9 @@ void handler_keyboard(){
     unsigned char keydata = 0;
     int i;
     // mask interrupt
-    cli();
+    send_eoi(1); //enable the pic interupt
+    terminal_t* current_terminal = &multi_terminal[curr_terminal_ID];
+    volatile uint8_t* key_buffer = current_terminal->terminal_buffer;
     // wait for interrupt
     while(1){
         if (inb(EOI)){
@@ -174,33 +175,36 @@ void handler_keyboard(){
         alt_flag = 0;
     }  
     else if(keydata == 0x1C){ //enter pressed
-        key_buffer[keybuffer_ptr] = '\n';
-        keybuffer_ptr = keybuffer_ptr + 1; 
-        read_the_terminal = 1;
+        key_buffer[current_terminal->terminal_buffer_ptr] = '\n';
+        (current_terminal->terminal_buffer_ptr) = (current_terminal->terminal_buffer_ptr) + 1; 
+        current_terminal->read_the_terminal = 1;
         terminal_newline();
     }  
     else if(keydata == 0x0E){ //backspace
-        if (keybuffer_ptr>0){
-            keybuffer_ptr = keybuffer_ptr - 1 ;
-            key_buffer[keybuffer_ptr] = ' ';
+        if (current_terminal->terminal_buffer_ptr>0){
+            current_terminal->terminal_buffer_ptr = current_terminal->terminal_buffer_ptr - 1 ;
+            key_buffer[current_terminal->terminal_buffer_ptr] = ' ';
             terminal_backspace();
         }
     } 
     else if(keydata == 0x0F){ //tab
         for (i=0; i<4; i++){
-            key_buffer[keybuffer_ptr] = ' ';
-            keybuffer_ptr = keybuffer_ptr + 1; 
+            key_buffer[current_terminal->terminal_buffer_ptr] = ' ';
+            current_terminal->terminal_buffer_ptr = current_terminal->terminal_buffer_ptr + 1; 
             putc(' ');
         }
     } 
     else{
         if(alt_flag){
-            if (keydata == 0x3B)
+            if (keydata == 0x3B){
                 terminal_switch(0);
-            else if (keydata == 0x3C)
+            }
+            else if (keydata == 0x3C){
                 terminal_switch(1);
-            else if (keydata == 0x3D)
+            }
+            else if (keydata == 0x3D){
                 terminal_switch(2);
+            }
         }
         if(keydata<128){
             unsigned char keyprint;
@@ -219,7 +223,7 @@ void handler_keyboard(){
             }       
             //print out the keys 
 
-            if (keybuffer_ptr < 128){
+            if (current_terminal->terminal_buffer_ptr < 128){
                 if (control_flag){
                     if (keyprint == 'l' || keyprint == 'L'){
                         terminal_reset();
@@ -227,8 +231,8 @@ void handler_keyboard(){
                     }
                 }
                 if(keyprint != 0){
-                    key_buffer[keybuffer_ptr] = keyprint;
-                    keybuffer_ptr += 1;
+                    key_buffer[current_terminal->terminal_buffer_ptr] = keyprint;
+                    current_terminal->terminal_buffer_ptr += 1;
                     putc(keyprint);                    
                 }
             }
@@ -241,11 +245,13 @@ void handler_keyboard(){
 }
 
 void clear_buffer(){
+    terminal_t* current_terminal = &multi_terminal[curr_terminal_ID];
+    volatile uint8_t* key_buffer = current_terminal->terminal_buffer;
     int i;
     for (i=0; i<127; i++){
         key_buffer[i] = 0;  
     }  
-    keybuffer_ptr = 0;
-	read_the_terminal = 0;
+    current_terminal->terminal_buffer_ptr = 0;
+	current_terminal->read_the_terminal = 0;
     return;
 }

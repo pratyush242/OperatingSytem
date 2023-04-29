@@ -16,15 +16,15 @@ int32_t terminal_read(int32_t fd, void* buf, int32_t nbytes){
     while(1)
     {
         sti();
-        if (read_the_terminal == 1){
+        if (multi_terminal[curr_terminal_ID].read_the_terminal == 1){
             cli();
             break;
         }   
     }
     for (i = 0; (i < nbytes) && (i < 127); i++)
     {
-        ((char*)buf)[i] = key_buffer[i];
-        if (key_buffer[i] == '\n')
+        ((char*)buf)[i] = multi_terminal[curr_terminal_ID].terminal_buffer[i];
+        if (multi_terminal[curr_terminal_ID].terminal_buffer[i] == '\n')
         {
             k = 1;
             ((char*)buf)[i] = '\0';
@@ -95,6 +95,8 @@ int32_t terminal_init()
         multi_terminal[i].pid = -1;
         multi_terminal[i].x = 0;
         multi_terminal[i].y = 0;
+
+
         // init terminal buffer
         for(j = 0; j < 128; j++)
             multi_terminal[i].terminal_buffer[j] = '\0';
@@ -103,10 +105,14 @@ int32_t terminal_init()
     
     runningTerminal = &(multi_terminal[0]);
 
-    
-   
+    multi_terminal[0].vidmem = 0xB9000;   
+    multi_terminal[1].vidmem = 0xBA000; 
+    multi_terminal[2].vidmem = 0xBB000; 
+
+    return 0;
   
 }
+
 int32_t terminal_switch(uint32_t terminal_ID)
 {
    
@@ -153,15 +159,5 @@ int32_t terminal_return(uint32_t terminal_ID)
     // restore current cursor position 
     set_xy(multi_terminal[terminal_ID].x, multi_terminal[terminal_ID].y);
 
-    return 0;
-}
-
-
-int32_t launch_first_terminal(){
-    /* get init terminal info */
-    terminal_return(0);
-    sti();
-    system_execute((uint8_t*)"shell");
-    /* never reach here */
     return 0;
 }

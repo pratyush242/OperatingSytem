@@ -25,7 +25,9 @@ typedef struct terminal_t{
     uint32_t x; //for cursor
     uint32_t y; //for cursor
     uint32_t id; //to access the terminal id of the current terminal
-
+    uint32_t vidmem;
+    volatile uint8_t terminal_buffer_ptr;
+    volatile uint8_t read_the_terminal;
 } terminal_t;
 
 terminal_t multi_terminal[3];

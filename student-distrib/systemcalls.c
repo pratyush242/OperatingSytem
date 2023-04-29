@@ -597,8 +597,6 @@ pid = runningTerminal->pid;
         : "a"(PCB->saved_esp), "b"(PCB->saved_ebp)
     );
 //sti();
-return 0;
 }
 
 
- 
