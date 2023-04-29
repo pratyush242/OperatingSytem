@@ -2,7 +2,7 @@
  * vim:ts=4 noexpandtab */
 
 #include "lib.h"
-
+#include "terminal.h"
 #define VIDEO       0xB8000
 #define NUM_COLS    80
 #define NUM_ROWS    25
@@ -10,13 +10,21 @@
 
 static int screen_x;
 static int screen_y;
-static char* video_mem = (char *)VIDEO;
+
 
 /* void clear(void);
  * Inputs: void
  * Return Value: none
  * Function: Clears video memory */
 void clear(void) {
+    
+    char* video_mem;
+    if(curr_terminal_ID==-1){
+        video_mem = (char*)0xB8000;
+    }
+    else{
+    video_mem =(char*) (multi_terminal[curr_terminal_ID].vidmem);
+    }
     int32_t i;
     for (i = 0; i < NUM_ROWS * NUM_COLS; i++) {
         *(uint8_t *)(video_mem + (i << 1)) = ' ';
@@ -168,6 +176,13 @@ int32_t puts(int8_t* s) {
  * Return Value: void
  *  Function: Output a character to the console */
 void putc(uint8_t c) {
+     char* video_mem;
+    if(curr_terminal_ID==-1){
+        video_mem = (char*)0xB8000;
+    }
+    else{
+    video_mem =(char*) (multi_terminal[curr_terminal_ID].vidmem);
+    }
     if(c == '\n' || c == '\r') {
         terminal_newline();
         return;
@@ -476,6 +491,13 @@ int8_t* strncpy(int8_t* dest, const int8_t* src, uint32_t n) {
  * Return Value: void
  * Function: increments video memory. To be used to test rtc */
 void test_interrupts(void) {
+     char* video_mem;
+    if(curr_terminal_ID==-1){
+        video_mem = (char*)0xB8000;
+    }
+    else{
+    video_mem =(char*) (multi_terminal[curr_terminal_ID].vidmem);
+    }
     int32_t i;
     for (i = 0; i < NUM_ROWS * NUM_COLS; i++) {
         video_mem[i << 1]++;
@@ -513,6 +535,13 @@ void terminal_newline(){
  * Function: allows us to backspace */
 
 void terminal_backspace(){
+      char* video_mem;
+    if(curr_terminal_ID==-1){
+        video_mem = (char*)0xB8000;
+    }
+    else{
+    video_mem =(char*) (multi_terminal[curr_terminal_ID].vidmem);
+    }
     if(screen_x == 0 && screen_y == 0)
         return;
     else if(screen_x == 0) //when go back to the previous line
@@ -542,6 +571,13 @@ void terminal_backspace(){
  * Function: allows us to scroll */
 
 void terminal_scroll(){
+     char* video_mem;
+    if(curr_terminal_ID==-1){
+        video_mem = (char*)0xB8000;
+    }
+    else{
+    video_mem =(char*) (multi_terminal[curr_terminal_ID].vidmem);
+    }
     // check if at bottom of screen 
     if (screen_y == NUM_ROWS){
         int i,j;

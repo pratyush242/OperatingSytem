@@ -95,6 +95,8 @@ int32_t terminal_init()
         multi_terminal[i].pid = -1;
         multi_terminal[i].x = 0;
         multi_terminal[i].y = 0;
+
+
         // init terminal buffer
         for(j = 0; j < 128; j++)
             multi_terminal[i].terminal_buffer[j] = '\0';
@@ -103,14 +105,16 @@ int32_t terminal_init()
     
     runningTerminal = &(multi_terminal[0]);
 
-    
-   
+    multi_terminal[0].vidmem = 0xB9000;   
+    multi_terminal[1].vidmem = 0xBA000; 
+    multi_terminal[2].vidmem = 0xBB000; 
   
 }
 int32_t terminal_switch(uint32_t terminal_ID)
 {
+   //printf("BUFF: %s \n", multi_terminal[terminal_ID].terminal_buffer);
+
    
-    cli();
     // if it is the current terminal, do nothing 
     if(curr_terminal_ID == terminal_ID){
         sti();

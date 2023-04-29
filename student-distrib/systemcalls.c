@@ -538,6 +538,13 @@ int32_t sigreturn(void){
 
 void scheduler(){
 
+
+
+
+
+
+
+
 if(runningTerminal->pid==-1){
 
 return;
@@ -565,22 +572,22 @@ else{
 }
 //after this runningTerminal is the terminal for the next process
 
-//remap_vidmem(runningTerminal->id);
+
 
 
 
 pcb_t* PCB = pcb_adress(runningTerminal->pid);
 
-sysCallPaging(runningTerminal->pid);
 
-sch_vidmem(runningTerminal->id);
 
-file_descriptor_array = PCB->file_descriptor;
+sch_vidmem();
+
+//file_descriptor_array = PCB->file_descriptor;
 
 tss.ss0 = KERNEL_DS;
 tss.esp0 = (mb_8 - ((runningTerminal->pid) * kb_8) - 4); 
-sti();
-send_eoi(0x0);
+
+
 pid = runningTerminal->pid;
     asm volatile ("                 \n\
         movl    %0, %%esp           \n\
@@ -589,8 +596,9 @@ pid = runningTerminal->pid;
         :
         : "a"(PCB->saved_esp), "b"(PCB->saved_ebp)
     );
-
+//sti();
 return 0;
 }
 
 
+ 

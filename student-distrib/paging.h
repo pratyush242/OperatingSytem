@@ -16,7 +16,7 @@ void remap_vidmem(uint32_t nextTerminalID);
 void initializeDirectory();
 extern void sysCallPaging(uint32_t pid);
 extern void enablePaging();
-void sch_vidmem(uint32_t currentTerminal);
+void sch_vidmem();
 extern void loadDirectory(PageDirectoryEntry* pg_dir);
 extern void flush();
 #endif
