@@ -20,7 +20,7 @@ extern int32_t launch_first_terminal();
 
 typedef struct terminal_t{
 
-    uint32_t pid;
+    int32_t pid;
     volatile uint8_t terminal_buffer[128];
     uint32_t x; //for cursor
     uint32_t y; //for cursor
@@ -31,7 +31,7 @@ typedef struct terminal_t{
 terminal_t multi_terminal[3];
 uint32_t curr_terminal_ID;
 
-terminal_t runningTerminal;
+terminal_t* runningTerminal;
 
 #endif
 

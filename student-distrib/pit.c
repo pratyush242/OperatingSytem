@@ -20,13 +20,50 @@ void pit_init()
 
 void pit_handler()
 {   
-   
-    printf("PITISWORKING \n");
+     cli();
+    //printf("PITISWORKING \n");
+
+     if(multi_terminal[0].pid == -1){
+     
+     terminal_switch(0);
+     runningTerminal =  &(multi_terminal[0]);
+     sti();
+     send_eoi(0x0);
+     system_execute((uint8_t*)"shell");
+    
+    
+    return;
+
+    }
+
+    else if(multi_terminal[1].pid == -1){
+     terminal_switch(1);
+     runningTerminal =  &(multi_terminal[1]);
+     sti();
+     send_eoi(0x0);
+     system_execute((uint8_t*)"shell");
+    
+    return;
+
+    }
+       else if(multi_terminal[2].pid == -1){
+     terminal_switch(2);
+     runningTerminal =  &(multi_terminal[2]);
+     sti();
+     send_eoi(0x0);
+     system_execute((uint8_t*)"shell");
+    
+    return;
+
+    }
+
+    
+    
+  
+    
+    //scheduler(); /* video memory and context switch */
+    sti();
     
     send_eoi(0x0);
-    scheduler(); /* video memory and context switch */
-    
-    
-    
    
 }

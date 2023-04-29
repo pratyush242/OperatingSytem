@@ -2,7 +2,7 @@
 #define _PIT_H
 
 
-
+#include "terminal.h"
 
 /*Constants to set the PIT frequency*/
 #define PIT_HZ        50       // frequency in Hz

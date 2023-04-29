@@ -99,10 +99,12 @@ int32_t terminal_init()
         for(j = 0; j < 128; j++)
             multi_terminal[i].terminal_buffer[j] = '\0';
     }
-    curr_terminal_ID = 0;
+    curr_terminal_ID = -1;
     
-    runningTerminal = multi_terminal[0];
+    runningTerminal = &(multi_terminal[0]);
+
     
+   
   
 }
 int32_t terminal_switch(uint32_t terminal_ID)
@@ -121,10 +123,7 @@ int32_t terminal_switch(uint32_t terminal_ID)
     terminal_return(terminal_ID);
     //it is the new terminal, run shell for this terminal 
     
-    if(multi_terminal[terminal_ID].pid == -1){
-        send_eoi(KEYBOARD_IRQ);
-        system_execute((uint8_t*)"shell");
-    }
+   
     sti();
 
     

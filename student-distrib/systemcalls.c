@@ -286,6 +286,7 @@ void file_op_table_init()
 int32_t system_execute(const uint8_t* command){
     //printf("1");
     //uint8_t argument[10];
+   
     if(command == NULL){
         return -1;
     } 
@@ -380,9 +381,8 @@ int32_t system_execute(const uint8_t* command){
         return -1;
     }
 
-    runningTerminal.pid = pid;
+    runningTerminal->pid = pid;
 
-    
     /* SET UP PAGING */
     sysCallPaging(pid);
     /* loading file */
@@ -537,40 +537,54 @@ int32_t sigreturn(void){
 
 void scheduler(){
 
+if(runningTerminal->pid==-1){
+
+return;
+}
 
 register uint32_t saved_ebp asm("ebp");
 register uint32_t saved_esp asm("esp");
-if(runningTerminal.pid == -1){
-    system_execute((uint8_t*)"shell");
-}
-pcb_t* curPCB = pcb_adress(runningTerminal.pid);
- 
-int next_terminal_id = (runningTerminal.id)+1;
-if(next_terminal_id > 2){
-    runningTerminal = multi_terminal[0];
+
+
+pcb_t* prevPCB = pcb_adress(runningTerminal->pid);
+prevPCB->saved_ebp = saved_ebp;
+prevPCB->saved_esp = saved_esp;
+
+
+int next_terminal_id = (runningTerminal->id)+1;
+
+
+
+if(next_terminal_id >2){
+    if((&(multi_terminal[0]))->pid == -1)
+        return;
+    runningTerminal = &(multi_terminal[0]);
 }
 else{
-    runningTerminal = multi_terminal[next_terminal_id];
+    if((&(multi_terminal[next_terminal_id]))->pid == -1)
+        return;
+    runningTerminal = &(multi_terminal[next_terminal_id]);
 }
-remap_vidmem(runningTerminal.id);
-curPCB->saved_ebp = saved_ebp;
-curPCB->saved_esp = saved_esp;
+
+
+remap_vidmem(runningTerminal->id);
 
 
 
 
-pcb_t* PCB = pcb_adress(runningTerminal.pid);
 
-sysCallPaging(runningTerminal.pid);
+pcb_t* PCB = pcb_adress(runningTerminal->pid);
+
+sysCallPaging(runningTerminal->pid);
 
 
 
 file_descriptor_array = PCB->file_descriptor;
 
 tss.ss0 = KERNEL_DS;
-tss.esp0 = (mb_8 - ((runningTerminal.pid) * kb_8) - 4); 
+tss.esp0 = (mb_8 - ((runningTerminal->pid) * kb_8) - 4); 
 
-
+pid = runningTerminal->pid;
     asm volatile ("                 \n\
         movl    %0, %%esp           \n\
         movl    %1, %%ebp           \n\

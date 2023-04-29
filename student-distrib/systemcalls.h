@@ -58,11 +58,11 @@ void scheduler();
 file_descriptor_t* file_descriptor_array;
 
 typedef struct pcb_t {
-    uint32_t pid;    // file operator table 
+    int32_t pid;    // file operator table 
     file_descriptor_t file_descriptor[8];   // inode index 
     uint32_t saved_ebp; 
     uint32_t saved_esp;   
-    uint32_t parent_id;
+    int32_t parent_id;
     uint32_t ss0;   
     uint32_t esp0;
     uint8_t arg[128];
