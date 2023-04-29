@@ -61,7 +61,7 @@ void pit_handler()
     
   
     
-    //scheduler(); /* video memory and context switch */
+    scheduler(); /* video memory and context switch */
     sti();
     
     send_eoi(0x0);

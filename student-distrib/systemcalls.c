@@ -168,13 +168,14 @@ int32_t halt(int32_t status){
     pidArray[pid] = 0;
     pid = PCB->parent_id;
     
+    multi_terminal[curr_terminal_ID].pid = pid;
     
     if (pid == -1) {
         system_execute((uint8_t *) "shell");
         return -1;
     }
     
-    
+
     PCB_parent = pcb_adress(pid);
    
 
@@ -556,20 +557,15 @@ int next_terminal_id = (runningTerminal->id)+1;
 
 
 if(next_terminal_id >2){
-    if((&(multi_terminal[0]))->pid == -1)
-        return;
     runningTerminal = &(multi_terminal[0]);
 }
 else{
-    if((&(multi_terminal[next_terminal_id]))->pid == -1)
-        return;
+   
     runningTerminal = &(multi_terminal[next_terminal_id]);
 }
+//after this runningTerminal is the terminal for the next process
 
-
-remap_vidmem(runningTerminal->id);
-
-
+//remap_vidmem(runningTerminal->id);
 
 
 
@@ -577,13 +573,14 @@ pcb_t* PCB = pcb_adress(runningTerminal->pid);
 
 sysCallPaging(runningTerminal->pid);
 
-
+sch_vidmem(runningTerminal->id);
 
 file_descriptor_array = PCB->file_descriptor;
 
 tss.ss0 = KERNEL_DS;
 tss.esp0 = (mb_8 - ((runningTerminal->pid) * kb_8) - 4); 
-
+sti();
+send_eoi(0x0);
 pid = runningTerminal->pid;
     asm volatile ("                 \n\
         movl    %0, %%esp           \n\

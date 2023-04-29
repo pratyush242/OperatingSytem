@@ -180,7 +180,29 @@ memcpy( (char*)(0xB9000 + curr_terminal_ID * 4*1024 ), (char*)0xB8000, 4*1024);
 //copy next terminal's video memory to video memory
 memcpy( (char*)0xB8000, (char*)(0xB9000 + nextTerminalID * 4*1024 ), 4*1024);
 
+
+
+
 }
 
 
+void sch_vidmem(uint32_t currentTerminal){
 
+
+
+uint32_t currentIndex = (0xB9000 + currentTerminal * 4*1024) >> 12;
+
+
+if(currentTerminal != ((*runningTerminal).id)){
+ video_page_table[0xB8].PageBaseAddr  = currentIndex;
+
+}
+else{
+
+video_page_table[0xB8].PageBaseAddr = 0xB8;
+}
+
+return;
+
+
+}
