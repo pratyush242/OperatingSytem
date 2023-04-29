@@ -34,6 +34,25 @@ void initializeTable() {
     video_page_table[0xB8].PageBaseAddr = 0xB8;
     video_page_table[0xB8].Present = 1;
 
+
+ video_page_table[0xB9].Present = 1;    
+    video_page_table[0xB9].ReadWrite = 1;  
+    video_page_table[0xB9].UserSupervisor = 1;
+    video_page_table[0xB9].PageBaseAddr = 0xB9;
+
+
+
+    video_page_table[0xBA].Present = 1;    
+    video_page_table[0xBA].ReadWrite = 1;  
+    video_page_table[0xBA].UserSupervisor = 1;
+    video_page_table[0xBA].PageBaseAddr = 0xBA;
+
+
+    video_page_table[0xBB].Present = 1;    
+    video_page_table[0xBB].ReadWrite = 1;  
+    video_page_table[0xBB].UserSupervisor = 1;
+    video_page_table[0xBB].PageBaseAddr = 0xBB;
+
 }
 
 //function to initialize directories
@@ -190,19 +209,19 @@ void sch_vidmem(){
 
 
 
-uint32_t currentIndex = (0xB9000 + curr_terminal_ID * 4*1024) >> 12;
+uint32_t currentIndex = (0xB9000 + ((*runningTerminal).id) * 4*1024) >> 12;
 
 
 if(curr_terminal_ID != ((*runningTerminal).id)){
  video_page_table[0xB8].PageBaseAddr  = currentIndex;
  
-
+flush();
 
 }
 else{
 
 video_page_table[0xB8].PageBaseAddr = 0xB8;
-
+flush();
 
 }
 
