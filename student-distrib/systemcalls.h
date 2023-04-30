@@ -50,6 +50,8 @@ void file_op_table_init();
 
 void scheduler();
 
+int set_running_terminal();
+
 
 /* struct for fops */
 

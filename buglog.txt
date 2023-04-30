@@ -71,6 +71,17 @@ We were getting this error because our function declarations were incorrect.
 17. The multiterminal skipped to terminal 3
 -> The order in which we execute shells was weird 
 
+18.  grep print out something when we does not enter arg
+-> check no argument case in get_args
+
+19. re initialized execute everytime pit handler was used
+-> we initallized everything in pit handeler which we moved to terminal switching
+
+20. page faults the 3rd time shell was called
+-> didnt flush TLB, then we flushed it 
+
+
+
 
 
 

@@ -142,8 +142,8 @@ void handler_keyboard(){
     unsigned char keydata = 0;
     int i;
     // mask interrupt
-    cli();
-    //send_eoi(1); //enable the pic interupt
+    //cli();
+    send_eoi(1); //enable the pic interupt
     terminal_t* current_terminal = &multi_terminal[curr_terminal_ID];
     volatile uint8_t* key_buffer = current_terminal->terminal_buffer;
     // wait for interrupt
@@ -240,7 +240,7 @@ void handler_keyboard(){
         }
     }
     // end interrupt
-    //send_eoi(KEYBOARD_IRQ);
+    send_eoi(KEYBOARD_IRQ);
     // enable interrupt
     sti();
 }
