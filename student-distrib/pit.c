@@ -32,7 +32,7 @@ void pit_handler()
      terminal_switch(2);
      runningTerminal =  &(multi_terminal[2]);
  sti();
-sch_vidmem();
+
      system_execute((uint8_t*)"shell");
      
     return;
@@ -44,19 +44,17 @@ sch_vidmem();
      runningTerminal =  &(multi_terminal[1]);
 sti();
 
-
-sch_vidmem();
      system_execute((uint8_t*)"shell");
      
     return;
 
     }
-    else if(multi_terminal[0].pid == -1){
+       else if(multi_terminal[0].pid == -1){
      
      terminal_switch(0);
      runningTerminal =  &(multi_terminal[0]);
 sti();
-sch_vidmem();
+
      system_execute((uint8_t*)"shell");
 
     
@@ -65,8 +63,7 @@ sch_vidmem();
     }
       
 
-    scheduler();
-    
+    //scheduler();
      /* video memory and context switch */
     
     

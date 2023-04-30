@@ -134,16 +134,8 @@ void GENERAL_PROTECTION(){
 //CHECK FOR PAGE FAULT AND PRINT PAGE FAULT
 void PAGE_FAULT(){
     cli();
-     uint32_t temp = 5;
-     asm volatile("                 \n\
-     mov  %%cr2, %0    \n\
-     "
-               : "=a"(temp)
-               :
-               : "memory");
-    printf("%x\n", temp);
+   
     printf("PAGE_FAULT \n");
-    while(1);
     halt(256);
 }
 

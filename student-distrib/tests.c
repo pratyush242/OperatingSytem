@@ -357,9 +357,9 @@ void launch_tests(){
 	//division_by_zero_test();
 	//idt_init();
 	TEST_OUTPUT("program1_paging_test()", program1_paging_test());
-	TEST_OUTPUT("program2_paging_test()", program1_paging_test());
-	TEST_OUTPUT("program3_paging_test()", program1_paging_test());
-	TEST_OUTPUT("program4_paging_test()", program1_paging_test());
+	TEST_OUTPUT("program2_paging_test()", program2_paging_test());
+	TEST_OUTPUT("program3_paging_test()", program3_paging_test());
+	TEST_OUTPUT("program4_paging_test()", program4_paging_test());
 	//TEST_OUTPUT("idt_test", idt_test());
 	//TEST_OUTPUT("read_text_file_test()", read_text_file_test());
 	//TEST_OUTPUT("read_large_file_test()", read_large_file_test());

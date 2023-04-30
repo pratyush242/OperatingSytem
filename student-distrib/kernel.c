@@ -172,7 +172,7 @@ void entry(unsigned long magic, unsigned long addr) {
 
   
 
-    pit_init();
+   pit_init();
     
     
     sti();
@@ -187,7 +187,7 @@ void entry(unsigned long magic, unsigned long addr) {
 //system_execute((uint8_t*)"shell");
 #ifdef RUN_TESTS
     /* Run tests */
-   // launch_tests();
+    //launch_tests();
 #endif
     /* Execute the first program ("shell") ... */
     
