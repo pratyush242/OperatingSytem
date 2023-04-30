@@ -63,7 +63,7 @@ sti();
     }
       
 
-    //scheduler();
+    scheduler();
      /* video memory and context switch */
     
     
