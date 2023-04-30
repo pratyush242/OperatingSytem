@@ -287,7 +287,7 @@ void file_op_table_init()
 int32_t system_execute(const uint8_t* command){
     //printf("1");
     //uint8_t argument[10];
-   
+   cli();
     if(command == NULL){
         return -1;
     } 
@@ -513,17 +513,7 @@ int32_t vidmap(uint8_t** screen_start)
     *screen_start = (uint8_t*)start;
 
     /* initialize the VIDMAP page */
-    PageDir[0].FourKB.Present = 1;    // present
-    PageDir[0].FourKB.ReadWrite = 1;
-    PageDir[0].FourKB.UserSupervisor = 1;    // user mode
-    PageDir[0].FourKB.PageBaseAddr   = (unsigned int)video_page_table >> 12;
-
-
-    video_page_table[0xB8].Present = 1;    
-    video_page_table[0xB8].ReadWrite = 1;  
-    video_page_table[0xB8].UserSupervisor = 1;
-    video_page_table[0xB8].PageBaseAddr = VID_MEM >> 12;
-    flush();
+init_vidmem(runningTerminal->id);
     return 0;
 }
 
@@ -543,11 +533,14 @@ if(runningTerminal->pid==-1){
 return;
 }
 
-register uint32_t saved_ebp asm("ebp");
-register uint32_t saved_esp asm("esp");
+
 
 
 pcb_t* prevPCB = pcb_adress(runningTerminal->pid);
+
+register uint32_t saved_ebp asm("ebp");
+register uint32_t saved_esp asm("esp");
+
 prevPCB->saved_ebp = saved_ebp;
 prevPCB->saved_esp = saved_esp;
 
@@ -565,10 +558,12 @@ else{
 }
 //after this runningTerminal is the terminal for the next process
 
+sch_vidmem();
+pid = runningTerminal->pid;
+sysCallPaging(pid);
 
-
-
-
+printf("WEAT Terminal: %d \n", runningTerminal->id);
+printf("WEAT Process: %d \n", runningTerminal->id);
 pcb_t* PCB = pcb_adress(runningTerminal->pid);
 
 
@@ -577,18 +572,20 @@ pcb_t* PCB = pcb_adress(runningTerminal->pid);
 //file_descriptor_array = PCB->file_descriptor;
 
 tss.ss0 = KERNEL_DS;
-tss.esp0 = (mb_8 - ((runningTerminal->pid) * kb_8) - 4); 
+tss.esp0 = (mb_8 - ((runningTerminal->pid) * kb_8)-4); 
 
 
-pid = runningTerminal->pid;
+
     asm volatile ("                 \n\
         movl    %0, %%esp           \n\
         movl    %1, %%ebp           \n\
+        leave          \n\
+        ret          \n\
         "
         :
         : "a"(PCB->saved_esp), "b"(PCB->saved_ebp)
     );
-//sti();
+sti();
 }
 
 

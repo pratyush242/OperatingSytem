@@ -12,19 +12,19 @@ int32_t terminal_read(int32_t fd, void* buf, int32_t nbytes){
         return 0;
     }
 
-        if(curr_terminal_ID == runningTerminal->id ){
+    //     if(curr_terminal_ID == runningTerminal->id ){
 
 
-        adjustVIDMEM(0xB8000);
+    //     adjustVIDMEM(0xB8000);
 
 
-    }
-    else{
+    // }
+    // else{
 
-    adjustVIDMEM(multi_terminal[runningTerminal->id].vidmem);
+    // adjustVIDMEM(multi_terminal[runningTerminal->id].vidmem);
 
 
-    }
+    // }
     int i;
     int j = 0;
     int k = 0; 
@@ -64,19 +64,19 @@ int32_t terminal_write(int32_t fd, void* buf, int32_t nbytes){
         return -1;
     }
 
-    if(curr_terminal_ID == runningTerminal->id ){
+    // if(curr_terminal_ID == runningTerminal->id ){
 
 
-        adjustVIDMEM(0xB8000);
+    //     adjustVIDMEM(0xB8000);
 
 
-    }
-    else{
+    // }
+    // else{
 
-    adjustVIDMEM(multi_terminal[runningTerminal->id].vidmem);
+    // adjustVIDMEM(multi_terminal[runningTerminal->id].vidmem);
 
 
-    }
+    // }
    
     int i;
     int j = 0;
@@ -149,6 +149,8 @@ int32_t terminal_switch(uint32_t terminal_ID)
    
     cli();
     // if it is the current terminal, do nothing 
+
+ 
     if(curr_terminal_ID == terminal_ID){
         sti();
         return 0;
@@ -161,6 +163,9 @@ memcpy( (char*)(0xB9000 + curr_terminal_ID * 4*1024 ), (char*)0xB8000, 4*1024);
 
 //copy next terminal's video memory to video memory
 memcpy( (char*)0xB8000, (char*)(0xB9000 + terminal_ID * 4*1024 ), 4*1024);
+
+sch_vidmem();
+
 
     // restore terminal  
     terminal_return(terminal_ID);

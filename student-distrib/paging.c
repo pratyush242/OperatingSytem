@@ -19,9 +19,9 @@ void initializeTable() {
     //1024 is the size of the table
     for (i=0; i < 1024; i++) {
        video_page_table[i].Present = 0;
-       video_page_table[i].ReadWrite = 1;
+       video_page_table[i].ReadWrite = 0;
        video_page_table[i].UserSupervisor = 0;
-       video_page_table[i].WriteThrough= 0;
+       video_page_table[i].WriteThrough= 1;
        video_page_table[i].CacheDisabled = 0;
        video_page_table[i].Accessed = 0;
        video_page_table[i].Dirty= 0;
@@ -35,22 +35,16 @@ void initializeTable() {
     video_page_table[0xB8].Present = 1;
 
 
- video_page_table[0xB9].Present = 1;    
-    video_page_table[0xB9].ReadWrite = 1;  
-    video_page_table[0xB9].UserSupervisor = 1;
+    video_page_table[0xB9].Present = 1;     
     video_page_table[0xB9].PageBaseAddr = 0xB9;
 
 
 
     video_page_table[0xBA].Present = 1;    
-    video_page_table[0xBA].ReadWrite = 1;  
-    video_page_table[0xBA].UserSupervisor = 1;
     video_page_table[0xBA].PageBaseAddr = 0xBA;
 
 
     video_page_table[0xBB].Present = 1;    
-    video_page_table[0xBB].ReadWrite = 1;  
-    video_page_table[0xBB].UserSupervisor = 1;
     video_page_table[0xBB].PageBaseAddr = 0xBB;
 
 }
@@ -67,7 +61,7 @@ void initializeDirectory(){
     //1024 is the size of the table
     for (i=0; i < 1024; i++) {
         PageDir[i].FourMB.Present = 0;
-        PageDir[i].FourMB.ReadWrite = 1;
+        PageDir[i].FourMB.ReadWrite = 0;
         PageDir[i].FourMB.UserSupervisor = 0;
         PageDir[i].FourMB.WriteThrough  = 0;
         PageDir[i].FourMB.CacheDisabled  = 0;
@@ -96,7 +90,7 @@ void initializeDirectory(){
     PageDir[0].FourKB.ProgUse = 0;
 
     //shift by 12 because the last 12 bits don't matter
-    PageDir[0].FourKB.PageBaseAddr = (uint32_t)video_page_table>>12;
+    PageDir[0].FourKB.PageBaseAddr = ((uint32_t)video_page_table)>>12;
 
 
 
@@ -138,7 +132,7 @@ void sysCallPaging(uint32_t pid){
     PageDir[32].FourMB.Accessed  = 0;
     PageDir[32].FourMB.Dirty   = 0;
     PageDir[32].FourMB.PageSize    = 1;
-    PageDir[32].FourMB.GlobalPage  = 0; //mod
+    PageDir[32].FourMB.GlobalPage  = 1; //mod
     PageDir[32].FourMB.ProgUse   = 0;
     PageDir[32].FourMB.PageTableAttr = 0;
     PageDir[32].FourMB.Reserved  = 0;
@@ -146,7 +140,8 @@ void sysCallPaging(uint32_t pid){
 
     PageDir[32].FourMB.PageBaseAddr = (0x800000 + (0x400000*pid)) >> 22;
     
-    flush();
+    loadDirectory(PageDir); 
+    enablePaging();
 }
 //terminal_t curr_term; // will have to use a curr term variable
 
@@ -158,36 +153,105 @@ unsigned int OFF = 0 ;     //have to calculate
 
 
 
-void init_vidmem(){
-    PageDir[0].FourKB.Present = 1;    // present
-    PageDir[0].FourKB.ReadWrite = 1;
-    PageDir[0].FourKB.UserSupervisor = 1;    // user mode
-    PageDir[0].FourKB.PageBaseAddr   = (unsigned int)video_page_table >> 12;
+void init_vidmem(uint32_t runTerm){
+
+
+    int i; 
+
+
+  
+    for (i=0; i < 1024; i++) {
+
+
+       video_page_table[i].WriteThrough = 0;
+
+       video_page_table[i].CacheDisabled = 0; 
+
+       video_page_table[i].Accessed = 0;
+
+       video_page_table[i].Dirty= 0; 
+
+       video_page_table[i].PageTableAttr = 0;  
+
+       video_page_table[i].GlobalPage = 0; 
+
+       video_page_table[i].ProgUse = 0;
+
+        
+       
+        if (i == 0xB8) {
+
+        video_page_table[i].UserSupervisor = 1;
+
+           video_page_table[i].ReadWrite = 1;
+
+
+           video_page_table[i].Present = 1;
+
+           
+
+            if(runTerm== curr_terminal_ID) {
+
+               video_page_table[i].PageBaseAddr = 0xB8;
+
+            }
+
+            else if(runTerm == 0) {
+
+               video_page_table[i].PageBaseAddr = 0xB9;
+
+            }
+
+            else if(runTerm == 1) {
+
+               video_page_table[i].PageBaseAddr = 0xBA;
+
+            }
+            else if(runTerm== 2) {
+
+               video_page_table[i].PageBaseAddr = 0xBB;
+
+            }
+        } 
+        else {
+
+           video_page_table[i].UserSupervisor = 0;
+
+           video_page_table[i].ReadWrite = 0;
+
+           video_page_table[i].Present = 0; 
+
+           video_page_table[i].PageBaseAddr = i; 
+
+        }
+    
+    }
 
 
 
-    video_page_table[0xB9].Present = 1;    
-    video_page_table[0xB9].ReadWrite = 1;  
-    video_page_table[0xB9].UserSupervisor = 1;
-    video_page_table[0xB9].PageBaseAddr = 0xB9;
+
+   PageDir[0].FourKB.Present = 1; 
+   PageDir[0].FourKB.ReadWrite = 1; 
+   PageDir[0].FourKB.UserSupervisor = 1;
+   PageDir[0].FourKB.WriteThrough = 0;
+   PageDir[0].FourKB.CacheDisabled = 0; 
+   PageDir[0].FourKB.Accessed= 0; 
+   PageDir[0].FourKB.PageSize  = 0;
+   PageDir[0].FourKB.GlobalPage = 0;
+   PageDir[0].FourKB.ProgUse = 0; 
+   PageDir[0].FourMB.Reserved  = 0;
+   PageDir[32].FourMB.PageTableAttr = 0;
+   PageDir[0].FourKB.PageBaseAddr = ((uint32_t)video_page_table)>>12;
 
 
+  loadDirectory(PageDir); 
+    enablePaging();
 
-    video_page_table[0xBA].Present = 1;    
-    video_page_table[0xBA].ReadWrite = 1;  
-    video_page_table[0xBA].UserSupervisor = 1;
-    video_page_table[0xBA].PageBaseAddr = 0xBA;
-
-
-    video_page_table[0xBB].Present = 1;    
-    video_page_table[0xBB].ReadWrite = 1;  
-    video_page_table[0xBB].UserSupervisor = 1;
-    video_page_table[0xBB].PageBaseAddr = 0xBB;
-
-
-
-    flush();
 }
+
+
+
+
 
 
 void remap_vidmem(uint32_t nextTerminalID)
@@ -214,13 +278,14 @@ uint32_t currentIndex = (0xB9000 + ((*runningTerminal).id) * 4*1024) >> 12;
 
 if(curr_terminal_ID != ((*runningTerminal).id)){
  video_page_table[0xB8].PageBaseAddr  = currentIndex;
- 
+ disable_irq(KEYBOARD_IRQ);
 flush();
 
 }
 else{
 
 video_page_table[0xB8].PageBaseAddr = 0xB8;
+enable_irq(KEYBOARD_IRQ);
 flush();
 
 }
