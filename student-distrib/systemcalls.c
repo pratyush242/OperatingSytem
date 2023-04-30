@@ -573,7 +573,6 @@ pcb_t* PCB = pcb_adress(runningTerminal->pid);
 
 
 
-sch_vidmem();
 
 //file_descriptor_array = PCB->file_descriptor;
 

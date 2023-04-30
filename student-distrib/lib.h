@@ -16,7 +16,7 @@ uint32_t strlen(const int8_t* s);
 void clear(void);
 void test_interrupts(void);
 
-
+void adjustVIDMEM(uint32_t new);
 //function declarations
 void terminal_reset(void);
 void terminal_newline(void);

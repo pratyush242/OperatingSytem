@@ -7,8 +7,23 @@
  * Outputs: the actual number of bytes that are read successfully, if error then ret -1
  */
 int32_t terminal_read(int32_t fd, void* buf, int32_t nbytes){
+
     if(NULL == buf || 0 == nbytes){
         return 0;
+    }
+
+        if(curr_terminal_ID == runningTerminal->id){
+
+
+        adjustVIDMEM(0xB8000);
+
+
+    }
+    else{
+
+    adjustVIDMEM(multi_terminal[runningTerminal->id].vidmem);
+
+
     }
     int i;
     int j = 0;
@@ -44,9 +59,25 @@ int32_t terminal_read(int32_t fd, void* buf, int32_t nbytes){
  * Outputs: the actual number of bytes that are written successfully, if error then ret -1
  */
 int32_t terminal_write(int32_t fd, void* buf, int32_t nbytes){
-    if(NULL == buf){
+
+     if(NULL == buf){
         return -1;
     }
+
+    if(curr_terminal_ID == runningTerminal->id){
+
+
+        adjustVIDMEM(0xB8000);
+
+
+    }
+    else{
+
+    adjustVIDMEM(multi_terminal[runningTerminal->id].vidmem);
+
+
+    }
+   
     int i;
     int j = 0;
     for(i = 0;i<nbytes;i++){

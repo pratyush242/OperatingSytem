@@ -25,7 +25,7 @@ uint32_t file_system_base;
 /* Check if MAGIC is valid and print the Multiboot information structure
    pointed by ADDR. */
 void entry(unsigned long magic, unsigned long addr) {
-    terminal_init();
+   
     multiboot_info_t *mbi;
 
     /* Clear the screen. */
@@ -162,7 +162,7 @@ void entry(unsigned long magic, unsigned long addr) {
     //paging init
     initializeTable();
     initializeDirectory();
-
+    terminal_init();
 
     init_filesys();
 
