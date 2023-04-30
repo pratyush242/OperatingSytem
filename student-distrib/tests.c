@@ -320,12 +320,30 @@ static inline void assertion_failure(){
 
 
 /* Checkpoint 3 tests */
-// int program1_paging_test(){
-//     TEST_HEADER;
-//     char* temp_pointer = (char*)0x8048001;
-//     char final = *temp_pointer;
-//     return PASS;
-// }
+int program1_paging_test(){
+    TEST_HEADER;
+    char* temp_pointer = (char*)0xB8000;
+    char final = *temp_pointer;
+    return PASS;
+}
+int program2_paging_test(){
+    TEST_HEADER;
+    char* temp_pointer = (char*)0xB9000;
+    char final = *temp_pointer;
+    return PASS;
+}
+int program3_paging_test(){
+    TEST_HEADER;
+    char* temp_pointer = (char*)0xBA000;
+    char final = *temp_pointer;
+    return PASS;
+}
+int program4_paging_test(){
+    TEST_HEADER;
+    char* temp_pointer = (char*)0xBB000;
+    char final = *temp_pointer;
+    return PASS;
+}
 
 /* Checkpoint 4 tests */
 /* Checkpoint 5 tests */
@@ -338,7 +356,10 @@ void launch_tests(){
 	//printf("WEHITTHIS");
 	//division_by_zero_test();
 	//idt_init();
-	//TEST_OUTPUT("program1_paging_test()", program1_paging_test());
+	TEST_OUTPUT("program1_paging_test()", program1_paging_test());
+	TEST_OUTPUT("program2_paging_test()", program1_paging_test());
+	TEST_OUTPUT("program3_paging_test()", program1_paging_test());
+	TEST_OUTPUT("program4_paging_test()", program1_paging_test());
 	//TEST_OUTPUT("idt_test", idt_test());
 	//TEST_OUTPUT("read_text_file_test()", read_text_file_test());
 	//TEST_OUTPUT("read_large_file_test()", read_large_file_test());

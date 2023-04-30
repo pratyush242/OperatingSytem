@@ -27,13 +27,13 @@ video_mem = (char *)new;
 void clear(void) {
 
 
-    char* video_mem;
-    if(curr_terminal_ID==(*runningTerminal).id){
-        video_mem = (char*)0xB8000;
-    }
-    else{
-    video_mem =(char*) (multi_terminal[(*runningTerminal).id].vidmem);
-    }
+    // char* video_mem;
+    // if(curr_terminal_ID==(*runningTerminal).id){
+    //     video_mem = (char*)0xB8000;
+    // }
+    // else{
+    // video_mem =(char*) (multi_terminal[(*runningTerminal).id].vidmem);
+    // }
 
     int32_t i;
     for (i = 0; i < NUM_ROWS * NUM_COLS; i++) {

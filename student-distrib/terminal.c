@@ -12,7 +12,7 @@ int32_t terminal_read(int32_t fd, void* buf, int32_t nbytes){
         return 0;
     }
 
-        if(curr_terminal_ID == runningTerminal->id){
+        if(curr_terminal_ID == runningTerminal->id || curr_terminal_ID == -1){
 
 
         adjustVIDMEM(0xB8000);
@@ -64,7 +64,7 @@ int32_t terminal_write(int32_t fd, void* buf, int32_t nbytes){
         return -1;
     }
 
-    if(curr_terminal_ID == runningTerminal->id){
+    if(curr_terminal_ID == runningTerminal->id || curr_terminal_ID == -1){
 
 
         adjustVIDMEM(0xB8000);

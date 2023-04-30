@@ -558,7 +558,7 @@ int next_terminal_id = (runningTerminal->id)+1;
 
 if(next_terminal_id >2){
     runningTerminal = &(multi_terminal[0]);
-}
+}                                                                 
 else{
    
     runningTerminal = &(multi_terminal[next_terminal_id]);

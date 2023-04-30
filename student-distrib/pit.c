@@ -25,15 +25,16 @@ void pit_handler()
    
     //printf("PITISWORKING \n");
 
-     if(multi_terminal[0].pid == -1){
-     
-     terminal_switch(0);
-     runningTerminal =  &(multi_terminal[0]);
-sti();
-
-     system_execute((uint8_t*)"shell");
 
     
+
+    if(multi_terminal[2].pid == -1){
+     terminal_switch(2);
+     runningTerminal =  &(multi_terminal[2]);
+ sti();
+
+     system_execute((uint8_t*)"shell");
+     
     return;
 
     }
@@ -48,18 +49,21 @@ sti();
     return;
 
     }
-       else if(multi_terminal[2].pid == -1){
-     terminal_switch(2);
-     runningTerminal =  &(multi_terminal[2]);
- sti();
+       else if(multi_terminal[0].pid == -1){
+     
+     terminal_switch(0);
+     runningTerminal =  &(multi_terminal[0]);
+sti();
 
      system_execute((uint8_t*)"shell");
-     
+
+    
     return;
 
     }
+      
 
-    scheduler();
+    //scheduler();
      /* video memory and context switch */
     
     
