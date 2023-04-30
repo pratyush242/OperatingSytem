@@ -354,17 +354,6 @@ int32_t system_execute(const uint8_t* command){
     }
 
 
-
-
-    // if(filename[counter] = "cat"){
-    //     uint8_t* string = "frame0.txt";
-    //     for(i = 0; i <10; i++){
-    //         argument[i] = string[i];
-    //     }
-    // }
-    
-
-
     if (read_dentry_by_name(filename, &dentry) == -1){
         return -1;
     } 

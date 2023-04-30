@@ -126,8 +126,7 @@ int32_t terminal_init()
         multi_terminal[i].pid = -1;
         multi_terminal[i].x = 0;
         multi_terminal[i].y = 0;
-
-
+        multi_terminal[i].execute_run = 0;
         // init terminal buffer
         for(j = 0; j < 128; j++)
             multi_terminal[i].terminal_buffer[j] = '\0';
@@ -135,10 +134,12 @@ int32_t terminal_init()
     curr_terminal_ID = -1;
     
     runningTerminal = &(multi_terminal[0]);
+    multi_terminal[0].execute_run = 1;
 
     multi_terminal[0].vidmem = 0xB9000;   
     multi_terminal[1].vidmem = 0xBA000; 
     multi_terminal[2].vidmem = 0xBB000; 
+
 
     return 0;
   
@@ -165,9 +166,14 @@ int32_t terminal_switch(uint32_t terminal_ID)
     // restore terminal  
     terminal_return(terminal_ID);
     //it is the new terminal, run shell for this terminal 
-   
-    
-   
+   if(multi_terminal[terminal_ID].execute_run == 0){
+        printf("TERMINAL #%d\n", terminal_ID+1);
+        multi_terminal[terminal_ID].execute_run = 1;
+        runningTerminal =  &(multi_terminal[terminal_ID]);
+        system_execute((uint8_t *)"shell");
+   }
+
+
     sti();
 
     

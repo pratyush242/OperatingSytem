@@ -28,6 +28,7 @@ typedef struct terminal_t{
     uint32_t vidmem;
     volatile uint8_t terminal_buffer_ptr;
     volatile uint8_t read_the_terminal;
+    int execute_run;
 } terminal_t;
 
 terminal_t multi_terminal[3];
