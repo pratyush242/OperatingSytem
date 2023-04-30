@@ -491,7 +491,7 @@ int32_t getargs(uint8_t* buf, int32_t nbytes){
     if(nbytes == 0){
         return -1;
     }
-    if(cur_pcb->arg[0] = '\0'){
+    if(cur_pcb->arg[0] == '\0'){
         return -1;
     }
     //copies into buf
@@ -582,14 +582,7 @@ int32_t sigreturn(void){
 // tss.esp0 = (mb_8 - ((runningTerminal->pid) * kb_8) - 4); 
 
 
-// pid = runningTerminal->pid;
-//     asm volatile ("                 \n\
-//         movl    %0, %%esp           \n\
-//         movl    %1, %%ebp           \n\
-//         "
-//         :
-//         : "a"(PCB->saved_esp), "b"(PCB->saved_ebp)
-//     );
+
 // //sti();
 // }
 
