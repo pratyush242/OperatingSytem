@@ -123,6 +123,13 @@ int32_t terminal_init()
     return 0;
   
 }
+/* terminal_switch
+ *
+ * switches  terminals
+ * Inputs:terminal id of  terminal to switch to
+ * 
+ * Return: 0 
+ */
 
 int32_t terminal_switch(uint32_t terminal_ID)
 {
@@ -158,6 +165,14 @@ int32_t terminal_switch(uint32_t terminal_ID)
     
     return 0;
 }
+/* terminal_save
+ *
+ * helper function to save terminal 
+ * Inputs:terminal id of  terminal to save or terminal that you are switching from
+ * 
+ * Return: 0 
+ */
+
 
 int32_t terminal_save(uint32_t terminal_ID)
 {
@@ -169,7 +184,13 @@ int32_t terminal_save(uint32_t terminal_ID)
     multi_terminal[terminal_ID].y = get_y();
     return 0;
 }
-
+/* terminal_return
+ *
+ * helper function to return terminal 
+ * Inputs:terminal id of  terminal to return or terminal that you are switching to
+ * 
+ * Return: 0 
+ */
 int32_t terminal_return(uint32_t terminal_ID)
 {
     if(terminal_ID >= 3) {
