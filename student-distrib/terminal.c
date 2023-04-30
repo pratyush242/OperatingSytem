@@ -43,23 +43,28 @@ int32_t terminal_read(int32_t fd, void* buf, int32_t nbytes){
 int32_t terminal_write(int32_t fd, void* buf, int32_t nbytes){
     int i;
     int j = 0;
-    cli();
-    if(curr_terminal_ID == (*runningTerminal).id){
-        for(i = 0;i<nbytes;i++){
+    // if(curr_terminal_ID == (*runningTerminal).id){
+    //     for(i = 0;i<nbytes;i++){
+    //         putc(((char*)buf)[i]);
+    //         if(((char*)buf)[i] != '\0'){
+    //             j+=1;
+    //         }
+    //     }
+    // }
+    // else{
+    //     for(i = 0;i<nbytes;i++){
+    //         terminal_putc_scheduler(((char*)buf)[i]);
+    //         if(((char*)buf)[i] != '\0'){
+    //             j+=1;
+    //         }
+    //     }    
+    // }
+       for(i = 0;i<nbytes;i++){
             putc(((char*)buf)[i]);
             if(((char*)buf)[i] != '\0'){
                 j+=1;
             }
-        }
-    }
-    else{
-        for(i = 0;i<nbytes;i++){
-            terminal_putc_scheduler(((char*)buf)[i]);
-            if(((char*)buf)[i] != '\0'){
-                j+=1;
-            }
-        }    
-    }
+       }
     return j;
    // return 0;
 
