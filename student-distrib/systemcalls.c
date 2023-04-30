@@ -155,6 +155,17 @@ int32_t halt(int32_t status){
     if (pid<-1){
         return -1;
     }
+    int fd;
+    for(fd = 2; fd < 8; fd++){
+        if(file_descriptor_array[fd].flags)
+            sys_close(fd);
+    }
+    // clear stdin fd 
+    file_descriptor_array[0].op = NULL;
+    file_descriptor_array[0].flags = 0;
+    // clear stdout fd 
+    file_descriptor_array[0].op = NULL;
+    file_descriptor_array[0].flags = 0;
 
    
     // clear flags 
