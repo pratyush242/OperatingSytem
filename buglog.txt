@@ -63,6 +63,13 @@ We were getting this error because our function declarations were incorrect.
 15. syserr was pagefaulting at file open 
 -> did not have an empty string check, added it to file open 
 
+#CP3.5
+
+16. PAGE FAULT & RESTART
+-> Enable interrupt when initializing RTC, which allows scheduling before initializing terminals so we set curr_pid to -1 initially, and add a conditional check for this at the begin of the scheduler
+
+17. The multiterminal skipped to terminal 3
+-> The order in which we execute shells was weird 
 
 
 
