@@ -146,12 +146,12 @@ int32_t sys_write(int32_t fd, void* buf, int32_t nbytes){
 int32_t halt(int32_t status){
     pcb_t* PCB;
     pcb_t* PCB_parent;
-
+ //checking pcb
     PCB = pcb_adress(pid);
     if(!PCB){
         return -1;
     }
-    
+//checking pid
     if (pid<-1){
         return -1;
     }
@@ -218,23 +218,30 @@ int32_t halt(int32_t status){
    
 
 
-
+//null_open
+//empty function
 
 
 int32_t null_open(){
     return -1;
    
 }
+//null_close
+//empty function
 
 int32_t null_close(){
     return -1;
    
 }
+//null_read
+//empty function
 
 int32_t null_read(){
     return -1;
    
 }
+//null_write
+//empty function
 
 int32_t null_write(){
     return -1;
@@ -538,68 +545,32 @@ int32_t sigreturn(void){
 
 
 
-// void scheduler(){
-
-// if(runningTerminal->pid==-1){
-
-// return;
-// }
-
-// register uint32_t saved_ebp asm("ebp");
-// register uint32_t saved_esp asm("esp");
-
-
-// pcb_t* prevPCB = pcb_adress(runningTerminal->pid);
-// prevPCB->saved_ebp = saved_ebp;
-// prevPCB->saved_esp = saved_esp;
-
-
-// int next_terminal_id = (runningTerminal->id)+1;
-
-
-
-// if(next_terminal_id >2){
-//     runningTerminal = &(multi_terminal[0]);
-// }                                                                 
-// else{
-   
-//     runningTerminal = &(multi_terminal[next_terminal_id]);
-// }
-// //after this runningTerminal is the terminal for the next process
-
-
-
-
-
-// pcb_t* PCB = pcb_adress(runningTerminal->pid);
-
-
-
-
-// //file_descriptor_array = PCB->file_descriptor;
-
-// tss.ss0 = KERNEL_DS;
-// tss.esp0 = (mb_8 - ((runningTerminal->pid) * kb_8) - 4); 
-
-
-
-// //sti();
-// }
-
+/* 
+ *  Scheduler
+ *  Description: Schedules processes in a multi terminal setting
+ *  Input:  none
+ *  Output: none
+ */
 
 void scheduler(){
+
+//checking processid of current runnig terminal if -1 means that shell isn't running yet
 
 if(runningTerminal->pid==-1){
 return;
 }
   cli();
+//saves current pcb adress in previous pcb adress
 pcb_t* prevPCB = pcb_adress(runningTerminal->pid);
 
+//saving current ebp and esp to return to
 register uint32_t saved_ebp asm("ebp");
 register uint32_t saved_esp asm("esp");
 
 prevPCB->saved_ebp = saved_ebp;
 prevPCB->saved_esp = saved_esp;
+
+//gets id for next terminal in round robin fashion
 
  int next_id = set_running_terminal();
 
@@ -607,17 +578,7 @@ prevPCB->saved_esp = saved_esp;
  pid = runningTerminal->pid;
  pcb_t* PCB = pcb_adress(runningTerminal->pid);
 
-// int next_terminal_id = (runningTerminal->id)+1;
-
-
-// if(next_terminal_id >2){
-//     runningTerminal = &(multi_terminal[0]);
-// }                                                                 
-// else{
-   
-//     runningTerminal = &(multi_terminal[next_terminal_id]);
-// }
-//after this runningTerminal is the terminal for the next process
+//setting up video page table
 if (curr_terminal_ID == next_id){
 
     PageDir[0].FourKB.Present = 1;    // present
@@ -647,14 +608,11 @@ else{
     video_page_table[0xB8].PageBaseAddr = (0xB8000+(next_id+2)*(4*1024)) >> 12;
     flush();
 }
-//sch_vidmem();
 
+//restores paging
 sysCallPaging(pid);
 
-// printf("WEAT Terminal: %d \n", runningTerminal->id);
-// printf("WEAT Process: %d \n", runningTerminal->id);
-//file_descriptor_array = PCB->file_descriptor;
-
+//context switching
 tss.ss0 = KERNEL_DS;
 tss.esp0 = (mb_8 - ((runningTerminal->pid) * kb_8)-4); 
 
@@ -672,7 +630,12 @@ tss.esp0 = (mb_8 - ((runningTerminal->pid) * kb_8)-4);
 sti();
 }
 
-
+/* 
+ *  int set_running_terminal()
+ *  Description: sets runnig terminal
+ *  Input:  none
+ *  returns id of next terminal
+ */
 int set_running_terminal()
 {
   int i, next_terminal_ID;
