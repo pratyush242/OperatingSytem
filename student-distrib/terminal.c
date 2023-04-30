@@ -156,7 +156,12 @@ int32_t terminal_switch(uint32_t terminal_ID)
     // save terminal  
     terminal_save(curr_terminal_ID);
     
-     remap_vidmem(terminal_ID);
+    //copy current video memory to current terminal's video memory
+memcpy( (char*)(0xB9000 + curr_terminal_ID * 4*1024 ), (char*)0xB8000, 4*1024);
+
+//copy next terminal's video memory to video memory
+memcpy( (char*)0xB8000, (char*)(0xB9000 + terminal_ID * 4*1024 ), 4*1024);
+
     // restore terminal  
     terminal_return(terminal_ID);
     //it is the new terminal, run shell for this terminal 
