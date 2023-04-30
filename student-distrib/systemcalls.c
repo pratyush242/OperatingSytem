@@ -538,13 +538,6 @@ int32_t sigreturn(void){
 
 void scheduler(){
 
-
-
-
-
-
-
-
 if(runningTerminal->pid==-1){
 
 return;
