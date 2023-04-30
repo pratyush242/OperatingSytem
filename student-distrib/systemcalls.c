@@ -202,7 +202,7 @@ int32_t halt(int32_t status){
     tss.esp0 = (mb_8 - ((pid) * kb_8) - 4); 
 
     uint32_t sendstatus = (uint8_t)status;
-   
+    putc('\n');
     asm volatile ("                 \n\
         movl    %0, %%esp           \n\
         movl    %1, %%ebp           \n\
@@ -482,17 +482,19 @@ int32_t system_execute(const uint8_t* command){
  * Side Effect: copy args to buffer
  */
 int32_t getargs(uint8_t* buf, int32_t nbytes){
-
+    pcb_t* cur_pcb = pcb_adress(pid);
     //buf null check
     if(buf==NULL){
         return 0;
     }
     //nbytes null check
-    if(nbytes==0){
+    if(nbytes == 0){
+        return -1;
+    }
+    if(cur_pcb->arg[0] = '\0'){
         return -1;
     }
     //copies into buf
-    pcb_t* cur_pcb = pcb_adress(pid);
     strncpy((int8_t*)buf, (int8_t*)(cur_pcb->arg), nbytes);
     return 0;
 }
@@ -595,13 +597,9 @@ int32_t sigreturn(void){
 void scheduler(){
 
 if(runningTerminal->pid==-1){
-
 return;
 }
-
-
-
-
+  cli();
 pcb_t* prevPCB = pcb_adress(runningTerminal->pid);
 
 register uint32_t saved_ebp asm("ebp");
@@ -610,33 +608,64 @@ register uint32_t saved_esp asm("esp");
 prevPCB->saved_ebp = saved_ebp;
 prevPCB->saved_esp = saved_esp;
 
-int next_terminal_id = (runningTerminal->id)+1;
+ int next_id = set_running_terminal();
+
+ runningTerminal = &(multi_terminal[next_id]);
+ pid = runningTerminal->pid;
+ pcb_t* PCB = pcb_adress(runningTerminal->pid);
+
+// int next_terminal_id = (runningTerminal->id)+1;
 
 
-if(next_terminal_id >2){
-    runningTerminal = &(multi_terminal[0]);
-}                                                                 
-else{
+// if(next_terminal_id >2){
+//     runningTerminal = &(multi_terminal[0]);
+// }                                                                 
+// else{
    
-    runningTerminal = &(multi_terminal[next_terminal_id]);
-}
+//     runningTerminal = &(multi_terminal[next_terminal_id]);
+// }
 //after this runningTerminal is the terminal for the next process
+if (curr_terminal_ID == next_id){
 
-sch_vidmem();
-pid = runningTerminal->pid;
+    PageDir[0].FourKB.Present = 1;    // present
+    PageDir[0].FourKB.ReadWrite = 1;
+    PageDir[0].FourKB.UserSupervisor = 1;    // user mode
+    PageDir[0].FourKB.PageBaseAddr   = (unsigned int)video_page_table >> 12;
+
+
+    video_page_table[0xB8].Present = 1;    
+    video_page_table[0xB8].ReadWrite = 1;  
+    video_page_table[0xB8].UserSupervisor = 1;
+    video_page_table[0xB8].PageBaseAddr = VID_MEM >> 12;
+    flush();
+
+}
+else{
+
+    PageDir[0].FourKB.Present = 1;    // present
+    PageDir[0].FourKB.ReadWrite = 1;
+    PageDir[0].FourKB.UserSupervisor = 1;    // user mode
+    PageDir[0].FourKB.PageBaseAddr   = (unsigned int)video_page_table >> 12;
+
+
+    video_page_table[0xB8].Present = 1;    
+    video_page_table[0xB8].ReadWrite = 1;  
+    video_page_table[0xB8].UserSupervisor = 1;
+    video_page_table[0xB8].PageBaseAddr = (0xB8000+(next_id+2)*(4*1024)) >> 12;
+    flush();
+}
+//sch_vidmem();
+
 sysCallPaging(pid);
 
-printf("WEAT Terminal: %d \n", runningTerminal->id);
-printf("WEAT Process: %d \n", runningTerminal->id);
-pcb_t* PCB = pcb_adress(runningTerminal->pid);
-
-
-
+// printf("WEAT Terminal: %d \n", runningTerminal->id);
+// printf("WEAT Process: %d \n", runningTerminal->id);
 //file_descriptor_array = PCB->file_descriptor;
 
 tss.ss0 = KERNEL_DS;
 tss.esp0 = (mb_8 - ((runningTerminal->pid) * kb_8)-4); 
 
+ pid = runningTerminal->pid;
 
     asm volatile ("                 \n\
         movl    %0, %%esp           \n\
@@ -648,6 +677,22 @@ tss.esp0 = (mb_8 - ((runningTerminal->pid) * kb_8)-4);
         : "a"(PCB->saved_esp), "b"(PCB->saved_ebp)
     );
 sti();
+}
+
+
+int set_running_terminal()
+{
+  int i, next_terminal_ID;
+
+  for(i = 0 ; i < 3; i++)
+  {
+    next_terminal_ID = curr_terminal_ID + 1;
+    next_terminal_ID = next_terminal_ID % 3;
+    if(multi_terminal[next_terminal_ID].execute_run == 1)
+      break;
+  }
+
+  return next_terminal_ID;
 }
 
 

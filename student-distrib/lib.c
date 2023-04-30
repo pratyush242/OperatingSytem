@@ -635,4 +635,43 @@ void set_xy(int x, int y){
     update_cursor(pos);
 }
 
+void terminal_putc_scheduler(uint8_t c) {
+
+    if(c == '\n' || c == '\r') {
+        terminal_newline_scheduler();
+        return;
+    } 
+
+    *(uint8_t *)(multi_terminal[curr_terminal_ID].vidmem + ((NUM_COLS * multi_terminal[curr_terminal_ID].y + multi_terminal[curr_terminal_ID].x) << 1)) = c;
+    *(uint8_t *)(multi_terminal[curr_terminal_ID].vidmem + ((NUM_COLS * multi_terminal[curr_terminal_ID].y + multi_terminal[curr_terminal_ID].x) << 1) + 1) = ATTRIB;
+    multi_terminal[curr_terminal_ID].x++;
+    // screen_x %= NUM_COLS;
+    // screen_y = (screen_y + (screen_x / NUM_COLS)) % NUM_ROWS;
+
+    if(multi_terminal[curr_terminal_ID].x == NUM_COLS)
+        terminal_newline_scheduler();
+}
+
+void terminal_newline_scheduler() {
+    multi_terminal[curr_terminal_ID].y ++;
+    terminal_scroll_up_scheduler();
+    multi_terminal[curr_terminal_ID].x = 0;
+}
+
+void terminal_scroll_up_scheduler() {
+	int x;
+	int y;
+    // shift existing content up, and fill last row with spaces
+    while (multi_terminal[curr_terminal_ID].y>=NUM_ROWS){
+	    for (x = 0; x < NUM_COLS; x++) {
+	    	for (y = 0; y < NUM_ROWS-1; y++) {
+	    		*(uint8_t *)(multi_terminal[curr_terminal_ID].vidmem + ((NUM_COLS*y + x) << 1)) = *(uint8_t *)(multi_terminal[curr_terminal_ID].vidmem + ((NUM_COLS*(y+1) + x) << 1));
+	    	}
+	    }
+        multi_terminal[curr_terminal_ID].y --;
+    }
+	for (x = 0; x < NUM_COLS; x++) {
+		*(uint8_t *)(multi_terminal[curr_terminal_ID].vidmem + ((NUM_COLS*(NUM_ROWS-1) + x) << 1)) = ' ';
+	}
+}
 

@@ -26,6 +26,9 @@ void update_cursor(uint16_t pos);
 uint32_t get_x();
 uint32_t get_y();
 void set_xy(int x, int y);
+void terminal_putc_scheduler(uint8_t c);
+void terminal_newline_scheduler();
+void terminal_scroll_up_scheduler() ;
 
 
 void* memset(void* s, int32_t c, uint32_t n);

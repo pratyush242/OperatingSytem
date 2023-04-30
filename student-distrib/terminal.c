@@ -7,24 +7,6 @@
  * Outputs: the actual number of bytes that are read successfully, if error then ret -1
  */
 int32_t terminal_read(int32_t fd, void* buf, int32_t nbytes){
-
-    // if(NULL == buf || 0 == nbytes){
-    //     return 0;
-    // }
-
-    //     if(curr_terminal_ID == runningTerminal->id || curr_terminal_ID == -1){
-
-
-    //     adjustVIDMEM(0xB8000);
-
-
-    // }
-    // else{
-
-    // adjustVIDMEM(multi_terminal[runningTerminal->id].vidmem);
-
-
-    // }
     int i;
     int j = 0;
     int k = 0; 
@@ -59,32 +41,24 @@ int32_t terminal_read(int32_t fd, void* buf, int32_t nbytes){
  * Outputs: the actual number of bytes that are written successfully, if error then ret -1
  */
 int32_t terminal_write(int32_t fd, void* buf, int32_t nbytes){
-
-    //  if(NULL == buf){
-    //     return -1;
-    // }
-
-    // if(curr_terminal_ID == runningTerminal->id || curr_terminal_ID == -1){
-
-
-    //     adjustVIDMEM(0xB8000);
-
-
-    // }
-    // else{
-
-    // adjustVIDMEM(multi_terminal[runningTerminal->id].vidmem);
-
-
-    // }
-   
     int i;
     int j = 0;
-    for(i = 0;i<nbytes;i++){
-        putc(((char*)buf)[i]);
-        if(((char*)buf)[i] != '\0'){
-            j+=1;
+    cli();
+    if(curr_terminal_ID == (*runningTerminal).id){
+        for(i = 0;i<nbytes;i++){
+            putc(((char*)buf)[i]);
+            if(((char*)buf)[i] != '\0'){
+                j+=1;
+            }
         }
+    }
+    else{
+        for(i = 0;i<nbytes;i++){
+            terminal_putc_scheduler(((char*)buf)[i]);
+            if(((char*)buf)[i] != '\0'){
+                j+=1;
+            }
+        }    
     }
     return j;
    // return 0;

@@ -22,6 +22,4 @@ void pit_handler()
 {   
     send_eoi(0x0);
     //scheduler();
-    
-   
 }
