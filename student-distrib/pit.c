@@ -3,7 +3,13 @@
 #include "systemcalls.h"
 #include "i8259.h"
 
-
+/* pit_init
+ *
+ * initialize pit
+ * Inputs: none
+ * Outputs: none
+ * Return: none
+ */
 void pit_init()
 {   
 
@@ -17,6 +23,13 @@ void pit_init()
   
     
 }
+/* pit_handler
+ *
+ * sends end of interrupt to pit and calls scheduler
+ * Inputs: none
+ * Outputs: none
+ * Return: none
+ */
 
 void pit_handler()
 {   

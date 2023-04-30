@@ -125,6 +125,13 @@ void initializeDirectory(){
     return; 
 
 }
+//function to restore paging
+/* sysCallPaging(uint32_t pid)
+ * input: process id
+ * 
+ * restores paging
+
+ */
 
 void sysCallPaging(uint32_t pid){
     
@@ -156,7 +163,11 @@ int curr_term = 0; //have to use runningTerminal instead of this
 
 unsigned int OFF = 0 ;     //have to calculate
 
+//function to initialize vidmem
+/* init_vidmem()
+ 
 
+ */
 
 void init_vidmem(){
     PageDir[0].FourKB.Present = 1;    // present
@@ -189,6 +200,11 @@ void init_vidmem(){
     flush();
 }
 
+//function to remap vidmem
+/* void remap_vidmem(uint32_t nextTerminalID)
+ * input : next terminal id
+
+ */
 
 void remap_vidmem(uint32_t nextTerminalID)
 {
@@ -203,6 +219,10 @@ memcpy( (char*)0xB8000, (char*)(0xB9000 + nextTerminalID * 4*1024 ), 4*1024);
 
 
 }
+//function to remap vidmem for scheduler
+/* void sch_vidmem()
+
+ */
 
 
 void sch_vidmem(){
